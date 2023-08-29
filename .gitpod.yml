@@ -30,6 +30,7 @@ tasks:
           sleep 0.5
         done
       } fi
+      flutter pub get
       flutter run
 
 ports:

@@ -1,2 +1,2 @@
-# Rhizomatic Lines
+# Oblique Strategies
 

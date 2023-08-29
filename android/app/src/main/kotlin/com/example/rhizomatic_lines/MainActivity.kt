@@ -1,4 +1,4 @@
-package com.example.rhizomatic_lines
+package com.example.oblique_strategies
 
 import io.flutter.embedding.android.FlutterActivity
 
