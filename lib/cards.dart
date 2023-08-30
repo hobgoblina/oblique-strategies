@@ -4,17 +4,32 @@ import 'package:google_fonts/google_fonts.dart';
 ClipRRect basicCard(String cardText) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(30),
-    child: Container(
-      alignment: Alignment.center,
-      color: Colors.white,
-      padding: const EdgeInsets.all(75),
-      child: Text(
-        cardText,
-        textWidthBasis: TextWidthBasis.longestLine,
-        style: GoogleFonts.inter(),
-        textScaleFactor: 1.5
-      ),
-    ),
+    child: LayoutBuilder(builder: (context, constraints) {
+      double paddingInterp;
+
+      if (constraints.maxWidth >= 750) {
+        paddingInterp = 1;
+      } else if (constraints.maxWidth <= 400) {
+        paddingInterp = 0;
+      } else {
+        paddingInterp = (constraints.maxWidth - 400) / 350;
+      }
+      
+      return Container(
+        alignment: Alignment.center,
+        color: Colors.white,
+        padding: EdgeInsetsTween(
+          begin: const EdgeInsets.all(20), 
+          end: const EdgeInsets.all(75)
+        ).lerp(paddingInterp),
+        child: Text(
+          cardText,
+          textWidthBasis: TextWidthBasis.longestLine,
+          style: GoogleFonts.inter(),
+          textScaleFactor: 1.5
+        ),
+      );
+    }),
   );
 }
 
@@ -23,28 +38,43 @@ ClipRRect attributionCard(String cardText, String contributor) {
     borderRadius: BorderRadius.circular(30),
     child: Container(
       color: Colors.white,
-      child: Stack(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(75),
-            child: Text(
-              cardText,
-              textWidthBasis: TextWidthBasis.longestLine,
-              style: GoogleFonts.inter(),
-              textScaleFactor: 1.5
+      child: LayoutBuilder(builder: (context, constraints) {
+        double paddingInterp;
+
+        if (constraints.maxWidth >= 750) {
+          paddingInterp = 1;
+        } else if (constraints.maxWidth <= 400) {
+          paddingInterp = 0;
+        } else {
+          paddingInterp = (constraints.maxWidth - 400) / 350;
+        }
+        
+        return Stack(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsetsTween(
+                begin: const EdgeInsets.all(20), 
+                end: const EdgeInsets.all(75)
+              ).lerp(paddingInterp),
+              child: Text(
+                cardText,
+                textWidthBasis: TextWidthBasis.longestLine,
+                style: GoogleFonts.inter(),
+                textScaleFactor: 1.5
+              ),
             ),
-          ),
-          Container(
-            alignment: Alignment.bottomRight,
-            padding: const EdgeInsets.only(bottom: 20, right: 30),
-            child: Text(
-              '(given by $contributor)',
-              style: GoogleFonts.inter(),
-            ),
-          )
-        ],
-      ),
+            Container(
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.only(bottom: 20, right: 27),
+              child: Text(
+                '(given by $contributor)',
+                style: GoogleFonts.inter(),
+              ),
+            )
+          ],
+        );
+      }),
     ),
   );
 }
@@ -52,79 +82,114 @@ ClipRRect attributionCard(String cardText, String contributor) {
 ClipRRect multipleCard(String cardText, List<String> options, double optionPadding) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(30),
-    child: Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(75),
-      color: Colors.white,
-      child: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          Text(
-            cardText,
-            style: GoogleFonts.inter(),
-            textScaleFactor: 1.5
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: optionPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: options.map((option) => Text(
-                option,
-                style: GoogleFonts.inter(),
-                textScaleFactor: 1.5
-              )).toList(),
+    child: LayoutBuilder(builder: (context, constraints) {
+      double paddingInterp;
+
+      if (constraints.maxWidth >= 750) {
+        paddingInterp = 1;
+      } else if (constraints.maxWidth <= 400) {
+        paddingInterp = 0;
+      } else {
+        paddingInterp = (constraints.maxWidth - 400) / 350;
+      }
+      
+      return Container(
+        alignment: Alignment.center,
+        padding: EdgeInsetsTween(
+          begin: const EdgeInsets.all(20), 
+          end: const EdgeInsets.all(75)
+        ).lerp(paddingInterp),
+        color: Colors.white,
+        child: Wrap(
+          direction: Axis.horizontal,
+          children: [
+            Text(
+              cardText,
+              style: GoogleFonts.inter(),
+              textScaleFactor: 1.5,
+              textWidthBasis: TextWidthBasis.longestLine,
             ),
-          )
-        ],
-      ),
-    ),
+            Padding(
+              padding: EdgeInsets.only(left: optionPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: options.map((option) => Text(
+                  option,
+                  style: GoogleFonts.inter(),
+                  textScaleFactor: 1.5,
+                  textWidthBasis: TextWidthBasis.longestLine,
+                )).toList(),
+              ),
+            )
+          ],
+        ),
+      );
+    }),
   );
 }
 
 ClipRRect optionsCard(String cardText, List<String> options, double optionPadding) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(30),
-    child: Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(75),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            cardText,
-            style: GoogleFonts.inter(),
-            textScaleFactor: 1.5
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: optionPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: options.map((option) => Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Text('•'),
-                  ),
-                  Flexible(
-                    child: Text(
-                      option,
-                      style: GoogleFonts.inter(),
-                      textScaleFactor: 1.5
-                    ),
-                  ),
-                ],
-              )).toList(),
+    child: LayoutBuilder(builder: (context, constraints) {
+      double paddingInterp;
+
+      if (constraints.maxWidth >= 750) {
+        paddingInterp = 1;
+      } else if (constraints.maxWidth <= 400) {
+        paddingInterp = 0;
+      } else {
+        paddingInterp = (constraints.maxWidth - 400) / 350;
+      }
+      
+      return Container(
+        alignment: Alignment.center,
+        padding: EdgeInsetsTween(
+          begin: const EdgeInsets.all(20), 
+          end: const EdgeInsets.all(75)
+        ).lerp(paddingInterp),
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              cardText,
+              style: GoogleFonts.inter(),
+              textScaleFactor: 1.5,
+              textWidthBasis: TextWidthBasis.longestLine,
             ),
-          )
-        ],
-      ),
-    ),
+            Padding(
+              padding: EdgeInsetsTween(
+                begin: const EdgeInsets.only(left: 20), 
+                end: EdgeInsets.only(left: optionPadding)
+              ).lerp(paddingInterp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: options.map((option) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Text('•'),
+                    ),
+                    Flexible(
+                      child: Text(
+                        option,
+                        style: GoogleFonts.inter(),
+                        textScaleFactor: 1.5,
+                        textWidthBasis: TextWidthBasis.longestLine,
+                      ),
+                    ),
+                  ],
+                )).toList(),
+              ),
+            )
+          ],
+        ),
+      );
+    }),
   );
 }
 

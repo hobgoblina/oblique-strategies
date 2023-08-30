@@ -75,6 +75,9 @@ class HomePage extends StatelessWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         controller.swipeBottom();
         return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        controller.undo();
+        return KeyEventResult.handled;
       }
     }
     return KeyEventResult.ignored;
