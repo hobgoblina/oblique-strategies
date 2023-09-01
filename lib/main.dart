@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:math';
-import './cards.dart';
+import 'cards.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await GetStorage.init();
+  runApp(const StrategiesApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StrategiesApp extends StatelessWidget {
+  const StrategiesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
+      create: (context) => StrategiesAppState(),
       child: MaterialApp(
         title: 'Oblique Strategies',
         theme: ThemeData(
@@ -33,12 +35,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class StrategiesAppState extends ChangeNotifier {
 
 }
 
 class HomePage extends StatelessWidget {
   final CardSwiperController controller = CardSwiperController();
+  final storage = GetStorage();
 
   // Might need this for a stateful app
   // @override
@@ -50,16 +53,15 @@ class HomePage extends StatelessWidget {
   KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.space) {
-        var rand = Random().nextInt(4);
-
-        if (rand == 0) {
-          controller.swipeLeft();
-        } else if (rand == 1) {
-          controller.swipeTop();
-        } else if (rand == 2) {
-          controller.swipeRight();
-        } else if (rand == 3) {
-          controller.swipeBottom();
+        switch (Random().nextInt(4)) {
+          case 0:
+            controller.swipeLeft();
+          case 1:
+            controller.swipeTop();
+          case 2:
+            controller.swipeRight();
+          case 3:
+            controller.swipeBottom();
         }
 
         return KeyEventResult.handled;
@@ -85,6 +87,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {   
+    final cards = Cards();
     return Scaffold(
       body: Center(
         child: ConstrainedBox(
@@ -95,9 +98,10 @@ class HomePage extends StatelessWidget {
             onKey: handleKeyPress,
             child: CardSwiper(
               controller: controller,
-              cardsCount: cards.length,
+              initialIndex: storage.read('currentIndex') ?? 0,
+              cardsCount: cards.numCards(),
               backCardOffset: const Offset(0, 0),
-              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards[index],
+              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards.nextCard(index, context),
             ),
           )
         ),
