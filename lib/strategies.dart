@@ -131,9 +131,13 @@ ClipRRect optionsCard(String cardText, List<String> options, double optionPaddin
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Text('•'),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Text(
+                    '•',
+                    style: GoogleFonts.inter(),
+                    textScaleFactor: 1.5,
+                  ),
                 ),
                 Flexible(
                   child: Text(
@@ -155,6 +159,7 @@ ClipRRect optionsCard(String cardText, List<String> options, double optionPaddin
 List<ClipRRect> strategies = [
   optionsCard('Destroy', [ 'nothing', 'the most important thing' ], 95),
   optionsCard('Bridges', [ 'build', 'burn' ], 95),
+  optionsCard('Intentions', [ 'credibility of', 'nobility of', 'humility of' ], 125),
   multipleCard('Think:', [ 'Inside the work', 'Outside the work' ], 30),
   attributionCard('Try faking it!', 'Stewart Brand'),
   attributionCard('Faced with a choice do both', 'Diter Rot'),

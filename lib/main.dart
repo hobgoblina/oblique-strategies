@@ -24,7 +24,7 @@ class StrategiesApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.grey,
+            seedColor: Colors.black,
             background: const Color.fromRGBO(25, 25, 25, 1)
           ),
           textTheme: GoogleFonts.interTextTheme()
@@ -99,9 +99,10 @@ class HomePage extends StatelessWidget {
             child: CardSwiper(
               controller: controller,
               initialIndex: storage.read('currentIndex') ?? 0,
-              cardsCount: cards.numCards(),
+              cardsCount: 999999999,
               backCardOffset: const Offset(0, 0),
               cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards.nextCard(index, context),
+              onEnd: () => storage.write('strategyData', []),
             ),
           )
         ),
