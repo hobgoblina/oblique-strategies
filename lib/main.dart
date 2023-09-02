@@ -101,7 +101,7 @@ class HomePage extends StatelessWidget {
               initialIndex: storage.read('currentIndex') ?? 0,
               cardsCount: 999999999,
               backCardOffset: const Offset(0, 0),
-              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards.nextCard(index, context),
+              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards.nextCard(index),
               onEnd: () => storage.write('strategyData', []),
             ),
           )

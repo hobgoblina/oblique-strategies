@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:math';
 
 class Cards {
-  ClipRRect nextCard(int index, BuildContext context) {
+  ClipRRect nextCard(int index) {
     final storage = GetStorage();
     // minus 1 because this runs for the upcoming card
     storage.write('currentIndex', index - 1);
