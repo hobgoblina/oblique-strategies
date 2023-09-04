@@ -17,7 +17,7 @@ class Cards {
 
     final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
     if (existingCard.isNotEmpty) {
-      next = strategies[existingCard.first['strategyNumber']];
+      next = strategies[existingCard.first['strategyNumber']]['card'];
     }
 
     while (next == null) {
@@ -42,7 +42,7 @@ class Cards {
         });
       }
 
-      next = strategies[strategyNumber];
+      next = strategies[strategyNumber]['card'];
     }
 
     storage.write('strategyData', strategyData);
