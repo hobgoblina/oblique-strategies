@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
 import 'strategy_card.dart';
+import 'package:ionicons/ionicons.dart';
 
 void main() async {
   await GetStorage.init();
@@ -15,7 +16,7 @@ class StrategiesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => StrategiesAppState(),
+      create: (context) => AppState(),
       child: MaterialApp(
         title: 'Oblique Strategies',
         theme: ThemeData(
@@ -32,16 +33,63 @@ class StrategiesApp extends StatelessWidget {
   }
 }
 
-class StrategiesAppState extends ChangeNotifier {
+class AppState extends ChangeNotifier {
+    bool? currentIsFavorite;
 
+    void setCurrentFavorite(bool favorite) {
+      currentIsFavorite = favorite;
+      notifyListeners();
+    }
 }
 
 class MainPage extends StatelessWidget {
+  final storage = GetStorage();
+
   @override
-  Widget build(BuildContext context) {   
-    return const Stack(
+  Widget build(BuildContext context) {
+    AppState state = context.watch<AppState>();
+
+    void addToFavorites() {
+      int? index = storage.read('currentIndex');
+
+      if (storage.read('currentIndex') is int) {
+        final List<dynamic> strategyData = storage.read('strategyData');
+        final int dataToUpdate = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
+        final bool favorite = !strategyData[dataToUpdate]['favorite'];
+        strategyData[dataToUpdate]['favorite'] = favorite;
+        storage.write('strategyData', strategyData);
+        state.setCurrentFavorite(favorite);
+      }
+    }
+
+    if (state.currentIsFavorite == null) {
+      int? index = storage.read('currentIndex');
+      if (storage.read('currentIndex') is int) {
+        List<dynamic> strategyData = storage.read('strategyData');
+        final int currentIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
+        state.currentIsFavorite = strategyData[currentIndex]['favorite'];
+      } else {
+        state.currentIsFavorite = false;
+      }
+    }
+
+    return Stack(
       children: [
-        StrategyCard(),
+        const StrategyCard(),
+        Container(
+          padding: const EdgeInsets.all(8),
+          alignment: Alignment.topRight,
+          child: IconButton(
+            onPressed: addToFavorites,
+            tooltip: 'Add to favorites',
+            icon: Icon(
+              Ionicons.heart_outline,
+              semanticLabel: 'Add to favorites',
+              color: (state.currentIsFavorite ?? false) ? Colors.red : Colors.white,
+              size: 40
+            ),
+          ),
+        ),
       ]
     );
   }
