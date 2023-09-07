@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-ClipRRect cardWrapper(Function cardBuilder) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(30),
-    child: LayoutBuilder(builder: (context, constraints) {
-      double paddingInterp;
-
-      if (constraints.maxWidth >= 750) {
-        paddingInterp = 1;
-      } else if (constraints.maxWidth <= 400) {
-        paddingInterp = 0;
-      } else {
-        paddingInterp = (constraints.maxWidth - 400) / 350;
-      }
-      
-      return cardBuilder(paddingInterp);
-    }),
+Container cardWrapper(Function cardBuilder) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30),
+      border: Border.all(
+        color: const Color.fromRGBO(25, 25, 25, 1)
+      )
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: LayoutBuilder(builder: (context, constraints) {
+        double paddingInterp;
+  
+        if (constraints.maxWidth >= 750) {
+          paddingInterp = 1;
+        } else if (constraints.maxWidth <= 400) {
+          paddingInterp = 0;
+        } else {
+          paddingInterp = (constraints.maxWidth - 400) / 350;
+        }
+        
+        return cardBuilder(paddingInterp);
+      }),
+    ),
   );
 }
 
@@ -34,7 +42,7 @@ Map<String, dynamic>  basic(String cardText) {
         cardText,
         textWidthBasis: TextWidthBasis.longestLine,
         style: GoogleFonts.inter(),
-        textScaleFactor: 1.5
+        textScaleFactor: 1.6
       ),
     )),
   };
@@ -57,7 +65,7 @@ Map<String, dynamic> attribution(String cardText, String contributor) {
               cardText,
               textWidthBasis: TextWidthBasis.longestLine,
               style: GoogleFonts.inter(),
-              textScaleFactor: 1.5
+              textScaleFactor: 1.6
             ),
           ),
           Container(
@@ -95,7 +103,7 @@ Map<String, dynamic> multiple(String cardText, List<String> options, double opti
           Text(
             cardText,
             style: GoogleFonts.inter(),
-            textScaleFactor: 1.5,
+            textScaleFactor: 1.6,
             textWidthBasis: TextWidthBasis.longestLine,
           ),
           Padding(
@@ -105,7 +113,7 @@ Map<String, dynamic> multiple(String cardText, List<String> options, double opti
               children: options.map((option) => Text(
                 option,
                 style: GoogleFonts.inter(),
-                textScaleFactor: 1.5,
+                textScaleFactor: 1.6,
                 textWidthBasis: TextWidthBasis.longestLine,
               )).toList(),
             ),
@@ -138,7 +146,7 @@ Map<String, dynamic> options(String cardText, List<String> options, double optio
           Text(
             cardText,
             style: GoogleFonts.inter(),
-            textScaleFactor: 1.5,
+            textScaleFactor: 1.6,
             textWidthBasis: TextWidthBasis.longestLine,
           ),
           Padding(
@@ -157,14 +165,14 @@ Map<String, dynamic> options(String cardText, List<String> options, double optio
                     child: Text(
                       '•',
                       style: GoogleFonts.inter(),
-                      textScaleFactor: 1.5,
+                      textScaleFactor: 1.6,
                     ),
                   ),
                   Flexible(
                     child: Text(
                       option,
                       style: GoogleFonts.inter(),
-                      textScaleFactor: 1.5,
+                      textScaleFactor: 1.6,
                       textWidthBasis: TextWidthBasis.longestLine,
                     ),
                   ),

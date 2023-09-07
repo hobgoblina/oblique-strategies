@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
 import 'strategy_card.dart';
@@ -15,6 +18,8 @@ class StrategiesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
@@ -34,12 +39,29 @@ class StrategiesApp extends StatelessWidget {
 }
 
 class AppState extends ChangeNotifier {
-    bool? currentIsFavorite;
+  bool? currentIsFavorite;
+  bool iconsVisible = false;
+  Timer? iconFadeoutTimer;
 
-    void setCurrentFavorite(bool favorite) {
-      currentIsFavorite = favorite;
+  void setCurrentFavorite(bool favorite) {
+    currentIsFavorite = favorite;
+    notifyListeners();
+  }
+
+  void setIconsVisible() {
+    if (!iconsVisible) {
+      iconsVisible = true;
       notifyListeners();
     }
+
+    if (iconsVisible) {
+      iconFadeoutTimer?.cancel();
+      iconFadeoutTimer = Timer(const Duration(seconds: 2), () {
+        iconsVisible = false;
+        notifyListeners();
+      });
+    }
+  }
 }
 
 class MainPage extends StatelessWidget {
@@ -73,24 +95,34 @@ class MainPage extends StatelessWidget {
       }
     }
 
-    return Stack(
-      children: [
-        const StrategyCard(),
-        Container(
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.topRight,
-          child: IconButton(
-            onPressed: addToFavorites,
-            tooltip: 'Add to favorites',
-            icon: Icon(
-              Ionicons.heart_outline,
-              semanticLabel: 'Add to favorites',
-              color: (state.currentIsFavorite ?? false) ? Colors.red : Colors.white,
-              size: 40
+    return Listener(
+      onPointerHover: (pointerHoverEvent) => state.setIconsVisible(),
+      child: GestureDetector(
+        onTap: () => state.setIconsVisible(),
+        child: Stack(
+          children: [
+            const StrategyCard(),
+            AnimatedOpacity(
+              opacity: state.iconsVisible ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: addToFavorites,
+                  tooltip: 'Add to favorites',
+                  icon: Icon(
+                    Ionicons.heart_outline,
+                    semanticLabel: 'Add to favorites',
+                    color: (state.currentIsFavorite ?? false) ? Colors.red : Colors.white,
+                    size: 40
+                  ),
+                ),
+              ),
             ),
-          ),
+          ]
         ),
-      ]
+      ),
     );
   }
 }

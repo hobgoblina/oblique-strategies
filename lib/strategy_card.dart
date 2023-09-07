@@ -68,8 +68,6 @@ class StrategyCard extends StatelessWidget {
       if (newIndex is int) {
         List<dynamic> strategyData = storage.read('strategyData');
         final int strategyIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == newIndex);
-        print(strategyData[strategyIndex]);
-        print(strategyData[strategyIndex]['favorite']);
         state.setCurrentFavorite(strategyData[strategyIndex]['favorite']);
       }
 
@@ -89,9 +87,13 @@ class StrategyCard extends StatelessWidget {
               controller: controller,
               initialIndex: storage.read('currentIndex') ?? 0,
               cardsCount: 999999999,
-              maxAngle: 15,
+              maxAngle: 13,
               backCardOffset: const Offset(0, 0),
-              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => Cards().nextCard(index),
+              scale: 1,
+              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
+                onTap: () => state.setIconsVisible(), 
+                child: Cards().nextCard(index)
+              ),
               onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
               onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
               onEnd: () => storage.write('strategyData', []),

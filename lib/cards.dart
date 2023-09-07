@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:math';
 
 class Cards {
-  ClipRRect nextCard(int index) {
+  Container nextCard(int index) {
     final storage = GetStorage();
     // minus 1 because this runs for the upcoming card
     storage.write('currentIndex', index - 1);
@@ -13,7 +13,7 @@ class Cards {
     final int maxAllowedLastDraw = (index - (strategies.length * minRedrawPercentage)).floor();
 
     List<dynamic> strategyData = storage.read('strategyData') ?? [];
-    ClipRRect? next;
+    Container? next;
 
     final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
     if (existingCard.isNotEmpty) {
