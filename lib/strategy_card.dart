@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:math';
-import 'cards.dart';
 import 'main.dart';
+import 'strategies.dart';
 
 class StrategyCard extends StatelessWidget {
   final IconState iconState;
@@ -13,6 +13,51 @@ class StrategyCard extends StatelessWidget {
     super.key,
     required this.iconState
   });
+
+  Container nextCard(int index) {
+    final storage = GetStorage();
+    // minus 1 because this runs for the upcoming card
+    storage.write('currentIndex', index - 1);
+
+    final double minRedrawPercentage = storage.read('minRedrawPercentage') ?? 0.5;
+    final int maxAllowedLastDraw = (index - (strategies.length * minRedrawPercentage)).floor();
+
+    List<dynamic> strategyData = storage.read('strategyData') ?? [];
+    Container? next;
+
+    final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
+    if (existingCard.isNotEmpty) {
+      next = strategies[existingCard.first['strategyNumber']]['card'];
+    }
+
+    while (next == null) {
+      final int strategyNumber = Random().nextInt(strategies.length);
+      final matches = strategyData.where((card) => card['strategyNumber'] == strategyNumber).toList();
+      
+      if (matches.isNotEmpty) {
+        if (
+          (matches.first['lastDrawnAtIndex'] > maxAllowedLastDraw) &&
+          !(matches.first['favorite'] && (storage.read('canAlwaysRedrawFavorites') ?? false))
+        ) {
+          continue;
+        }
+
+        final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == strategyNumber);
+        strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
+      } else {
+        strategyData.add({
+          'strategyNumber': strategyNumber,
+          'lastDrawnAtIndex': index,
+          'favorite': false
+        });
+      }
+
+      next = strategies[strategyNumber]['card'];
+    }
+
+    storage.write('strategyData', strategyData);
+    return next;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +130,7 @@ class StrategyCard extends StatelessWidget {
               scale: 1,
               cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
                 onTap: () => iconState.setIconsVisible(),
-                child: Cards().nextCard(index)
+                child: nextCard(index)
               ),
               onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
               onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
