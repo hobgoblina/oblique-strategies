@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
 import 'strategy_card.dart';
 import 'favorite_icon.dart';
+import 'settings_icon.dart';
 
 void main() async {
   await GetStorage.init();
@@ -36,11 +37,17 @@ class StrategiesApp extends StatelessWidget {
 
 class IconState extends ChangeNotifier {
   bool? currentIsFavorite;
+  bool settingsOpen = false;
   bool iconsVisible = false;
   Timer? iconFadeoutTimer;
 
   void setCurrentFavorite(bool favorite) {
     currentIsFavorite = favorite;
+    notifyListeners();
+  }
+
+  void toggleSettingsOpen() {
+    settingsOpen = !settingsOpen;
     notifyListeners();
   }
 
@@ -71,6 +78,7 @@ class MainPage extends StatelessWidget {
           children: [
             StrategyCard(iconState: iconState),
             FavoriteIcon(iconState: iconState),
+            SettingsIcon(iconState: iconState),
           ]
         ),
       ),

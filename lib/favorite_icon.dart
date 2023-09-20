@@ -50,10 +50,10 @@ class FavoriteIcon extends StatelessWidget {
           alignment: Alignment.topRight,
           child: IconButton(
             onPressed: addToFavorites,
-            tooltip: 'Add to favorites',
+            tooltip: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
             icon: Icon(
               Ionicons.heart_outline,
-              semanticLabel: 'Add to favorites',
+              semanticLabel: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
               color: (iconState.currentIsFavorite ?? false) ? Colors.red : Colors.white,
               size: 40
             ),
