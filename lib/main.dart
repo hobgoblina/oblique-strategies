@@ -20,25 +20,22 @@ class StrategiesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    return ChangeNotifierProvider(
-      create: (context) => AppState(),
-      child: MaterialApp(
-        title: 'Oblique Strategies',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.black,
-            background: const Color.fromRGBO(25, 25, 25, 1)
-          ),
-          textTheme: GoogleFonts.interTextTheme()
+    return MaterialApp(
+      title: 'Oblique Strategies',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          background: const Color.fromRGBO(25, 25, 25, 1)
         ),
-        home: MainPage(),
+        textTheme: GoogleFonts.interTextTheme()
       ),
+      home: MainPage(),
     );
   }
 }
 
-class AppState extends ChangeNotifier {
+class IconState extends ChangeNotifier {
   bool? currentIsFavorite;
   bool iconsVisible = false;
   Timer? iconFadeoutTimer;
@@ -54,13 +51,11 @@ class AppState extends ChangeNotifier {
       notifyListeners();
     }
 
-    if (iconsVisible) {
-      iconFadeoutTimer?.cancel();
-      iconFadeoutTimer = Timer(const Duration(seconds: 2), () {
-        iconsVisible = false;
-        notifyListeners();
-      });
-    }
+    iconFadeoutTimer?.cancel();
+    iconFadeoutTimer = Timer(const Duration(seconds: 3), () {
+      iconsVisible = false;
+      notifyListeners();
+    });
   }
 }
 
@@ -69,53 +64,57 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppState state = context.watch<AppState>();
+    IconState iconState = IconState();
 
     void addToFavorites() {
       int? index = storage.read('currentIndex');
 
-      if (storage.read('currentIndex') is int) {
+      if (index is int) {
         final List<dynamic> strategyData = storage.read('strategyData');
         final int dataToUpdate = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
         final bool favorite = !strategyData[dataToUpdate]['favorite'];
         strategyData[dataToUpdate]['favorite'] = favorite;
         storage.write('strategyData', strategyData);
-        state.setCurrentFavorite(favorite);
+        iconState.setCurrentFavorite(favorite);
+        iconState.setIconsVisible();
       }
     }
 
-    if (state.currentIsFavorite == null) {
+    if (iconState.currentIsFavorite == null) {
       int? index = storage.read('currentIndex');
       if (storage.read('currentIndex') is int) {
         List<dynamic> strategyData = storage.read('strategyData');
         final int currentIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
-        state.currentIsFavorite = strategyData[currentIndex]['favorite'];
+        iconState.currentIsFavorite = strategyData[currentIndex]['favorite'];
       } else {
-        state.currentIsFavorite = false;
+        iconState.currentIsFavorite = false;
       }
     }
 
     return Listener(
-      onPointerHover: (pointerHoverEvent) => state.setIconsVisible(),
+      onPointerHover: (pointerHoverEvent) => iconState.setIconsVisible(),
       child: GestureDetector(
-        onTap: () => state.setIconsVisible(),
+        onTap: () => iconState.setIconsVisible(),
         child: Stack(
           children: [
-            const StrategyCard(),
-            AnimatedOpacity(
-              opacity: state.iconsVisible ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: addToFavorites,
-                  tooltip: 'Add to favorites',
-                  icon: Icon(
-                    Ionicons.heart_outline,
-                    semanticLabel: 'Add to favorites',
-                    color: (state.currentIsFavorite ?? false) ? Colors.red : Colors.white,
-                    size: 40
+            StrategyCard(iconState: iconState),
+            ListenableBuilder(
+              listenable: iconState,
+              builder: (context, child) => AnimatedOpacity(
+                opacity: iconState.iconsVisible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: addToFavorites,
+                    tooltip: 'Add to favorites',
+                    icon: Icon(
+                      Ionicons.heart_outline,
+                      semanticLabel: 'Add to favorites',
+                      color: (iconState.currentIsFavorite ?? false) ? Colors.red : Colors.white,
+                      size: 40
+                    ),
                   ),
                 ),
               ),
