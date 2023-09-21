@@ -1,313 +1,129 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'cards.dart';
 
-Container cardWrapper(Function cardBuilder) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(30),
-      border: Border.all(
-        color: const Color.fromRGBO(25, 25, 25, 1)
-      )
-    ),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(30),
-      child: LayoutBuilder(builder: (context, constraints) {
-        double paddingInterp;
-  
-        if (constraints.maxWidth >= 750) {
-          paddingInterp = 1;
-        } else if (constraints.maxWidth <= 400) {
-          paddingInterp = 0;
-        } else {
-          paddingInterp = (constraints.maxWidth - 400) / 350;
-        }
-        
-        return cardBuilder(paddingInterp);
-      }),
-    ),
-  );
-}
-
-Map<String, dynamic>  basic(String cardText) {
-  return {
-    'text': cardText,
-    'card': cardWrapper((paddingInterp) => Container(
-      alignment: Alignment.center,
-      color: Colors.white,
-      padding: EdgeInsetsTween(
-        begin: const EdgeInsets.all(20), 
-        end: const EdgeInsets.all(75)
-      ).lerp(paddingInterp),
-      child: Text(
-        cardText,
-        textWidthBasis: TextWidthBasis.longestLine,
-        style: GoogleFonts.inter(),
-        textScaleFactor: 1.6
-      ),
-    )),
-  };
-}
-
-Map<String, dynamic> attribution(String cardText, String contributor) {
-  return {
-    'text': cardText,
-    'card': cardWrapper((paddingInterp) => Container(
-      color: Colors.white,
-      child: Stack(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsetsTween(
-              begin: const EdgeInsets.all(20), 
-              end: const EdgeInsets.all(75)
-            ).lerp(paddingInterp),
-            child: Text(
-              cardText,
-              textWidthBasis: TextWidthBasis.longestLine,
-              style: GoogleFonts.inter(),
-              textScaleFactor: 1.6
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomRight,
-            padding: const EdgeInsets.only(bottom: 20, right: 27),
-            child: Text(
-              '(given by $contributor)',
-              style: GoogleFonts.inter(),
-            ),
-          ),
-        ],
-      ),
-    )),
-  };
-}
-
-Map<String, dynamic> multiple(String cardText, List<String> options, double optionPadding) {
-  String text = cardText;
-  for (int i = 0; i < options.length; ++i) {
-    text += ' •$options[i]';
-  }
-  
-  return {
-    'text': text,
-    'card': cardWrapper((paddingInterp) => Container(
-      alignment: Alignment.center,
-      padding: EdgeInsetsTween(
-        begin: const EdgeInsets.all(20), 
-        end: const EdgeInsets.all(75)
-      ).lerp(paddingInterp),
-      color: Colors.white,
-      child: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          Text(
-            cardText,
-            style: GoogleFonts.inter(),
-            textScaleFactor: 1.6,
-            textWidthBasis: TextWidthBasis.longestLine,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: optionPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: options.map((option) => Text(
-                option,
-                style: GoogleFonts.inter(),
-                textScaleFactor: 1.6,
-                textWidthBasis: TextWidthBasis.longestLine,
-              )).toList(),
-            ),
-          )
-        ],
-      ),
-    )),
-  };
-}
-
-Map<String, dynamic> options(String cardText, List<String> options, double optionPadding) {
-  String text = cardText;
-  for (int i = 0; i < options.length; ++i) {
-    text += ' •$options[i]';
-  }
-
-  return {
-    'text': text,
-    'card': cardWrapper((paddingInterp) => Container(
-      alignment: Alignment.center,
-      padding: EdgeInsetsTween(
-        begin: const EdgeInsets.all(20), 
-        end: const EdgeInsets.all(75)
-      ).lerp(paddingInterp),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            cardText,
-            style: GoogleFonts.inter(),
-            textScaleFactor: 1.6,
-            textWidthBasis: TextWidthBasis.longestLine,
-          ),
-          Padding(
-            padding: EdgeInsetsTween(
-              begin: const EdgeInsets.only(left: 20), 
-              end: EdgeInsets.only(left: optionPadding)
-            ).lerp(paddingInterp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: options.map((option) => Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Text(
-                      '•',
-                      style: GoogleFonts.inter(),
-                      textScaleFactor: 1.6,
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      option,
-                      style: GoogleFonts.inter(),
-                      textScaleFactor: 1.6,
-                      textWidthBasis: TextWidthBasis.longestLine,
-                    ),
-                  ),
-                ],
-              )).toList(),
-            ),
-          )
-        ],
-      ),
-    ))
-  };
-}
+Cards card = Cards();
 
 List<dynamic> strategies = [
-  options('Destroy', [ 'nothing', 'the most important thing' ], 95),
-  options('Bridges', [ 'build', 'burn' ], 95),
-  options('Intentions', [ 'credibility of', 'nobility of', 'humility of' ], 125),
-  multiple('Think:', [ 'Inside the work', 'Outside the work' ], 30),
-  attribution('Try faking it!', 'Stewart Brand'),
-  attribution('Faced with a choice do both', 'Diter Rot'),
-  attribution('Tape your mouth', 'Ritva Saarikko'),
-  attribution('Always give yourself credit for having more than personality', 'Arto Lindsay'),
-  basic('Use filters'),
-  basic('Which elements can be grouped?'),
-  basic('Gardening, not architecture'),
-  basic('Where\'s the edge?\nWhere does the frame start?'),
-  basic('Just carry on'),
-  basic('Listen to the quiet voice'),
-  basic('Question the heroic approach'),
-  basic('Take away the elements in order of apparent non importance'),
-  basic('The inconsistency principle'),
-  basic('You don\'t have to be ashamed of using your own ideas'),
-  basic('What to maintain?'),
-  basic('Decorate, decorate'),
-  basic('When is it for?'),
-  basic('Is it finished?'),
-  basic('Is there something missing?'),
-  basic('Cut a vital connection'),
-  basic('Ask people to work against their better judgment'),
-  basic('Only one element of each kind'),
-  basic('Overtly resist change'),
-  basic('Accretion'),
-  basic('Be less critical more often'),
-  basic('State the problem in words as clearly as possible'),
-  basic('Take a break'),
-  basic('Emphasize the flaws'),
-  basic('Breathe more deeply'),
-  basic('Distorting time'),
-  basic('Make an exhaustive list of everything you might do and do the last thing on the list'),
-  basic('Emphasize differences'),
-  basic('Discover the recipes you are using and abandon them'),
-  basic('Disconnect from desire'),
-  basic('Be extravagant'),
-  basic('Do nothing for as long as possible'),
-  basic('Remove specifics and convert to ambiguities'),
-  basic('The most important thing is the thing most easily forgotten'),
-  basic('Tidy up'),
-  basic('In total darkness or in a very large room, very quietly'),
-  basic('Once the search is in progress, something will be found'),
-  basic('Only a part, not the whole'),
-  basic('Go outside. Shut the door'),
-  basic('Go to an extreme, move back to a more comfortable place'),
-  basic('Simple subtraction'),
-  basic('Simply a matter of work'),
-  basic('Make a blank valuable by putting it in an exquisite frame'),
-  basic('Don\'t stress one thing more than another'),
-  basic('Make a sudden, destructive unpredictable action; incorporate'),
-  basic('Don\'t break the silence'),
-  basic('Disciplined self-indulgence'),
-  basic('Repetition is a form of change'),
-  basic('Discard an axiom'),
-  basic('Retrace your steps'),
-  basic('Ask your body'),
-  basic('Are there sections? Consider transitions'),
-  basic('Don\'t be afraid of things because they\'re easy to do'),
-  basic('Turn it upside down'),
-  basic('Use an old idea'),
-  basic('You are an engineer'),
-  basic('Do we need holes?'),
-  basic('Humanize something free of error'),
-  basic('Use \'unqualified\' people'),
-  basic('Do the words need changing?'),
-  basic('Do something boring'),
-  basic('Towards the insignificant'),
-  basic('Trust in the you of now'),
-  basic('Courage!'),
-  basic('Change nothing and continue with immaculate consistency'),
-  basic('Work at a different speed'),
-  basic('Would anybody want it?'),
-  basic('Accept advice'),
-  basic('Abandon normal instruments'),
-  basic('Which frame would make this look right?'),
-  basic('Look at the order in which you do things'),
-  basic('Look closely at the most embarrassing details and amplify them'),
-  basic('Remove ambiguities and convert to specifics'),
-  basic('What to increase? What to reduce?'),
-  basic('What would your closest friend do?'),
-  basic('Who should be doing this job?\nHow would they do it?'),
-  basic('Reverse'),
-  basic('Slow preparation..Fast execution'),
-  basic('Short circuit (example; a man eating peas with the idea that they will improve his virility shovels them straight into his lap)'),
-  basic('Voice nagging suspicions'),
-  basic('Make it more sensual'),
-  basic('Don\'t be frightened to display your talents'),
-  basic('What wouldn\'t you do?'),
-  basic('Don\'t be frightened of cliches'),
-  basic('What mistakes did you make last time?'),
-  basic('Water'),
-  basic('Make something implied more definite (reinforce, duplicate)'),
-  basic('What are you really thinking about just now? incorporate'),
-  basic('Define an area as \'safe\' and use it as an anchor'),
-  basic('Always first steps'),
-  basic('Allow an easement (an easement is the abandonment of structure)'),
-  basic('How would you have done it?'),
-  basic('Give the game away'),
-  basic('Not building a wall but making a brick'),
-  basic('Be dirty'),
-  basic('Give way to your worst impulse'),
-  basic('Honour thy error as a hidden intention'),
-  basic('Use an unacceptable colour'),
-  basic('Remember  .those quiet evenings'),
-  basic(''),
-  basic('A line has two sides'),
-  basic('Fill every beat with something'),
-  basic('Infinitesimal gradations'),
-  basic('Into the impossible'),
-  basic('Left channel, right channel, centre channel'),
-  basic('Look at a very small object, look at its centre'),
-  basic('Spectrum analysis'),
-  basic('The tape is now the music'),
-  basic('Go slowly all the way round the outside'),
-  basic('Put in earplugs'),
-  basic('Assemble some of the elements in a group and treat the group'),
-  basic('Lowest common denominator'),
-  basic('(Organic) machinery'),
-  basic('Revaluation (a warm feeling)'),
-  basic('You can only make one dot at a time'),
+  card.options('Destroy', [ 'nothing', 'the most important thing' ], 95),
+  card.options('Bridges', [ 'build', 'burn' ], 95),
+  card.options('Intentions', [ 'credibility of', 'nobility of', 'humility of' ], 125),
+  card.multiple('Think:', [ 'Inside the work', 'Outside the work' ], 30),
+  card.attribution('Try faking it!', 'Stewart Brand'),
+  card.attribution('Faced with a choice do both', 'Diter Rot'),
+  card.attribution('Tape your mouth', 'Ritva Saarikko'),
+  card.attribution('Always give yourself credit for having more than personality', 'Arto Lindsay'),
+  card.basic('Use filters'),
+  card.basic('Which elements can be grouped?'),
+  card.basic('Gardening, not architecture'),
+  card.basic('Where\'s the edge?\nWhere does the frame start?'),
+  card.basic('Just carry on'),
+  card.basic('Listen to the quiet voice'),
+  card.basic('Question the heroic approach'),
+  card.basic('Take away the elements in order of apparent non importance'),
+  card.basic('The inconsistency principle'),
+  card.basic('You don\'t have to be ashamed of using your own ideas'),
+  card.basic('What to maintain?'),
+  card.basic('Decorate, decorate'),
+  card.basic('When is it for?'),
+  card.basic('Is it finished?'),
+  card.basic('Is there something missing?'),
+  card.basic('Cut a vital connection'),
+  card.basic('Ask people to work against their better judgment'),
+  card.basic('Only one element of each kind'),
+  card.basic('Overtly resist change'),
+  card.basic('Accretion'),
+  card.basic('Be less critical more often'),
+  card.basic('State the problem in words as clearly as possible'),
+  card.basic('Take a break'),
+  card.basic('Emphasize the flaws'),
+  card.basic('Breathe more deeply'),
+  card.basic('Distorting time'),
+  card.basic('Make an exhaustive list of everything you might do and do the last thing on the list'),
+  card.basic('Emphasize differences'),
+  card.basic('Discover the recipes you are using and abandon them'),
+  card.basic('Disconnect from desire'),
+  card.basic('Be extravagant'),
+  card.basic('Do nothing for as long as possible'),
+  card.basic('Remove specifics and convert to ambiguities'),
+  card.basic('The most important thing is the thing most easily forgotten'),
+  card.basic('Tidy up'),
+  card.basic('In total darkness or in a very large room, very quietly'),
+  card.basic('Once the search is in progress, something will be found'),
+  card.basic('Only a part, not the whole'),
+  card.basic('Go outside. Shut the door'),
+  card.basic('Go to an extreme, move back to a more comfortable place'),
+  card.basic('Simple subtraction'),
+  card.basic('Simply a matter of work'),
+  card.basic('Make a blank valuable by putting it in an exquisite frame'),
+  card.basic('Don\'t stress one thing more than another'),
+  card.basic('Make a sudden, destructive unpredictable action; incorporate'),
+  card.basic('Don\'t break the silence'),
+  card.basic('Disciplined self-indulgence'),
+  card.basic('Repetition is a form of change'),
+  card.basic('Discard an axiom'),
+  card.basic('Retrace your steps'),
+  card.basic('Ask your body'),
+  card.basic('Are there sections? Consider transitions'),
+  card.basic('Don\'t be afraid of things because they\'re easy to do'),
+  card.basic('Turn it upside down'),
+  card.basic('Use an old idea'),
+  card.basic('You are an engineer'),
+  card.basic('Do we need holes?'),
+  card.basic('Humanize something free of error'),
+  card.basic('Use \'unqualified\' people'),
+  card.basic('Do the words need changing?'),
+  card.basic('Do something boring'),
+  card.basic('Towards the insignificant'),
+  card.basic('Trust in the you of now'),
+  card.basic('Courage!'),
+  card.basic('Change nothing and continue with immaculate consistency'),
+  card.basic('Work at a different speed'),
+  card.basic('Would anybody want it?'),
+  card.basic('Accept advice'),
+  card.basic('Abandon normal instruments'),
+  card.basic('Which frame would make this look right?'),
+  card.basic('Look at the order in which you do things'),
+  card.basic('Look closely at the most embarrassing details and amplify them'),
+  card.basic('Remove ambiguities and convert to specifics'),
+  card.basic('What to increase? What to reduce?'),
+  card.basic('What would your closest friend do?'),
+  card.basic('Who should be doing this job?\nHow would they do it?'),
+  card.basic('Reverse'),
+  card.basic('Slow preparation..Fast execution'),
+  card.basic('Short circuit (example; a man eating peas with the idea that they will improve his virility shovels them straight into his lap)'),
+  card.basic('Voice nagging suspicions'),
+  card.basic('Make it more sensual'),
+  card.basic('Don\'t be frightened to display your talents'),
+  card.basic('What wouldn\'t you do?'),
+  card.basic('Don\'t be frightened of cliches'),
+  card.basic('What mistakes did you make last time?'),
+  card.basic('Water'),
+  card.basic('Make something implied more definite (reinforce, duplicate)'),
+  card.basic('What are you really thinking about just now? incorporate'),
+  card.basic('Define an area as \'safe\' and use it as an anchor'),
+  card.basic('Always first steps'),
+  card.basic('Allow an easement (an easement is the abandonment of structure)'),
+  card.basic('How would you have done it?'),
+  card.basic('Give the game away'),
+  card.basic('Not building a wall but making a brick'),
+  card.basic('Be dirty'),
+  card.basic('Give way to your worst impulse'),
+  card.basic('Honour thy error as a hidden intention'),
+  card.basic('Use an unacceptable colour'),
+  card.basic('Remember  .those quiet evenings'),
+  card.basic(''),
+  card.basic('A line has two sides'),
+  card.basic('Fill every beat with something'),
+  card.basic('Infinitesimal gradations'),
+  card.basic('Into the impossible'),
+  card.basic('Left channel, right channel, centre channel'),
+  card.basic('Look at a very small object, look at its centre'),
+  card.basic('Spectrum analysis'),
+  card.basic('The tape is now the music'),
+  card.basic('Go slowly all the way round the outside'),
+  card.basic('Put in earplugs'),
+  card.basic('Assemble some of the elements in a group and treat the group'),
+  card.basic('Lowest common denominator'),
+  card.basic('(Organic) machinery'),
+  card.basic('Revaluation (a warm feeling)'),
+  card.basic('You can only make one dot at a time'),
 ];

@@ -16,6 +16,7 @@ dependencies:
   flutter_card_swiper: ^6.0.0
   get_storage: ^2.1.1
   ionicons: ^0.2.2
+  flip_card: ^0.7.0
 
 dev_dependencies:
   flutter_test:

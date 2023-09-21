@@ -117,27 +117,20 @@ class StrategyCard extends StatelessWidget {
       canRequestFocus: true,
       skipTraversal: false,
       onKey: handleKeyPress,
-      child: Scaffold(
-        body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.loose(const Size(750, 500)),
-            child: CardSwiper(
-              controller: controller,
-              initialIndex: storage.read('currentIndex') ?? 0,
-              cardsCount: 999999999,
-              maxAngle: 13,
-              backCardOffset: const Offset(0, 0),
-              scale: 1,
-              cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
-                onTap: () => iconState.setIconsVisible(),
-                child: nextCard(index)
-              ),
-              onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-              onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-              onEnd: () => storage.write('strategyData', []),
-            )
-          ),
+      child: CardSwiper(
+        controller: controller,
+        initialIndex: storage.read('currentIndex') ?? 0,
+        cardsCount: 999999999,
+        maxAngle: 13,
+        backCardOffset: const Offset(0, 0),
+        scale: 1,
+        cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
+          onTap: () => iconState.setIconsVisible(),
+          child: nextCard(index)
         ),
+        onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+        onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+        onEnd: () => storage.write('strategyData', []),
       ),
     );
   }

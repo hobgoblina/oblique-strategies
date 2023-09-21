@@ -1,12 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
+import 'settings_card.dart';
 
 void main() async {
   await GetStorage.init();
@@ -46,8 +48,8 @@ class IconState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleSettingsOpen() {
-    settingsOpen = !settingsOpen;
+  void setSettingsOpen(bool isOpen) {
+    settingsOpen = isOpen;
     notifyListeners();
   }
 
@@ -70,15 +72,31 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     IconState iconState = IconState();
 
+    FlipCardController flipController = FlipCardController();
+
     return Listener(
       onPointerHover: (pointerHoverEvent) => iconState.setIconsVisible(),
       child: GestureDetector(
         onTap: () => iconState.setIconsVisible(),
         child: Stack(
           children: [
-            StrategyCard(iconState: iconState),
+            Scaffold(
+              body: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.loose(const Size(750, 500)),
+                  child: FlipCard(
+                    onFlipDone: (isFront) => iconState.setSettingsOpen(isFront),
+                    flipOnTouch: false,
+                    direction: FlipDirection.VERTICAL,
+                    controller: flipController,
+                    front: StrategyCard(iconState: iconState),
+                    back: settingsCard
+                  ),
+                ),
+              ),
+            ),
             FavoriteIcon(iconState: iconState),
-            SettingsIcon(iconState: iconState),
+            SettingsIcon(iconState: iconState, flipController: flipController),
           ]
         ),
       ),

@@ -42,20 +42,23 @@ class FavoriteIcon extends StatelessWidget {
 
     return ListenableBuilder(
       listenable: iconState,
-      builder: (context, child) => AnimatedOpacity(
-        opacity: iconState.iconsVisible ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.topRight,
-          child: IconButton(
-            onPressed: addToFavorites,
-            tooltip: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
-            icon: Icon(
-              Ionicons.heart_outline,
-              semanticLabel: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
-              color: (iconState.currentIsFavorite ?? false) ? Colors.red : Colors.white,
-              size: 40
+      builder: (context, child) => Visibility(
+        visible: !iconState.settingsOpen,
+        child: AnimatedOpacity(
+          opacity: iconState.iconsVisible ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            alignment: Alignment.topRight,
+            child: IconButton(
+              onPressed: addToFavorites,
+              tooltip: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
+              icon: Icon(
+                Ionicons.heart_outline,
+                semanticLabel: '${iconState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
+                color: (iconState.currentIsFavorite ?? false) ? Colors.red : Colors.white,
+                size: 40
+              ),
             ),
           ),
         ),
