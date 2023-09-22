@@ -1,42 +1,42 @@
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
 import 'main.dart';
 
 class SettingsIcon extends StatelessWidget {
   const SettingsIcon({
     super.key,
-    required this.iconState,
-    required this.flipController,
+    required this.flipController
   });
 
-  final IconState iconState;
   final FlipCardController flipController;
-
-  void onPressed() {
-    flipController.toggleCard();
-    iconState.setIconsVisible();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: iconState,
-      builder: (context, child) => AnimatedOpacity(
-        opacity: iconState.iconsVisible ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.topLeft,
-          child: IconButton(
-            onPressed: onPressed,
-            tooltip: '${iconState.settingsOpen ? 'Close' : 'Open'} settings',
-            icon: Icon(
-              iconState.settingsOpen ? Ionicons.close_outline : Ionicons.options_outline,
-              semanticLabel: '${iconState.settingsOpen ? 'Close' : 'Open'} settings',
-              color: Colors.white,
-              size: 40
-            ),
+    AppState appState = context.watch<AppState>();
+    final storage = GetStorage();
+
+    void onPressed() {
+      flipController.toggleCard();
+      appState.setIconsVisible();
+    }
+
+    return AnimatedOpacity(
+      opacity: appState.iconsVisible || appState.settingsOpen ? 1.0 : 0.0,
+      duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),
+      child: Container(
+        padding: const EdgeInsets.all(11),
+        alignment: Alignment.topLeft,
+        child: IconButton(
+          onPressed: onPressed,
+          tooltip: '${appState.settingsOpen ? 'Close' : 'Open'} settings',
+          icon: Icon(
+            appState.settingsOpen ? Ionicons.close_outline : Ionicons.options_outline,
+            semanticLabel: '${appState.settingsOpen ? 'Close' : 'Open'} settings',
+            color: Colors.white,
+            size: 35
           ),
         ),
       ),
