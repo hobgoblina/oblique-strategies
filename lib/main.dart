@@ -34,19 +34,29 @@ class StrategiesApp extends StatelessWidget {
             background: const Color.fromRGBO(25, 25, 25, 1)
           ),
           checkboxTheme: CheckboxThemeData(
-            splashRadius: 0,
+            splashRadius: 17,
             shape: const RoundedRectangleBorder(),
             checkColor: MaterialStateProperty.all(Colors.black),
+            overlayColor: MaterialStateColor.resolveWith((states) {
+              if (states.contains(MaterialState.focused)) {
+                return Colors.black12;
+              }
+              return Colors.transparent;
+            }),
             side: MaterialStateBorderSide.resolveWith(
               (states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black),
             ),
-            fillColor: MaterialStateColor.resolveWith(
-              (states) {
-                if (states.contains(MaterialState.disabled)) {
-                  return Colors.grey;
-                }
-                return Colors.white;
-              },
+            fillColor: MaterialStateColor.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.grey;
+              }
+              return Colors.white;
+            }),
+          ),
+          tooltipTheme: const TooltipThemeData(
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.all(Radius.circular(10))
             ),
           ),
           textTheme: GoogleFonts.interTextTheme()

@@ -30,88 +30,94 @@ class SettingsCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Tooltip(
-                triggerMode: TooltipTriggerMode.tap,
-                message: 'A reload may be required for certain animation changes to take effect.',
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Icon(
-                          Ionicons.information_circle_outline,
-                          color: Colors.black,
-                          size: 25
-                        ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  children: [
+                    Tooltip(
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: 'A reload may be required for certain animation changes to take effect.',
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Icon(
+                              Ionicons.information_circle_outline,
+                              color: Colors.black,
+                              size: 25
+                            ),
+                          ),
+                          Text(
+                            'Reduce animations',
+                            textWidthBasis: TextWidthBasis.longestLine,
+                            style: GoogleFonts.inter(),
+                            textScaleFactor: 1.5
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Text(
-                          'Reduce animations',
-                          textWidthBasis: TextWidthBasis.longestLine,
-                          style: GoogleFonts.inter(),
-                          textScaleFactor: 1.5
-                        ),
+                    ),
+                    const Spacer(),
+                    Transform.scale(
+                      scale: 1.2,
+                      child: Checkbox(
+                        autofocus: true,
+                        value: storage.read('reduceAnimations') ?? false,
+                        semanticLabel: 'Reduce animations',
+                        onChanged: (val) => {
+                          if (val is bool) {
+                            storage.write('reduceAnimations', val),
+                            appState.rebuildApp()
+                          }
+                        }
                       ),
-                      Transform.scale(
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  children: [
+                    Tooltip(
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Icon(
+                              Ionicons.information_circle_outline,
+                              color: Colors.black,
+                              size: 25
+                            ),
+                          ),
+                          Text(
+                            'Keep favorites in the deck',
+                            textWidthBasis: TextWidthBasis.longestLine,
+                            style: GoogleFonts.inter(),
+                            textScaleFactor: 1.5
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    ListenableBuilder(
+                      listenable: canAlwaysRedrawFavorites,
+                      builder: (context, child) => Transform.scale(
                         scale: 1.2,
                         child: Checkbox(
-                          autofocus: true,
-                          value: storage.read('reduceAnimations') ?? false,
-                          semanticLabel: 'Reduce animations',
+                          value: canAlwaysRedrawFavorites.value,
+                          semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
                           onChanged: (val) => {
                             if (val is bool) {
-                              storage.write('reduceAnimations', val),
-                              appState.rebuildApp()
+                              storage.write('canAlwaysRedrawFavorites', val),
+                              canAlwaysRedrawFavorites.value = val
                             }
                           }
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Tooltip(
-                triggerMode: TooltipTriggerMode.tap,
-                message: 'Allow favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Icon(
-                          Ionicons.information_circle_outline,
-                          color: Colors.black,
-                          size: 25
-                        ),
                       ),
-                      Expanded(
-                        child: Text(
-                          'Keep favorites in the deck',
-                          textWidthBasis: TextWidthBasis.longestLine,
-                          style: GoogleFonts.inter(),
-                          textScaleFactor: 1.5
-                        ),
-                      ),
-                      ListenableBuilder(
-                        listenable: canAlwaysRedrawFavorites,
-                        builder: (context, child) => Transform.scale(
-                          scale: 1.2,
-                          child: Checkbox(
-                            value: canAlwaysRedrawFavorites.value,
-                            semanticLabel: 'Allow favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                            onChanged: (val) => {
-                              if (val is bool) {
-                                storage.write('canAlwaysRedrawFavorites', val),
-                                canAlwaysRedrawFavorites.value = val
-                              }
-                            }
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
             ],
