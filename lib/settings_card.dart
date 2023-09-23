@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +15,9 @@ class SettingsCard extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     final Cards card = Cards();
     final storage = GetStorage();
+
     final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
+    final Duration? tooltipDuration = Platform.isAndroid || Platform.isIOS ? const Duration(milliseconds: 2500) : null;
 
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
@@ -36,6 +39,7 @@ class SettingsCard extends StatelessWidget {
                   children: [
                     Tooltip(
                       triggerMode: TooltipTriggerMode.tap,
+                      showDuration: tooltipDuration,
                       message: 'A reload may be required for certain animation changes to take effect.',
                       child: Row(
                         children: [
@@ -80,6 +84,7 @@ class SettingsCard extends StatelessWidget {
                   children: [
                     Tooltip(
                       triggerMode: TooltipTriggerMode.tap,
+                      showDuration: tooltipDuration,
                       message: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
                       child: Row(
                         children: [
