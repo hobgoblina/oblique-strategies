@@ -67,10 +67,10 @@ class SettingsCard extends StatelessWidget {
                         autofocus: true,
                         value: storage.read('reduceAnimations') ?? false,
                         semanticLabel: 'Reduce animations',
-                        onChanged: (val) => {
+                        onChanged: (val) {
                           if (val is bool) {
-                            storage.write('reduceAnimations', val),
-                            appState.rebuildApp()
+                            storage.write('reduceAnimations', val);
+                            appState.rebuildApp();
                           }
                         }
                       ),
@@ -113,15 +113,15 @@ class SettingsCard extends StatelessWidget {
                         child: Checkbox(
                           value: canAlwaysRedrawFavorites.value,
                           semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                          onChanged: (val) => {
+                          onChanged: (val) {
                             if (val is bool) {
-                              storage.write('canAlwaysRedrawFavorites', val),
-                              canAlwaysRedrawFavorites.value = val
+                              storage.write('canAlwaysRedrawFavorites', val);
+                              canAlwaysRedrawFavorites.value = val;
                             }
                           }
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

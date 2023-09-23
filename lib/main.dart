@@ -31,7 +31,7 @@ class StrategiesApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.black,
-            background: const Color.fromRGBO(25, 25, 25, 1)
+            background: const Color.fromRGBO(23, 23, 23, 1)
           ),
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
