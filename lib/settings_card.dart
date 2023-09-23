@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +17,7 @@ class SettingsCard extends StatelessWidget {
     final storage = GetStorage();
 
     final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
-    final Duration? tooltipDuration = Platform.isAndroid || Platform.isIOS ? const Duration(milliseconds: 2500) : null;
+    const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 2500);
 
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
