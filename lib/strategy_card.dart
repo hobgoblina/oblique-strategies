@@ -134,28 +134,39 @@ class StrategyCardState extends State<StrategyCard> {
       return true;
     }
 
-    return Focus(
-      autofocus: true,
-      canRequestFocus: !appState.settingsOpen,
-      skipTraversal: false,
-      onKey: handleKeyPress,
-      child: Semantics(
-        label: 'The current strategy card. Press space, enter, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
-        child: CardSwiper(
-          controller: controller,
-          initialIndex: storage.read('currentIndex') ?? 0,
-          cardsCount: 999999999,
-          maxAngle: 13,
-          duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
-          backCardOffset: const Offset(0, 0),
-          scale: 1,
-          cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
-            onTap: () => appState.setIconsVisible(),
-            child: nextCard(index)
+    bool onWillPop() {
+      if (!appState.settingsOpen) {
+        controller.undo();
+      }
+
+      return false;
+    }
+
+    return WillPopScope(
+      onWillPop: () async => onWillPop(),
+      child: Focus(
+        autofocus: true,
+        canRequestFocus: !appState.settingsOpen,
+        skipTraversal: false,
+        onKey: handleKeyPress,
+        child: Semantics(
+          label: 'The current strategy card. Press space, enter, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
+          child: CardSwiper(
+            controller: controller,
+            initialIndex: storage.read('currentIndex') ?? 0,
+            cardsCount: 999999999,
+            maxAngle: 13,
+            duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
+            backCardOffset: const Offset(0, 0),
+            scale: 1,
+            cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
+              onTap: () => appState.setIconsVisible(),
+              child: nextCard(index)
+            ),
+            onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+            onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+            onEnd: () => storage.write('strategyData', []),
           ),
-          onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-          onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-          onEnd: () => storage.write('strategyData', []),
         ),
       ),
     );

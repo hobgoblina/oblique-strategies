@@ -72,6 +72,7 @@ class AppState extends ChangeNotifier {
   bool settingsOpen = false;
   bool iconsVisible = false;
   Timer? iconFadeoutTimer;
+  FlipCardController flipController = FlipCardController();
 
   void setCurrentFavorite(bool favorite) {
     currentIsFavorite = favorite;
@@ -106,7 +107,6 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final storage = GetStorage();
     AppState appState = context.watch<AppState>();
-    FlipCardController flipController = FlipCardController();
 
     return Listener(
       onPointerHover: (pointerHoverEvent) => appState.setIconsVisible(),
@@ -123,7 +123,7 @@ class MainPage extends StatelessWidget {
                     onFlipDone: (isFront) => appState.setSettingsOpen(isFront),
                     flipOnTouch: false,
                     direction: FlipDirection.VERTICAL,
-                    controller: flipController,
+                    controller: appState.flipController,
                     front: const StrategyCard(),
                     back: const SettingsCard()
                   ),
@@ -131,7 +131,7 @@ class MainPage extends StatelessWidget {
               ),
             ),
             const FavoriteIcon(),
-            SettingsIcon(flipController: flipController),
+            const SettingsIcon(),
           ]
         ),
       ),

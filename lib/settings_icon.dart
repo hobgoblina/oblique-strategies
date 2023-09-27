@@ -6,12 +6,7 @@ import 'package:provider/provider.dart';
 import 'main.dart';
 
 class SettingsIcon extends StatelessWidget {
-  const SettingsIcon({
-    super.key,
-    required this.flipController
-  });
-
-  final FlipCardController flipController;
+  const SettingsIcon({ super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +14,7 @@ class SettingsIcon extends StatelessWidget {
     final storage = GetStorage();
 
     void onPressed() {
-      flipController.toggleCard();
+      appState.flipController.toggleCard();
       appState.setIconsVisible();
     }
 
