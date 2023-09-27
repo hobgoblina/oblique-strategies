@@ -81,48 +81,48 @@ class StrategyCardState extends State<StrategyCard> {
     return next;
   }
 
+  KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      if (
+        event.logicalKey == LogicalKeyboardKey.space || 
+        event.logicalKey == LogicalKeyboardKey.enter
+      ) {
+        switch (Random().nextInt(4)) {
+          case 0:
+            controller.swipeLeft();
+          case 1:
+            controller.swipeTop();
+          case 2:
+            controller.swipeRight();
+          case 3:
+            controller.swipeBottom();
+        }
+
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        controller.swipeLeft();
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        controller.swipeTop();
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        controller.swipeRight();
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        controller.swipeBottom();
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        controller.undo();
+        return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
   @override
   Widget build(BuildContext context) {
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
-    
-    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
-      if (event is RawKeyDownEvent) {
-        if (
-          event.logicalKey == LogicalKeyboardKey.space || 
-          event.logicalKey == LogicalKeyboardKey.enter
-        ) {
-          switch (Random().nextInt(4)) {
-            case 0:
-              controller.swipeLeft();
-            case 1:
-              controller.swipeTop();
-            case 2:
-              controller.swipeRight();
-            case 3:
-              controller.swipeBottom();
-          }
-
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          controller.swipeLeft();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          controller.swipeTop();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          controller.swipeRight();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          controller.swipeBottom();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-          controller.undo();
-          return KeyEventResult.handled;
-        }
-      }
-      return KeyEventResult.ignored;
-    }
 
     bool refreshFavorite(int? newIndex) {
       if (newIndex is int) {
