@@ -1,4 +1,3 @@
-import 'package:flip_card/flip_card_controller.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
