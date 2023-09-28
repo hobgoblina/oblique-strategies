@@ -22,7 +22,8 @@ class StrategiesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(20, 20, 20, 1)));
 
     return ChangeNotifierProvider(
       create: (context) => AppState(),
@@ -32,7 +33,7 @@ class StrategiesApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.black,
-            background: const Color.fromRGBO(23, 23, 23, 1)
+            background: const Color.fromRGBO(20, 20, 20, 1)
           ),
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
