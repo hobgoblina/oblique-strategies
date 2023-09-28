@@ -23,7 +23,10 @@ class StrategiesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(20, 20, 20, 1)));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color.fromRGBO(20, 20, 20, 1),
+      systemNavigationBarColor: Color.fromRGBO(20, 20, 20, 1)
+    ));
 
     return ChangeNotifierProvider(
       create: (context) => AppState(),
