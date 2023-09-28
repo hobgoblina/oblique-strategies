@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
@@ -72,7 +73,9 @@ class AppState extends ChangeNotifier {
   bool settingsOpen = false;
   bool iconsVisible = false;
   Timer? iconFadeoutTimer;
-  FlipCardController flipController = FlipCardController();
+  
+  final FlipCardController flipController = FlipCardController();
+  final CardSwiperController swipeController = CardSwiperController();
 
   void setCurrentFavorite(bool favorite) {
     currentIsFavorite = favorite;
@@ -108,31 +111,44 @@ class MainPage extends StatelessWidget {
     final storage = GetStorage();
     AppState appState = context.watch<AppState>();
 
-    return Listener(
-      onPointerHover: (pointerHoverEvent) => appState.setIconsVisible(),
-      child: GestureDetector(
-        onTap: () => appState.setIconsVisible(),
-        child: Stack(
-          children: [
-            Scaffold(
-              body: Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.loose(const Size(750, 500)),
-                  child: FlipCard(
-                    speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
-                    onFlipDone: (isFront) => appState.setSettingsOpen(isFront),
-                    flipOnTouch: false,
-                    direction: FlipDirection.VERTICAL,
-                    controller: appState.flipController,
-                    front: const StrategyCard(),
-                    back: const SettingsCard()
+    bool onWillPop() {
+      if (!appState.settingsOpen) {
+        appState.swipeController.undo();
+      } else {
+        appState.flipController.toggleCard();
+      }
+
+      return false;
+    }
+
+    return WillPopScope(
+      onWillPop: () async => onWillPop(),
+      child: Listener(
+        onPointerHover: (pointerHoverEvent) => appState.setIconsVisible(),
+        child: GestureDetector(
+          onTap: () => appState.setIconsVisible(),
+          child: Stack(
+            children: [
+              Scaffold(
+                body: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.loose(const Size(750, 500)),
+                    child: FlipCard(
+                      speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
+                      onFlipDone: (isFront) => appState.setSettingsOpen(isFront),
+                      flipOnTouch: false,
+                      direction: FlipDirection.VERTICAL,
+                      controller: appState.flipController,
+                      front: const StrategyCard(),
+                      back: const SettingsCard()
+                    ),
                   ),
                 ),
               ),
-            ),
-            const FavoriteIcon(),
-            const SettingsIcon(),
-          ]
+              const FavoriteIcon(),
+              const SettingsIcon(),
+            ]
+          ),
         ),
       ),
     );

@@ -7,23 +7,8 @@ import 'dart:math';
 import 'main.dart';
 import 'strategies.dart';
 
-class StrategyCard extends StatefulWidget {
-
+class StrategyCard extends StatelessWidget {
   const StrategyCard({ super.key });
-
-  @override
-  // ignore: no_logic_in_create_state
-  State<StrategyCard> createState() => StrategyCardState();
-}
-
-class StrategyCardState extends State<StrategyCard> {
-  final CardSwiperController controller = CardSwiperController();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   Container nextCard(int index) {
     final storage = GetStorage();
@@ -81,7 +66,12 @@ class StrategyCardState extends State<StrategyCard> {
     return next;
   }
 
-  KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
+  @override
+  Widget build(BuildContext context) {
+    AppState appState = context.watch<AppState>();
+    final storage = GetStorage();
+
+    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       if (
         event.logicalKey == LogicalKeyboardKey.space || 
@@ -89,40 +79,35 @@ class StrategyCardState extends State<StrategyCard> {
       ) {
         switch (Random().nextInt(4)) {
           case 0:
-            controller.swipeLeft();
+            appState.swipeController.swipeLeft();
           case 1:
-            controller.swipeTop();
+            appState.swipeController.swipeTop();
           case 2:
-            controller.swipeRight();
+            appState.swipeController.swipeRight();
           case 3:
-            controller.swipeBottom();
+            appState.swipeController.swipeBottom();
         }
 
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        controller.swipeLeft();
+        appState.swipeController.swipeLeft();
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        controller.swipeTop();
+        appState.swipeController.swipeTop();
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        controller.swipeRight();
+        appState.swipeController.swipeRight();
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        controller.swipeBottom();
+        appState.swipeController.swipeBottom();
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-        controller.undo();
+        appState.swipeController.undo();
         return KeyEventResult.handled;
       }
     }
     return KeyEventResult.ignored;
   }
-
-  @override
-  Widget build(BuildContext context) {
-    AppState appState = context.watch<AppState>();
-    final storage = GetStorage();
 
     bool refreshFavorite(int? newIndex) {
       if (newIndex is int) {
@@ -134,39 +119,28 @@ class StrategyCardState extends State<StrategyCard> {
       return true;
     }
 
-    bool onWillPop() {
-      if (!appState.settingsOpen) {
-        controller.undo();
-      }
-
-      return false;
-    }
-
-    return WillPopScope(
-      onWillPop: () async => onWillPop(),
-      child: Focus(
-        autofocus: true,
-        canRequestFocus: !appState.settingsOpen,
-        skipTraversal: false,
-        onKey: handleKeyPress,
-        child: Semantics(
-          label: 'The current strategy card. Press space, enter, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
-          child: CardSwiper(
-            controller: controller,
-            initialIndex: storage.read('currentIndex') ?? 0,
-            cardsCount: 999999999,
-            maxAngle: 13,
-            duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
-            backCardOffset: const Offset(0, 0),
-            scale: 1,
-            cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
-              onTap: () => appState.setIconsVisible(),
-              child: nextCard(index)
-            ),
-            onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-            onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-            onEnd: () => storage.write('strategyData', []),
+    return Focus(
+      autofocus: true,
+      canRequestFocus: !appState.settingsOpen,
+      skipTraversal: false,
+      onKey: handleKeyPress,
+      child: Semantics(
+        label: 'The current strategy card. Press space, enter, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
+        child: CardSwiper(
+          controller: appState.swipeController,
+          initialIndex: storage.read('currentIndex') ?? 0,
+          cardsCount: 999999999,
+          maxAngle: 13,
+          duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
+          backCardOffset: const Offset(0, 0),
+          scale: 1,
+          cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
+            onTap: () => appState.setIconsVisible(),
+            child: nextCard(index)
           ),
+          onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+          onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+          onEnd: () => storage.write('strategyData', []),
         ),
       ),
     );

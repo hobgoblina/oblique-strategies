@@ -4,7 +4,7 @@ tasks:
   - name: Android Appetize info
     command: |
       curl -sS --http1.1 "https://$APPETIZE_API_TOKEN@api.appetize.io/v1/apps/$APPETIZE_PUBLICKEY" \
-          -F "file=@/workspace/template-flutter/build/app/outputs/flutter-apk/app.apk" \
+          -F "file=@/workspace/oblique-strategies/build/app/outputs/flutter-apk/app.apk" \
           -F platform=android \
           -F "buttonText=Start App" \
           -F "postSessionButtonText=Start App" \
