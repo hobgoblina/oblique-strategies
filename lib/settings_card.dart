@@ -17,7 +17,7 @@ class SettingsCard extends StatelessWidget {
     final storage = GetStorage();
 
     final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
-    const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 2500);
+    const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 5000);
 
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),

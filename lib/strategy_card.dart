@@ -135,7 +135,7 @@ class StrategyCard extends StatelessWidget {
           backCardOffset: const Offset(0, 0),
           scale: 1,
           cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
-            onTap: () => appState.setIconsVisible(),
+            onTapUp: (tapUpDetails) => appState.setIconsVisible(),
             child: nextCard(index)
           ),
           onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
