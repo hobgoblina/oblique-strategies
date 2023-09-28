@@ -20,7 +20,7 @@ class SettingsCard extends StatelessWidget {
     const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 2500);
 
     bool onWillPop() {
-      if (!appState.settingsOpen) {
+      if (appState.settingsOpen) {
         appState.flipController.toggleCard();
       }
 
