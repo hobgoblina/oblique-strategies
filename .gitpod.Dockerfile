@@ -7,12 +7,12 @@ ENV PATH="$HOME/flutter/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_
 
 # Install Open JDK for android and other dependencies
 USER root
-RUN install-packages openjdk-8-jdk -y \
+RUN install-packages openjdk-17-jdk -y \
         libgtk-3-dev \
         libnss3-dev \
         fonts-noto \
         fonts-noto-cjk \
-    && update-java-alternatives --set java-1.8.0-openjdk-amd64
+    && update-java-alternatives --set java-1.17.0-openjdk-amd64
 
 # Insall flutter and dependencies
 USER gitpod
@@ -23,7 +23,7 @@ RUN wget -q "https://storage.googleapis.com/flutter_infra_release/releases/stabl
     && rm -f "$_file_name" \
     && mkdir -p $ANDROID_HOME/cmdline-tools/latest \
     && mv $ANDROID_HOME/cmdline-tools/{bin,lib} $ANDROID_HOME/cmdline-tools/latest \
-    && yes | sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-31" \
+    && yes | sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-33" \
     && flutter precache && for _plat in web linux-desktop; do flutter config --enable-${_plat}; done \
     && flutter config --android-sdk $ANDROID_HOME \
     && yes | flutter doctor --android-licenses \
