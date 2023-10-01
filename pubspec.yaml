@@ -31,14 +31,16 @@ flutter:
 
 flutter_launcher_icons:
   android: "launcher_icon"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/icon/icon.png"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: "assets/icon/icon_round.png"
   image_path_ios: "assets/icon/ios_icon.png"
   min_sdk_android: 21
   web:
     generate: true
-    image_path: "assets/icon/icon.png"
+    image_path: "assets/icon/icon_round.png"
     background_color: "#000000"
     theme_color: "#000000"
 
