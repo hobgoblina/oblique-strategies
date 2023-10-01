@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -128,10 +129,10 @@ class MainPage extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async => onWillPop(),
-      child: Listener(
-        onPointerHover: (pointerHoverEvent) => appState.setIconsVisible(),
+      child: MouseRegion(
+        onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : {},
         child: GestureDetector(
-          onTap: () => appState.setIconsVisible(),
+          onTapUp: (tapUpDetails) => appState.setIconsVisible(),
           child: Stack(
             children: [
               Scaffold(
