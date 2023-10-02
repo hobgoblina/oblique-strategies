@@ -36,11 +36,11 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   image_path: "assets/icon/icon_round.png"
-  image_path_ios: "assets/icon/ios_icon.png"
+  image_path_ios: "assets/icon/icon_square.png"
   min_sdk_android: 21
   web:
     generate: true
-    image_path: "assets/icon/icon_round.png"
+    image_path: "assets/icon/icon_square.png"
     background_color: "#000000"
     theme_color: "#000000"
 

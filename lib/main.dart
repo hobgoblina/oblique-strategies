@@ -130,7 +130,7 @@ class MainPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => onWillPop(),
       child: MouseRegion(
-        onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : {},
+        onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
         child: GestureDetector(
           onTapUp: (tapUpDetails) => appState.setIconsVisible(),
           child: Stack(

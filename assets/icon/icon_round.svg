@@ -1,9 +1,0 @@
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
- <g>
-  <title>Layer 1</title>
-  <rect id="svg_3" height="400" width="400" y="0" x="0" stroke="#000" fill="#000000"/>
-  <path stroke-width="0" id="svg_1" d="m50,125c0,-13.58447 11.41553,-25 25,-25l250,0c13.58447,0 25,11.41553 25,25l0,150c0,13.58447 -11.41553,25 -25,25l-250,0c-13.58447,0 -25,-11.41553 -25,-25l0,-150z" opacity="undefined" stroke="#000" fill="#ffffff"/>
-  <path id="svg_2" d="m125,200c0,-5.43379 4.56621,-10 10,-10l130,0c5.43379,0 10,4.56621 10,10l0,0c0,5.43379 -4.56621,10 -10,10l-130,0c-5.43379,0 -10,-4.56621 -10,-10l0,0z" opacity="undefined" stroke="#000" fill="#000000"/>
- </g>
-
-</svg>

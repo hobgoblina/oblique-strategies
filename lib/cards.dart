@@ -29,7 +29,7 @@ class Cards {
     );
   }
 
-  Map<String, dynamic>  basic(String cardText) {
+  Map<String, dynamic> basic(String cardText) {
     return {
       'text': cardText,
       'card': cardWrapper((paddingInterp) => Container(
