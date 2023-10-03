@@ -44,6 +44,8 @@ class SettingsCard extends StatelessWidget {
         final timeString = '${newTime.hour}:${newTime.minute}';
         storage.write(startOrEnd == 'start' ? 'quietHoursStart' : 'quietHoursEnd', timeString);
         appState.rebuildApp();
+
+        // TODO: reset scheduled notifications, if needed
       }
     }
 
@@ -152,7 +154,7 @@ class SettingsCard extends StatelessWidget {
                 padding: EdgeInsets.zero, 
                 child: TextButton(
                   onPressed: () => onQuietHoursPressed('start'),
-                  child: const Text('Time input'),
+                  child: Text('${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}'),
                 )
               ),
             ],
