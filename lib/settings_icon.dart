@@ -24,6 +24,8 @@ class SettingsIcon extends StatelessWidget {
         padding: const EdgeInsets.all(11),
         alignment: Alignment.topLeft,
         child: IconButton(
+          hoverColor: const Color.fromRGBO(25, 25, 25, 1),
+          focusColor: const Color.fromRGBO(25, 25, 25, 1),
           onPressed: onPressed,
           tooltip: '${appState.settingsOpen ? 'Close' : 'Open'} settings',
           icon: Icon(

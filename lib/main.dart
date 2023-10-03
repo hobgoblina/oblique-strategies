@@ -36,9 +36,48 @@ class StrategiesApp extends StatelessWidget {
         title: 'Oblique Strategies',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: backgroundColor,
-            background: backgroundColor
+          colorScheme: const ColorScheme(
+            brightness: Brightness.light,
+            primary: Colors.white,
+            onPrimary: Colors.black,
+            secondary: Colors.black12,
+            onSecondary: Colors.black,
+            error: Color.fromRGBO(200, 32, 20, 1),
+            onError: Colors.white,
+            background: backgroundColor,
+            onBackground: Colors.white,
+            surface: Colors.white,
+            onSurface: Colors.black,
+            outline: Colors.black
+          ),
+          timePickerTheme: TimePickerThemeData(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsets.all(40),
+            dialBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+            dialHandColor: Colors.black,
+            dialTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            entryModeIconColor: Colors.black,
+            hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
+            hourMinuteShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: const BorderSide(color: Colors.black, width: 1.5)
+            ),
+            dayPeriodBorderSide: const BorderSide(color: Colors.black, width: 1.5),
+            dayPeriodColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.black : Colors.white),
+            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            confirmButtonStyle: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
+              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(color: Colors.black)),
+              overlayColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+                  return Colors.black12;
+                } else if (states.contains(MaterialState.pressed)) {
+                  return Colors.black26;
+                }
+
+                return Colors.transparent;
+              })
+            )
           ),
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
@@ -60,8 +99,9 @@ class StrategiesApp extends StatelessWidget {
               return Colors.white;
             }),
           ),
-          tooltipTheme: const TooltipThemeData(
-            decoration: BoxDecoration(
+          tooltipTheme: TooltipThemeData(
+            textStyle: GoogleFonts.inter(color: Colors.white),
+            decoration: const BoxDecoration(
               color: Colors.black87,
               borderRadius: BorderRadius.all(Radius.circular(10))
             ),

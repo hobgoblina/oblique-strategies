@@ -19,6 +19,46 @@ class SettingsCard extends StatelessWidget {
     final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
     const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 5000);
 
+    Widget settingsItem({ String? tooltip, required String text, required Widget child }) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Row(
+          children: [
+            tooltip is String ? Tooltip(
+              triggerMode: TooltipTriggerMode.tap,
+              showDuration: tooltipDuration,
+              message: tooltip,
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Ionicons.information_circle_outline,
+                      color: Colors.black,
+                      size: 25
+                    ),
+                  ),
+                  Text(
+                    text,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    style: GoogleFonts.inter(),
+                    textScaleFactor: 1.5
+                  ),
+                ],
+              ),
+            ) : Text(
+              text,
+              textWidthBasis: TextWidthBasis.longestLine,
+              style: GoogleFonts.inter(),
+              textScaleFactor: 1.5
+            ),
+            const Spacer(),
+            child
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
       child: card.cardWrapper((paddingInterp) => Container(
@@ -33,97 +73,62 @@ class SettingsCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  children: [
-                    Tooltip(
-                      triggerMode: TooltipTriggerMode.tap,
-                      showDuration: tooltipDuration,
-                      message: 'A reload may be required for certain animation changes to take effect.',
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Icon(
-                              Ionicons.information_circle_outline,
-                              color: Colors.black,
-                              size: 25
-                            ),
-                          ),
-                          Text(
-                            'Reduce animations',
-                            textWidthBasis: TextWidthBasis.longestLine,
-                            style: GoogleFonts.inter(),
-                            textScaleFactor: 1.5
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Transform.scale(
-                      scale: 1.2,
-                      child: Checkbox(
-                        autofocus: true,
-                        value: storage.read('reduceAnimations') ?? false,
-                        semanticLabel: 'Reduce animations',
-                        onChanged: (val) {
-                          if (val is bool) {
-                            storage.write('reduceAnimations', val);
-                            appState.rebuildApp();
-                          }
-                        }
-                      ),
-                    )
-                  ],
-                ),
+              settingsItem(
+                tooltip: 'A reload may be required for certain animation changes to take effect.',
+                text: 'Reduce animations',
+                child: Transform.scale(
+                  scale: 1.2,
+                  child: Checkbox(
+                    autofocus: true,
+                    value: storage.read('reduceAnimations') ?? false,
+                    semanticLabel: 'Reduce animations',
+                    onChanged: (val) {
+                      if (val is bool) {
+                        storage.write('reduceAnimations', val);
+                        appState.rebuildApp();
+                      }
+                    }
+                  ),
+                )
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  children: [
-                    Tooltip(
-                      triggerMode: TooltipTriggerMode.tap,
-                      showDuration: tooltipDuration,
-                      message: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: Icon(
-                              Ionicons.information_circle_outline,
-                              color: Colors.black,
-                              size: 25
-                            ),
-                          ),
-                          Text(
-                            'Keep favorites in the deck',
-                            textWidthBasis: TextWidthBasis.longestLine,
-                            style: GoogleFonts.inter(),
-                            textScaleFactor: 1.5
-                          ),
-                        ],
-                      ),
+              settingsItem(
+                tooltip: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+                text: 'Keep favorites in the deck',
+                child: ListenableBuilder(
+                  listenable: canAlwaysRedrawFavorites,
+                  builder: (context, child) => Transform.scale(
+                    scale: 1.2,
+                    child: Checkbox(
+                      value: canAlwaysRedrawFavorites.value,
+                      semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+                      onChanged: (val) {
+                        if (val is bool) {
+                          storage.write('canAlwaysRedrawFavorites', val);
+                          canAlwaysRedrawFavorites.value = val;
+                        }
+                      }
                     ),
-                    const Spacer(),
-                    ListenableBuilder(
-                      listenable: canAlwaysRedrawFavorites,
-                      builder: (context, child) => Transform.scale(
-                        scale: 1.2,
-                        child: Checkbox(
-                          value: canAlwaysRedrawFavorites.value,
-                          semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                          onChanged: (val) {
-                            if (val is bool) {
-                              storage.write('canAlwaysRedrawFavorites', val);
-                              canAlwaysRedrawFavorites.value = val;
-                            }
-                          }
-                        ),
-                      ),
+                  ),
+                )
+              ),
+              settingsItem(
+                tooltip: 'Notifications will not occur between these times.',
+                text: 'Quiet hours',
+                child: TextButton(
+                  onPressed: () => showTimePicker(
+                    useRootNavigator: false,
+                    hourLabelText: '',
+                    minuteLabelText: '',
+                    helpText: '',
+                    initialTime: const TimeOfDay(hour: 23, minute: 0),
+                    context: context,
+                    builder: (context, child) => ConstrainedBox(
+                      constraints: BoxConstraints.loose(const Size(750, 500)),
+                      child: child
                     ),
-                  ],
-                ),
+                  ),
+                  child: const Text('Time input'),
+                )
               ),
             ],
           ),

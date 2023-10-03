@@ -72,42 +72,42 @@ class StrategyCard extends StatelessWidget {
     final storage = GetStorage();
 
     KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
-    if (event is RawKeyDownEvent) {
-      if (
-        event.logicalKey == LogicalKeyboardKey.space || 
-        event.logicalKey == LogicalKeyboardKey.enter
-      ) {
-        switch (Random().nextInt(4)) {
-          case 0:
-            appState.swipeController.swipeLeft();
-          case 1:
-            appState.swipeController.swipeTop();
-          case 2:
-            appState.swipeController.swipeRight();
-          case 3:
-            appState.swipeController.swipeBottom();
-        }
+      if (event is RawKeyDownEvent) {
+        if (
+          event.logicalKey == LogicalKeyboardKey.space || 
+          event.logicalKey == LogicalKeyboardKey.enter
+        ) {
+          switch (Random().nextInt(4)) {
+            case 0:
+              appState.swipeController.swipeLeft();
+            case 1:
+              appState.swipeController.swipeTop();
+            case 2:
+              appState.swipeController.swipeRight();
+            case 3:
+              appState.swipeController.swipeBottom();
+          }
 
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        appState.swipeController.swipeLeft();
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        appState.swipeController.swipeTop();
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        appState.swipeController.swipeRight();
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        appState.swipeController.swipeBottom();
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-        appState.swipeController.undo();
-        return KeyEventResult.handled;
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          appState.swipeController.swipeLeft();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          appState.swipeController.swipeTop();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          appState.swipeController.swipeRight();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          appState.swipeController.swipeBottom();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+          appState.swipeController.undo();
+          return KeyEventResult.handled;
+        }
       }
+      return KeyEventResult.ignored;
     }
-    return KeyEventResult.ignored;
-  }
 
     bool refreshFavorite(int? newIndex) {
       if (newIndex is int) {
@@ -125,7 +125,7 @@ class StrategyCard extends StatelessWidget {
       skipTraversal: false,
       onKey: handleKeyPress,
       child: Semantics(
-        label: 'The current strategy card. Press space, enter, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
+        label: 'The current strategy card. Press enter, space, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
         child: CardSwiper(
           controller: appState.swipeController,
           initialIndex: storage.read('currentIndex') ?? 0,

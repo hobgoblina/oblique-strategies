@@ -46,6 +46,8 @@ class FavoriteIcon extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           alignment: Alignment.topRight,
           child: IconButton(
+            hoverColor: const Color.fromRGBO(25, 25, 25, 1),
+            focusColor: const Color.fromRGBO(25, 25, 25, 1),
             onPressed: addToFavorites,
             tooltip: '${appState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
             icon: Icon(
