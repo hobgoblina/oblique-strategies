@@ -52,10 +52,10 @@ class StrategiesApp extends StatelessWidget {
           ),
           timePickerTheme: TimePickerThemeData(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            padding: const EdgeInsets.all(40),
             dialBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
             dialHandColor: Colors.black,
             dialTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            dialTextStyle: GoogleFonts.inter(fontSize: 20),
             entryModeIconColor: Colors.black,
             hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
             hourMinuteShape: RoundedRectangleBorder(
@@ -105,6 +105,22 @@ class StrategiesApp extends StatelessWidget {
               color: Colors.black87,
               borderRadius: BorderRadius.all(Radius.circular(10))
             ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(fontSize: 20)),
+              foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
+              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
+              overlayColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+                  return Colors.black12;
+                } else if (states.contains(MaterialState.pressed)) {
+                  return Colors.black26;
+                }
+
+                return Colors.transparent;
+              })
+            )
           ),
           textTheme: GoogleFonts.interTextTheme()
         ),

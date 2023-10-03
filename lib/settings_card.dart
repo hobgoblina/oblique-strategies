@@ -19,40 +19,50 @@ class SettingsCard extends StatelessWidget {
     final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
     const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 5000);
 
-    Widget settingsItem({ String? tooltip, required String text, required Widget child }) {
+    Widget settingsItem({
+      String? tooltip,
+      required String text,
+      EdgeInsets padding = const EdgeInsets.only(bottom: 40),
+      required Widget child
+    }) {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 4),
+        padding: padding,
         child: Row(
           children: [
-            tooltip is String ? Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
-              showDuration: tooltipDuration,
-              message: tooltip,
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Icon(
-                      Ionicons.information_circle_outline,
-                      color: Colors.black,
-                      size: 25
+            tooltip is String ? Expanded(
+              child: Tooltip(
+                triggerMode: TooltipTriggerMode.tap,
+                showDuration: tooltipDuration,
+                message: tooltip,
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Ionicons.information_circle_outline,
+                        color: Colors.black,
+                        size: 25
+                      ),
                     ),
-                  ),
-                  Text(
-                    text,
-                    textWidthBasis: TextWidthBasis.longestLine,
-                    style: GoogleFonts.inter(),
-                    textScaleFactor: 1.5
-                  ),
-                ],
+                    Expanded(
+                      child: Text(
+                        text,
+                        textWidthBasis: TextWidthBasis.longestLine,
+                        style: GoogleFonts.inter(),
+                        textScaleFactor: 1.5
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ) : Text(
-              text,
-              textWidthBasis: TextWidthBasis.longestLine,
-              style: GoogleFonts.inter(),
-              textScaleFactor: 1.5
+            ) : Expanded(
+              child: Text(
+                text,
+                textWidthBasis: TextWidthBasis.longestLine,
+                style: GoogleFonts.inter(),
+                textScaleFactor: 1.5
+              ),
             ),
-            const Spacer(),
             child
           ],
         ),
@@ -114,18 +124,20 @@ class SettingsCard extends StatelessWidget {
               settingsItem(
                 tooltip: 'Notifications will not occur between these times.',
                 text: 'Quiet hours',
+                padding: EdgeInsets.zero, 
                 child: TextButton(
                   onPressed: () => showTimePicker(
                     useRootNavigator: false,
                     hourLabelText: '',
                     minuteLabelText: '',
+                    confirmText: 'Confirm',
                     helpText: '',
                     initialTime: const TimeOfDay(hour: 23, minute: 0),
                     context: context,
-                    builder: (context, child) => ConstrainedBox(
-                      constraints: BoxConstraints.loose(const Size(750, 500)),
-                      child: child
-                    ),
+                    // builder: (context, child) => MediaQuery(
+                    //   data: MediaQuery.of(context).copyWith(size: const Size(750, 500)),
+                    //   child: child ?? Container()
+                    // ),
                   ),
                   child: const Text('Time input'),
                 )
