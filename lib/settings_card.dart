@@ -16,8 +16,36 @@ class SettingsCard extends StatelessWidget {
     final Cards card = Cards();
     final storage = GetStorage();
 
-    final ValueNotifier<bool> canAlwaysRedrawFavorites = ValueNotifier(storage.read('canAlwaysRedrawFavorites') ?? true);
     const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 5000);
+
+    final String quietStart = storage.read('quietHoursStart') ?? '23:00';
+    final String quietEnd = storage.read('quietHoursEnd') ?? '11:00';
+    final TimeOfDay quietHoursStart = TimeOfDay(
+      hour: int.parse(quietStart.split(':')[0]),
+      minute: int.parse(quietStart.split(':')[1]),
+    );
+    final TimeOfDay quietHoursEnd = TimeOfDay(
+      hour: int.parse(quietEnd.split(':')[0]),
+      minute: int.parse(quietEnd.split(':')[1]),
+    );
+
+    void onQuietHoursPressed(String startOrEnd) async {
+      TimeOfDay? newTime = await showTimePicker(
+        useRootNavigator: false,
+        hourLabelText: '',
+        minuteLabelText: '',
+        confirmText: 'Confirm',
+        helpText: '',
+        initialTime: startOrEnd == 'start' ? quietHoursStart : quietHoursEnd,
+        context: context,
+      );
+
+      if (newTime is TimeOfDay) {
+        final timeString = '${newTime.hour}:${newTime.minute}';
+        storage.write(startOrEnd == 'start' ? 'quietHoursStart' : 'quietHoursEnd', timeString);
+        appState.rebuildApp();
+      }
+    }
 
     Widget settingsItem({
       String? tooltip,
@@ -104,20 +132,17 @@ class SettingsCard extends StatelessWidget {
               settingsItem(
                 tooltip: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
                 text: 'Keep favorites in the deck',
-                child: ListenableBuilder(
-                  listenable: canAlwaysRedrawFavorites,
-                  builder: (context, child) => Transform.scale(
-                    scale: 1.2,
-                    child: Checkbox(
-                      value: canAlwaysRedrawFavorites.value,
-                      semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-                      onChanged: (val) {
-                        if (val is bool) {
-                          storage.write('canAlwaysRedrawFavorites', val);
-                          canAlwaysRedrawFavorites.value = val;
-                        }
+                child: Transform.scale(
+                  scale: 1.2,
+                  child: Checkbox(
+                    value: storage.read('canAlwaysRedrawFavorites') ?? true,
+                    semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+                    onChanged: (val) {
+                      if (val is bool) {
+                        storage.write('canAlwaysRedrawFavorites', val);
+                        appState.rebuildApp();
                       }
-                    ),
+                    }
                   ),
                 )
               ),
@@ -126,19 +151,7 @@ class SettingsCard extends StatelessWidget {
                 text: 'Quiet hours',
                 padding: EdgeInsets.zero, 
                 child: TextButton(
-                  onPressed: () => showTimePicker(
-                    useRootNavigator: false,
-                    hourLabelText: '',
-                    minuteLabelText: '',
-                    confirmText: 'Confirm',
-                    helpText: '',
-                    initialTime: const TimeOfDay(hour: 23, minute: 0),
-                    context: context,
-                    // builder: (context, child) => MediaQuery(
-                    //   data: MediaQuery.of(context).copyWith(size: const Size(750, 500)),
-                    //   child: child ?? Container()
-                    // ),
-                  ),
+                  onPressed: () => onQuietHoursPressed('start'),
                   child: const Text('Time input'),
                 )
               ),

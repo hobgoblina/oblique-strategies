@@ -7,7 +7,7 @@ class Cards {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: const Color.fromRGBO(25, 25, 25, 1)
+          color: const Color.fromRGBO(15, 15, 15, 1)
         )
       ),
       child: ClipRRect(

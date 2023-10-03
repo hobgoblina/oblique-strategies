@@ -23,7 +23,7 @@ class StrategiesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color backgroundColor = Color.fromRGBO(16, 16, 16, 1);
+    const Color backgroundColor = Color.fromRGBO(15, 15, 15, 1);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: backgroundColor,
@@ -58,53 +58,22 @@ class StrategiesApp extends StatelessWidget {
             dialTextStyle: GoogleFonts.inter(fontSize: 20),
             entryModeIconColor: Colors.black,
             hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
-            hourMinuteShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: const BorderSide(color: Colors.black, width: 1.5)
-            ),
+            hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: Colors.black, width: 1.5)),
             dayPeriodBorderSide: const BorderSide(color: Colors.black, width: 1.5),
             dayPeriodColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.black : Colors.white),
-            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
-            confirmButtonStyle: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
-              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(color: Colors.black)),
-              overlayColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
-                  return Colors.black12;
-                } else if (states.contains(MaterialState.pressed)) {
-                  return Colors.black26;
-                }
-
-                return Colors.transparent;
-              })
-            )
+            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black)
           ),
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
             shape: const RoundedRectangleBorder(),
             checkColor: MaterialStateProperty.all(Colors.black),
-            overlayColor: MaterialStateColor.resolveWith((states) {
-              if (states.contains(MaterialState.focused)) {
-                return Colors.black12;
-              }
-              return Colors.transparent;
-            }),
-            side: MaterialStateBorderSide.resolveWith(
-              (states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black),
-            ),
-            fillColor: MaterialStateColor.resolveWith((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return Colors.grey;
-              }
-              return Colors.white;
-            }),
+            overlayColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.focused) ? Colors.black12 : Colors.transparent),
+            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
+            fillColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.disabled) ? Colors.grey : Colors.white),
           ),
           tooltipTheme: TooltipThemeData(
             textStyle: GoogleFonts.inter(color: Colors.white),
-            decoration: const BoxDecoration(
-              color: Colors.black87,
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
+            decoration: const BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
@@ -114,8 +83,6 @@ class StrategiesApp extends StatelessWidget {
               overlayColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
                   return Colors.black12;
-                } else if (states.contains(MaterialState.pressed)) {
-                  return Colors.black26;
                 }
 
                 return Colors.transparent;
@@ -174,7 +141,9 @@ class MainPage extends StatelessWidget {
     AppState appState = context.watch<AppState>();
 
     bool onWillPop() {
-      if (!appState.settingsOpen) {
+      if (kIsWeb) {
+        return true;
+      } else if (!appState.settingsOpen) {
         appState.swipeController.undo();
       } else {
         appState.flipController.toggleCard();
