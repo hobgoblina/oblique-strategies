@@ -29,20 +29,20 @@ class SettingsCard extends StatelessWidget {
       minute: int.parse(quietEnd.split(':')[1]),
     );
 
-    void onQuietHoursPressed(String startOrEnd) async {
+    void onQuietHoursPressed(bool isStartTime) async {
       TimeOfDay? newTime = await showTimePicker(
         useRootNavigator: false,
         hourLabelText: '',
         minuteLabelText: '',
         confirmText: 'Confirm',
         helpText: '',
-        initialTime: startOrEnd == 'start' ? quietHoursStart : quietHoursEnd,
+        initialTime: isStartTime ? quietHoursStart : quietHoursEnd,
         context: context,
       );
 
       if (newTime is TimeOfDay) {
         final timeString = '${newTime.hour}:${newTime.minute}';
-        storage.write(startOrEnd == 'start' ? 'quietHoursStart' : 'quietHoursEnd', timeString);
+        storage.write(isStartTime ? 'quietHoursStart' : 'quietHoursEnd', timeString);
         appState.rebuildApp();
 
         // TODO: reset scheduled notifications, if needed
@@ -152,9 +152,24 @@ class SettingsCard extends StatelessWidget {
                 tooltip: 'Notifications will not occur between these times.',
                 text: 'Quiet hours',
                 padding: EdgeInsets.zero, 
-                child: TextButton(
-                  onPressed: () => onQuietHoursPressed('start'),
-                  child: Text('${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}'),
+                child: Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => onQuietHoursPressed(true),
+                      child: Text(
+                        '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
+                        style: GoogleFonts.inter(decoration: TextDecoration.underline)
+                      ),
+                    ),
+                    Text('–', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                    TextButton(
+                      onPressed: () => onQuietHoursPressed(false),
+                      child: Text(
+                        '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${quietHoursEnd.period.name.toUpperCase()}',
+                        style: GoogleFonts.inter(decoration: TextDecoration.underline)
+                      ),
+                    ),
+                  ],
                 )
               ),
             ],

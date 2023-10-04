@@ -77,7 +77,7 @@ class StrategiesApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(fontSize: 20)),
+              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(fontSize: 19)),
               foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
               backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
               overlayColor: MaterialStateProperty.resolveWith((states) {
