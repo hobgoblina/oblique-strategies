@@ -55,7 +55,6 @@ class StrategiesApp extends StatelessWidget {
             dialBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
             dialHandColor: Colors.black,
             dialTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
-            dialTextStyle: GoogleFonts.inter(fontSize: 20),
             entryModeIconColor: Colors.black,
             hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
             hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: Colors.black, width: 1.5)),
@@ -91,6 +90,7 @@ class StrategiesApp extends StatelessWidget {
             ),
           ),
           textSelectionTheme: const TextSelectionThemeData(
+            selectionHandleColor: Colors.transparent,
             cursorColor: Colors.black
           ),
           checkboxTheme: CheckboxThemeData(

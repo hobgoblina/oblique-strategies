@@ -18,6 +18,7 @@ class SettingsCard extends StatelessWidget {
 
     const Duration? tooltipDuration = kIsWeb ? null : Duration(milliseconds: 5000);
 
+    final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     final String quietStart = storage.read('quietHoursStart') ?? '23:00';
     final String quietEnd = storage.read('quietHoursEnd') ?? '11:00';
     final TimeOfDay quietHoursStart = TimeOfDay(
@@ -38,6 +39,10 @@ class SettingsCard extends StatelessWidget {
         helpText: '',
         initialTime: isStartTime ? quietHoursStart : quietHoursEnd,
         context: context,
+        builder: (context, child) =>  MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: !is24HoursFormat),
+          child: child ?? Container(),
+        ),
       );
 
       if (newTime is TimeOfDay) {
@@ -157,7 +162,9 @@ class SettingsCard extends StatelessWidget {
                     TextButton(
                       onPressed: () => onQuietHoursPressed(true),
                       child: Text(
-                        '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
+                        is24HoursFormat
+                          ? '${quietHoursStart.hour.toString().padLeft(2, '0')}:${quietHoursStart.minute.toString().padLeft(2, '0')}'
+                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
                         style: GoogleFonts.inter(decoration: TextDecoration.underline)
                       ),
                     ),
