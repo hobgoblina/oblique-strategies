@@ -32,9 +32,9 @@ class SettingsCard extends StatelessWidget {
     void onQuietHoursPressed(bool isStartTime) async {
       TimeOfDay? newTime = await showTimePicker(
         useRootNavigator: false,
-        hourLabelText: '',
-        minuteLabelText: '',
         confirmText: 'Confirm',
+        minuteLabelText: '',
+        hourLabelText: '',
         helpText: '',
         initialTime: isStartTime ? quietHoursStart : quietHoursEnd,
         context: context,

@@ -61,7 +61,37 @@ class StrategiesApp extends StatelessWidget {
             hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: Colors.black, width: 1.5)),
             dayPeriodBorderSide: const BorderSide(color: Colors.black, width: 1.5),
             dayPeriodColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.black : Colors.white),
-            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black)
+            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            inputDecorationTheme: const InputDecorationTheme(
+              filled: true,
+              errorStyle: TextStyle(height: 0),
+              contentPadding: EdgeInsets.zero,
+              outlineBorder: BorderSide(color: Colors.black, width: 1.5),
+              activeIndicatorBorder: BorderSide(color: Colors.black, width: 1.5),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: Colors.red, width: 1.5),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: Colors.red, width: 1.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: Colors.black, width: 1.5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: Colors.black, width: 1.5),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: Colors.black, width: 1.5),
+              )
+            ),
+          ),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: Colors.black
           ),
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,

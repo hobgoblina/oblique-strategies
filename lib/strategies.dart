@@ -110,7 +110,6 @@ List<dynamic> strategies = [
   card.basic('Honour thy error as a hidden intention'),
   card.basic('Use an unacceptable colour'),
   card.basic('Remember  .those quiet evenings'),
-  card.basic(''),
   card.basic('A line has two sides'),
   card.basic('Fill every beat with something'),
   card.basic('Infinitesimal gradations'),
