@@ -39,10 +39,6 @@ class SettingsCard extends StatelessWidget {
         helpText: '',
         initialTime: isStartTime ? quietHoursStart : quietHoursEnd,
         context: context,
-        builder: (context, child) =>  MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: !is24HoursFormat),
-          child: child ?? Container(),
-        ),
       );
 
       if (newTime is TimeOfDay) {
