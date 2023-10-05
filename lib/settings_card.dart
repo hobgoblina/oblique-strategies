@@ -168,7 +168,9 @@ class SettingsCard extends StatelessWidget {
                     TextButton(
                       onPressed: () => onQuietHoursPressed(false),
                       child: Text(
-                        '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${quietHoursEnd.period.name.toUpperCase()}',
+                        is24HoursFormat
+                          ? '${quietHoursStart.hour.toString().padLeft(2, '0')}:${quietHoursStart.minute.toString().padLeft(2, '0')}'
+                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
                         style: GoogleFonts.inter(decoration: TextDecoration.underline)
                       ),
                     ),
