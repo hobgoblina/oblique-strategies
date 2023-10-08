@@ -13,8 +13,22 @@ class SettingsIcon extends StatelessWidget {
     final storage = GetStorage();
 
     void onPressed() {
-      appState.flipController.toggleCard();
+      if (appState.currentCardFront != 'strategies') {
+        appState.flipController.toggleCard();
+        appState.currentCardFront = 'strategies';
+      } else {
+        appState.setCardFrontAndFlip('strategies');
+      }
+
       appState.setIconsVisible();
+    }
+
+    IoniconsData icon = appState.settingsOpen ? Ionicons.close_outline : Ionicons.options_outline;
+    String iconLabel = '${appState.settingsOpen ? 'Close' : 'Open'} settings';
+
+    if (appState.settingsOpen && appState.currentCardFront != 'strategies') {
+      icon = Ionicons.arrow_back_outline;
+      iconLabel = 'Go back to settings';
     }
 
     return AnimatedOpacity(
@@ -27,10 +41,10 @@ class SettingsIcon extends StatelessWidget {
           hoverColor: const Color.fromRGBO(25, 25, 25, 1),
           focusColor: const Color.fromRGBO(25, 25, 25, 1),
           onPressed: onPressed,
-          tooltip: '${appState.settingsOpen ? 'Close' : 'Open'} settings',
+          tooltip: iconLabel,
           icon: Icon(
-            appState.settingsOpen ? Ionicons.close_outline : Ionicons.options_outline,
-            semanticLabel: '${appState.settingsOpen ? 'Close' : 'Open'} settings',
+            icon,
+            semanticLabel: iconLabel,
             color: Colors.white,
             size: 35
           ),

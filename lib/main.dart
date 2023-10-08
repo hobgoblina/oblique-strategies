@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
@@ -12,6 +11,8 @@ import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
 import 'settings_card.dart';
+import 'about_card.dart';
+import 'notifications_card.dart';
 
 void main() async {
   await GetStorage.init();
@@ -35,6 +36,7 @@ class StrategiesApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Oblique Strategies',
         theme: ThemeData(
+          fontFamily: 'Univers',
           useMaterial3: true,
           colorScheme: const ColorScheme(
             brightness: Brightness.light,
@@ -101,13 +103,13 @@ class StrategiesApp extends StatelessWidget {
             side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
             fillColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.disabled) ? Colors.grey : Colors.white),
           ),
-          tooltipTheme: TooltipThemeData(
-            textStyle: GoogleFonts.inter(color: Colors.white),
-            decoration: const BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.all(Radius.circular(10))),
+          tooltipTheme: const TooltipThemeData(
+            textStyle: TextStyle(color: Colors.white),
+            decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => GoogleFonts.inter(fontSize: 19)),
+              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 19, fontFamily: 'Univers')),
               foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
               backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
               overlayColor: MaterialStateProperty.resolveWith((states) {
@@ -119,7 +121,6 @@ class StrategiesApp extends StatelessWidget {
               })
             )
           ),
-          textTheme: GoogleFonts.interTextTheme()
         ),
         home: MainPage(),
       )
@@ -130,6 +131,7 @@ class StrategiesApp extends StatelessWidget {
 class AppState extends ChangeNotifier {
   bool? currentIsFavorite;
   bool settingsOpen = false;
+  String currentCardFront = 'strategies';
   bool iconsVisible = false;
   Timer? iconFadeoutTimer;
   
@@ -139,6 +141,12 @@ class AppState extends ChangeNotifier {
   void setCurrentFavorite(bool favorite) {
     currentIsFavorite = favorite;
     notifyListeners();
+  }
+
+  void setCardFrontAndFlip(String cardType) {
+    currentCardFront = cardType;
+    notifyListeners();
+    flipController.toggleCard();
   }
 
   void setSettingsOpen(bool isOpen) {
@@ -169,6 +177,13 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final storage = GetStorage();
     AppState appState = context.watch<AppState>();
+    Widget frontCard = const StrategyCard();
+
+    if (appState.currentCardFront == 'about') {
+      frontCard = const AboutCard();
+    } else if (appState.currentCardFront == 'notifications') {
+      frontCard = const NotificationsCard();
+    }
 
     bool onWillPop() {
       if (kIsWeb) {
@@ -180,6 +195,12 @@ class MainPage extends StatelessWidget {
       }
 
       return false;
+    }
+
+    void onFlipDone(isFlipped) {
+      if (appState.currentCardFront == 'strategies') {
+        appState.setSettingsOpen(isFlipped);
+      }
     }
 
     return WillPopScope(
@@ -196,11 +217,11 @@ class MainPage extends StatelessWidget {
                     constraints: BoxConstraints.loose(const Size(750, 500)),
                     child: FlipCard(
                       speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
-                      onFlipDone: (isFront) => appState.setSettingsOpen(isFront),
+                      onFlipDone: onFlipDone,
                       flipOnTouch: false,
                       direction: FlipDirection.VERTICAL,
                       controller: appState.flipController,
-                      front: const StrategyCard(),
+                      front: frontCard,
                       back: const SettingsCard()
                     ),
                   ),

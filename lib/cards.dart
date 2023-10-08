@@ -42,7 +42,6 @@ class Cards {
         child: Text(
           cardText,
           textWidthBasis: TextWidthBasis.longestLine,
-          style: GoogleFonts.inter(),
           textScaleFactor: 1.6
         ),
       )),
@@ -65,7 +64,6 @@ class Cards {
               child: Text(
                 cardText,
                 textWidthBasis: TextWidthBasis.longestLine,
-                style: GoogleFonts.inter(),
                 textScaleFactor: 1.6
               ),
             ),
@@ -74,7 +72,6 @@ class Cards {
               padding: const EdgeInsets.only(bottom: 20, right: 27),
               child: Text(
                 '(given by $contributor)',
-                style: GoogleFonts.inter(),
               ),
             ),
           ],
@@ -103,7 +100,6 @@ class Cards {
           children: [
             Text(
               cardText,
-              style: GoogleFonts.inter(),
               textScaleFactor: 1.6,
               textWidthBasis: TextWidthBasis.longestLine,
             ),
@@ -113,7 +109,6 @@ class Cards {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: options.map((option) => Text(
                   option,
-                  style: GoogleFonts.inter(),
                   textScaleFactor: 1.6,
                   textWidthBasis: TextWidthBasis.longestLine,
                 )).toList(),
@@ -146,7 +141,6 @@ class Cards {
           children: [
             Text(
               cardText,
-              style: GoogleFonts.inter(),
               textScaleFactor: 1.6,
               textWidthBasis: TextWidthBasis.longestLine,
             ),
@@ -161,18 +155,16 @@ class Cards {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
                       child: Text(
                         '•',
-                        style: GoogleFonts.inter(),
                         textScaleFactor: 1.6,
                       ),
                     ),
                     Flexible(
                       child: Text(
                         option,
-                        style: GoogleFonts.inter(),
                         textScaleFactor: 1.6,
                         textWidthBasis: TextWidthBasis.longestLine,
                       ),
