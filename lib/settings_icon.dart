@@ -13,13 +13,7 @@ class SettingsIcon extends StatelessWidget {
     final storage = GetStorage();
 
     void onPressed() {
-      if (appState.currentCardFront != 'strategies') {
-        appState.flipController.toggleCard();
-        appState.currentCardFront = 'strategies';
-      } else {
-        appState.setCardFrontAndFlip('strategies');
-      }
-
+      appState.flipController.toggleCard();
       appState.setIconsVisible();
     }
 

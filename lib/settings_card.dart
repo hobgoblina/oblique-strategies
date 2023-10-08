@@ -70,7 +70,7 @@ class SettingsCard extends StatelessWidget {
             end: const EdgeInsets.symmetric(horizontal: 75)
           ).lerp(paddingInterp),
           child: FocusTraversalGroup(
-            descendantsAreFocusable: appState.settingsOpen,
+            descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'strategies',
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: children

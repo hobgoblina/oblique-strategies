@@ -190,11 +190,8 @@ class MainPage extends StatelessWidget {
         return true;
       } else if (!appState.settingsOpen) {
         appState.swipeController.undo();
-      } else if (appState.currentCardFront != 'strategies') {
-        appState.flipController.toggleCard();
-        appState.currentCardFront = 'strategies';
       } else {
-        appState.setCardFrontAndFlip('strategies');
+        appState.flipController.toggleCard();
       }
 
       return false;
@@ -203,6 +200,9 @@ class MainPage extends StatelessWidget {
     void onFlipDone(isFlipped) {
       if (appState.currentCardFront == 'strategies') {
         appState.setSettingsOpen(isFlipped);
+      } else if (isFlipped) {
+        appState.currentCardFront = 'strategies';
+        appState.rebuildApp();
       }
     }
 
