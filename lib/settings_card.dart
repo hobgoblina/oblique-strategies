@@ -87,6 +87,7 @@ class SettingsCard extends StatelessWidget {
           onPressed: () => appState.setCardFrontAndFlip('about'),
           child: const Text(
             'About',
+            semanticsLabel: 'Show information about this app',
             textScaleFactor: 1.1,
             style: TextStyle(decoration: TextDecoration.underline)
           ),
@@ -137,6 +138,7 @@ class SettingsCard extends StatelessWidget {
             onPressed: () => appState.setCardFrontAndFlip('notifications'),
             child: const Text(
               'Notifications',
+              semanticsLabel: 'Open notifications settings',
               textScaleFactor: 1.1,
               style: TextStyle(decoration: TextDecoration.underline)
             ),

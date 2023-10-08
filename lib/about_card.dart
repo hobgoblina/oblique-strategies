@@ -54,13 +54,13 @@ class AboutCard extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                'Fifth*, again slightly revised edition, 2001',
+                'Fifth, again slightly revised edition, 2001',
                 textWidthBasis: TextWidthBasis.longestLine,
                 textAlign: TextAlign.center,
-                textScaleFactor: 1.25
+                textScaleFactor: 1.1
               ),
               Text(
-                '*Plus a selection from earlier editions',
+                'Plus a selection from earlier editions',
                 textWidthBasis: TextWidthBasis.longestLine,
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.1
@@ -69,7 +69,7 @@ class AboutCard extends StatelessWidget {
                 'Digitized by Lina, 2023',
                 textWidthBasis: TextWidthBasis.longestLine,
                 textAlign: TextAlign.center,
-                textScaleFactor: 1.25
+                textScaleFactor: 1.1
               ),
               Spacer(),
               Spacer(),
