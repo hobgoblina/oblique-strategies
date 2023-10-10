@@ -17,15 +17,14 @@ class TitleCard extends StatelessWidget {
       alignment: Alignment.center,
       color: Colors.white,
       padding: EdgeInsetsTween(
-        begin: const EdgeInsets.symmetric(horizontal: 15), 
-        end: const EdgeInsets.symmetric(horizontal: 75)
+        begin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15), 
+        end: const EdgeInsets.symmetric(horizontal: 75, vertical: 15)
       ).lerp(paddingInterp),
       child: FocusTraversalGroup(
         descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'about',
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
             Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 8),
@@ -38,37 +37,31 @@ class TitleCard extends StatelessWidget {
             ),
             Text(
               'Over one hundred worthwhile dilemmas',
-              textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
               textScaleFactor: 1.5
             ),
             Spacer(),
             Text(
               'BRIAN ENO and PETER SCHMIDT',
-              textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
               textScaleFactor: 1.5
             ),
             Spacer(),
             Text(
               'Fifth, again slightly revised edition, 2001',
-              textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.2
+              textScaleFactor: 1.1
             ),
             Text(
               'Plus a selection from earlier editions',
-              textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.2
+              textScaleFactor: 1.1
             ),
             Text(
               'Digitized by Lina, 2023',
-              textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.2
+              textScaleFactor: 1.1
             ),
-            Spacer(),
             Spacer(),
           ]
         )

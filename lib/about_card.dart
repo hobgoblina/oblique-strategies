@@ -17,8 +17,8 @@ class AboutCard extends StatelessWidget {
       alignment: Alignment.center,
       color: Colors.white,
       padding: EdgeInsetsTween(
-        begin: const EdgeInsets.symmetric(horizontal: 15), 
-        end: const EdgeInsets.symmetric(horizontal: 75)
+        begin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15), 
+        end: const EdgeInsets.symmetric(horizontal: 90, vertical: 15)
       ).lerp(paddingInterp),
       child: FocusTraversalGroup(
         descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'about',
@@ -29,13 +29,8 @@ class AboutCard extends StatelessWidget {
             Text(
               'OBLIQUE STRATEGIES',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
+              textScaleFactor: 1.6,
               style: TextStyle(fontWeight: FontWeight.bold)
-            ),
-            Text(
-              'Over one hundred worthwhile dilemmas',
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.4,
             ),
             Spacer(),
             Text(
