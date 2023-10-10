@@ -34,7 +34,7 @@ class AboutCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              'These cards evolved from our separate observations of the principals underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.',
+              'These cards evolved from our separate observations of the principles underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.',
               textAlign: TextAlign.justify,
               textScaleFactor: 1.2
             ),

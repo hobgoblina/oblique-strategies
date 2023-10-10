@@ -24,7 +24,7 @@ class SettingsCard extends StatelessWidget {
             child: Row(
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(right: 8),
+                  padding: EdgeInsets.only(right: 8, bottom: 3),
                   child: Icon(
                     Ionicons.information_circle_outline,
                     color: Colors.black,
