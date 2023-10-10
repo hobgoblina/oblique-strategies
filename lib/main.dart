@@ -11,7 +11,7 @@ import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
 import 'settings_card.dart';
-import 'about_card.dart';
+import 'info_cards.dart';
 import 'notifications_card.dart';
 
 void main() async {
@@ -180,7 +180,7 @@ class MainPage extends StatelessWidget {
     Widget frontCard = const StrategyCard();
 
     if (appState.currentCardFront == 'about') {
-      frontCard = const AboutCard();
+      frontCard = const InfoCards();
     } else if (appState.currentCardFront == 'notifications') {
       frontCard = const NotificationsCard();
     }
@@ -217,7 +217,7 @@ class MainPage extends StatelessWidget {
               Scaffold(
                 body: Center(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints.loose(const Size(750, 500)),
+                    constraints: BoxConstraints.loose(const Size(770, 550)),
                     child: FlipCard(
                       speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
                       onFlipDone: onFlipDone,

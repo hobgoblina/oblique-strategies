@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'main.dart';
 import 'cards.dart';
 
-class AboutCard extends StatelessWidget {
-  const AboutCard({
+class TitleCard extends StatelessWidget {
+  const TitleCard({
     super.key,
   });
 
@@ -26,35 +26,49 @@ class AboutCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Spacer(),
-            Text(
-              'OBLIQUE STRATEGIES',
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: TextStyle(fontWeight: FontWeight.bold)
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'OBLIQUE STRATEGIES',
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.6,
+                style: TextStyle(fontWeight: FontWeight.bold)
+              ),
             ),
             Text(
               'Over one hundred worthwhile dilemmas',
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.4,
-            ),
-            Spacer(),
-            Text(
-              'These cards evolved from our separate observations of the principals underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.',
-              textAlign: TextAlign.justify,
-              textScaleFactor: 1.2
-            ),
-            Text(
-              'They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.',
-              textAlign: TextAlign.justify,
-              textScaleFactor: 1.2
-            ),
-            Spacer(),
-            Text(
-              'First published 1975',
               textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.4
+              textScaleFactor: 1.5
             ),
+            Spacer(),
+            Text(
+              'BRIAN ENO and PETER SCHMIDT',
+              textWidthBasis: TextWidthBasis.longestLine,
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.5
+            ),
+            Spacer(),
+            Text(
+              'Fifth, again slightly revised edition, 2001',
+              textWidthBasis: TextWidthBasis.longestLine,
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.2
+            ),
+            Text(
+              'Plus a selection from earlier editions',
+              textWidthBasis: TextWidthBasis.longestLine,
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.2
+            ),
+            Text(
+              'Digitized by Lina, 2023',
+              textWidthBasis: TextWidthBasis.longestLine,
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.2
+            ),
+            Spacer(),
             Spacer(),
           ]
         )
