@@ -7,6 +7,7 @@ import 'dart:math';
 import 'main.dart';
 import 'title_card.dart';
 import 'about_card.dart';
+import 'instructions_card.dart';
 
 class InfoCards extends StatelessWidget {
   const InfoCards({ super.key });
@@ -19,7 +20,8 @@ class InfoCards extends StatelessWidget {
 
     final cards = [
       const TitleCard(),
-      const AboutCard()
+      const AboutCard(),
+      const InstructionsCard()
     ];
 
     KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {

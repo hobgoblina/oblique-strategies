@@ -133,6 +133,7 @@ class AppState extends ChangeNotifier {
   bool settingsOpen = false;
   String currentCardFront = 'strategies';
   bool iconsVisible = false;
+  bool titleCardsSeen = false;
   Timer? iconFadeoutTimer;
   
   final FlipCardController flipController = FlipCardController();
@@ -140,6 +141,11 @@ class AppState extends ChangeNotifier {
 
   void setCurrentFavorite(bool favorite) {
     currentIsFavorite = favorite;
+    notifyListeners();
+  }
+
+  void setTitleCardsSeen(bool seen) {
+    titleCardsSeen = seen;
     notifyListeners();
   }
 

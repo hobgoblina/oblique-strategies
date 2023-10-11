@@ -26,9 +26,11 @@ class FavoriteIcon extends StatelessWidget {
       }
     }
 
+    int? index = storage.read('currentIndex');
+    final bool indexIsPastOne = index is int && index > 1;
+
     if (appState.currentIsFavorite == null) {
-      int? index = storage.read('currentIndex');
-      if (storage.read('currentIndex') is int) {
+      if (indexIsPastOne) {
         List<dynamic> strategyData = storage.read('strategyData');
         final int currentIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
         appState.currentIsFavorite = strategyData[currentIndex]['favorite'];
@@ -38,7 +40,7 @@ class FavoriteIcon extends StatelessWidget {
     }
 
     return Visibility(
-      visible: !appState.settingsOpen,
+      visible: !appState.settingsOpen && appState.titleCardsSeen,
       child: AnimatedOpacity(
         opacity: appState.iconsVisible ? 1.0 : 0.0,
         duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),

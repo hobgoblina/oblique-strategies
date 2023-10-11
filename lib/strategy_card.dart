@@ -6,11 +6,13 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:math';
 import 'main.dart';
 import 'strategies.dart';
+import 'title_card.dart';
+import 'instructions_card.dart';
 
 class StrategyCard extends StatelessWidget {
   const StrategyCard({ super.key });
 
-  Container nextCard(int index) {
+  Widget nextCard(int index) {
     final storage = GetStorage();
     final lastIndex = storage.read('currentIndex');
     // minus 1 because this runs for the upcoming card
@@ -21,7 +23,13 @@ class StrategyCard extends StatelessWidget {
     final int maxAllowedLastDraw = (index - (strategies.length * minRedrawPercentage)).floor();
     final int minAllowedLastDraw = (index - (strategies.length * needsRedrawPercentage)).floor();
     List<dynamic> strategyData = storage.read('strategyData') ?? [];
-    Container? next;
+    Widget? next;
+
+    if (index == 0) {
+      next = const TitleCard();
+    } else if (index == 1) {
+      next = const InstructionsCard();
+    }
 
     final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
     if (existingCard.isNotEmpty) {
@@ -110,10 +118,13 @@ class StrategyCard extends StatelessWidget {
     }
 
     bool refreshFavorite(int? newIndex) {
-      if (newIndex is int) {
+      if (newIndex is int && newIndex > 1) {
         List<dynamic> strategyData = storage.read('strategyData');
         final int strategyIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == newIndex);
+        appState.titleCardsSeen = true;
         appState.setCurrentFavorite(strategyData[strategyIndex]['favorite']);
+      } else {
+        appState.setTitleCardsSeen(false);
       }
 
       return true;
