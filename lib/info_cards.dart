@@ -16,7 +16,6 @@ class InfoCards extends StatelessWidget {
   Widget build(BuildContext context) {
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
-    final swipeController = CardSwiperController();
 
     final cards = [
       const TitleCard(),
@@ -32,30 +31,30 @@ class InfoCards extends StatelessWidget {
         ) {
           switch (Random().nextInt(4)) {
             case 0:
-              swipeController.swipeLeft();
+              appState.swipeController.swipeLeft();
             case 1:
-              swipeController.swipeTop();
+              appState.swipeController.swipeTop();
             case 2:
-              swipeController.swipeRight();
+              appState.swipeController.swipeRight();
             case 3:
-              swipeController.swipeBottom();
+              appState.swipeController.swipeBottom();
           }
 
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          swipeController.swipeLeft();
+          appState.swipeController.swipeLeft();
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          swipeController.swipeTop();
+          appState.swipeController.swipeTop();
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          swipeController.swipeRight();
+          appState.swipeController.swipeRight();
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          swipeController.swipeBottom();
+          appState.swipeController.swipeBottom();
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-          swipeController.undo();
+          appState.swipeController.undo();
           return KeyEventResult.handled;
         }
       }
@@ -70,7 +69,7 @@ class InfoCards extends StatelessWidget {
       child: Semantics(
         label: 'Title and about cards. To go to the next card, you can press enter, space, or the arrow keys while the card has focus. Press backspace to return to the previous card.',
         child: CardSwiper(
-          controller: swipeController,
+          controller: appState.swipeController,
           initialIndex: 0,
           cardsCount: cards.length,
           maxAngle: 13,
