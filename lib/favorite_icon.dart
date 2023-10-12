@@ -34,6 +34,7 @@ class FavoriteIcon extends StatelessWidget {
         List<dynamic> strategyData = storage.read('strategyData');
         final int currentIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
         appState.currentIsFavorite = strategyData[currentIndex]['favorite'];
+        appState.titleCardsSeen = true;
       } else {
         appState.currentIsFavorite = false;
       }

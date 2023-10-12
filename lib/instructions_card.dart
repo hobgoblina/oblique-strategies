@@ -28,7 +28,7 @@ class InstructionsCard extends StatelessWidget {
           children: [
             Spacer(),
             Text(
-              'How to Use',
+              'Using This App',
               textAlign: TextAlign.center,
               textScaleFactor: 1.5,
               style: TextStyle(fontWeight: FontWeight.bold)

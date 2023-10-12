@@ -29,7 +29,7 @@ class AboutCard extends StatelessWidget {
             Text(
               'OBLIQUE STRATEGIES',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.6,
+              textScaleFactor: 1.5,
               style: TextStyle(fontWeight: FontWeight.bold)
             ),
             Spacer(),
@@ -48,7 +48,7 @@ class AboutCard extends StatelessWidget {
               'First published 1975',
               textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.4
+              textScaleFactor: 1.2
             ),
             Spacer(),
           ]
