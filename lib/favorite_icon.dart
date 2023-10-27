@@ -17,10 +17,19 @@ class FavoriteIcon extends StatelessWidget {
 
       if (index is int) {
         final List<dynamic> strategyData = storage.read('strategyData');
-        final int dataToUpdate = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index);
+        final int dataToUpdate = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == index || card['strategyNumber'] == appState.drawnCards[index]);
         final bool favorite = !strategyData[dataToUpdate]['favorite'];
         strategyData[dataToUpdate]['favorite'] = favorite;
         storage.write('strategyData', strategyData);
+
+        if (!favorite) {
+          final favorites = strategyData.where((card) => card['favorite'] == true).toList();
+          
+          if (favorites.length < 2) {
+            storage.write('onlyDrawFavorites', false);
+          }
+        }
+
         appState.setCurrentFavorite(favorite);
         appState.setIconsVisible();
       }

@@ -12,65 +12,108 @@ import 'instructions_card.dart';
 class StrategyCard extends StatelessWidget {
   const StrategyCard({ super.key });
 
-  Widget nextCard(int index) {
+  Widget nextCard(int index, Map<int, int> sessionDrawnCards) {
     final storage = GetStorage();
-    final lastIndex = storage.read('currentIndex');
-    // minus 1 because this runs for the upcoming card
-    storage.write('currentIndex', index - 1);
-
     final double minRedrawPercentage = storage.read('minRedrawPercentage') ?? 0.5;
     final double needsRedrawPercentage = storage.read('needsRedrawPercentage') ?? 1.5;
-    final int maxAllowedLastDraw = (index - (strategies.length * minRedrawPercentage)).floor();
-    final int minAllowedLastDraw = (index - (strategies.length * needsRedrawPercentage)).floor();
+    int maxAllowedLastDraw = (index - (strategies.length * minRedrawPercentage)).ceil();
+    int minAllowedLastDraw = (index - (strategies.length * needsRedrawPercentage)).ceil();
     List<dynamic> strategyData = storage.read('strategyData') ?? [];
+    final favorites = strategyData.where((card) => card['favorite'] == true).toList();
     Widget? next;
+    bool nextIsFavorite = false;
+    final bool onlyFavorites = storage.read('onlyDrawFavorites') ?? false;
 
     if (index == 0) {
       next = const TitleCard();
     } else if (index == 1) {
       next = const InstructionsCard();
-    }
+    } else {
+      final existingCardInSession = sessionDrawnCards.containsKey(index);
 
-    final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
-    if (existingCard.isNotEmpty) {
-      next = strategies[existingCard.first['strategyNumber']]['card'];
-    }
-
-    final tooOld = strategyData.where((card) => card['lastDrawnAtIndex'] < minAllowedLastDraw);
-    if (tooOld.isNotEmpty) {
-      next = strategies[tooOld.first['strategyNumber']]['card'];
-
-      final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == tooOld.first['strategyNumber']);
-      strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
-    }
-
-    while (next == null) {
-      final int strategyNumber = Random().nextInt(strategies.length);
-      final matches = strategyData.where((card) => card['strategyNumber'] == strategyNumber).toList();
-      
-      if (matches.isNotEmpty) {
-        if (
-          matches.first['lastDrawnAtIndex'] == lastIndex ||
-          (matches.first['lastDrawnAtIndex'] > maxAllowedLastDraw &&
-          !(matches.first['favorite'] && (storage.read('canAlwaysRedrawFavorites') ?? true)))
-        ) {
-          continue;
-        }
-
-        final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == strategyNumber);
-        strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
+      if (existingCardInSession) {
+        next = strategies[sessionDrawnCards[index] ?? 0]['card'];
+        nextIsFavorite = strategyData.where((card) => card['strategyNumber'] == sessionDrawnCards[index]).toList().first['favorite'];
       } else {
-        strategyData.add({
-          'strategyNumber': strategyNumber,
-          'lastDrawnAtIndex': index,
-          'favorite': false
-        });
+        final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
+        if (existingCard.isNotEmpty) {
+          next = strategies[existingCard.first['strategyNumber']]['card'];
+          nextIsFavorite = existingCard.first['favorite'];
+        }
       }
 
-      next = strategies[strategyNumber]['card'];
+      if (onlyFavorites) {
+        strategyData.sort((s1, s2) => s2['lastDrawnAtIndex'] - s1['lastDrawnAtIndex']);
+        if (
+          next is Widget &&
+          !nextIsFavorite &&
+          storage.read('currentIndex') != index &&
+          strategyData.first['lastDrawnAtIndex'] <= index
+        ) {
+          next = null;
+        }
+        maxAllowedLastDraw = (index - (favorites.length * minRedrawPercentage)).ceil();
+        minAllowedLastDraw = (index - (favorites.length * needsRedrawPercentage)).ceil();
+      }
+
+      final tooOld = (onlyFavorites ? favorites : strategyData).where((card) => card['lastDrawnAtIndex'] < minAllowedLastDraw);
+      if (next == null && tooOld.isNotEmpty) {
+        next = strategies[tooOld.first['strategyNumber']]['card'];
+
+        final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == tooOld.first['strategyNumber']);
+        strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
+      }
+
+      while (next == null) {
+        if (onlyFavorites) {
+          final int favoriteNumber = Random().nextInt(favorites.length);
+
+          if (
+            favorites[favoriteNumber]['lastDrawnAtIndex'] == index - 1 ||
+            (
+              index - maxAllowedLastDraw > 1 &&
+              favorites[favoriteNumber]['lastDrawnAtIndex'] > maxAllowedLastDraw
+            )
+          ) {
+            continue;
+          }
+
+          final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == favorites[favoriteNumber]['strategyNumber']);
+          strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
+
+          next = strategies[favorites[favoriteNumber]['strategyNumber']]['card'];
+          sessionDrawnCards[index] = favorites[favoriteNumber]['strategyNumber'];
+        } else {
+          final int strategyNumber = Random().nextInt(strategies.length);
+          final matches = strategyData.where((card) => card['strategyNumber'] == strategyNumber).toList();
+          
+          if (matches.isNotEmpty) {
+            if (
+              matches.first['lastDrawnAtIndex'] == index - 1 ||
+              (matches.first['lastDrawnAtIndex'] > maxAllowedLastDraw &&
+              !(matches.first['favorite'] && (storage.read('canAlwaysRedrawFavorites') ?? true)))
+            ) {
+              continue;
+            }
+
+            final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == strategyNumber);
+            strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
+          } else {
+            strategyData.add({
+              'strategyNumber': strategyNumber,
+              'lastDrawnAtIndex': index,
+              'favorite': false
+            });
+          }
+
+          next = strategies[strategyNumber]['card'];
+          sessionDrawnCards[index] = strategyNumber;
+        }
+      }
+
+      storage.write('strategyData', strategyData);
     }
 
-    storage.write('strategyData', strategyData);
     return next;
   }
 
@@ -118,11 +161,16 @@ class StrategyCard extends StatelessWidget {
     }
 
     bool refreshFavorite(int? newIndex) {
+      storage.write('currentIndex', newIndex);
+
       if (newIndex is int && newIndex > 1) {
-        List<dynamic> strategyData = storage.read('strategyData');
-        final int strategyIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == newIndex);
         appState.titleCardsSeen = true;
-        appState.setCurrentFavorite(strategyData[strategyIndex]['favorite']);
+        List<dynamic> strategyData = storage.read('strategyData');
+        int strategyIndex = strategyData.indexWhere((card) => card['lastDrawnAtIndex'] == newIndex || card['strategyNumber'] == appState.drawnCards[newIndex]);
+
+        if (strategyIndex != -1) {
+          appState.setCurrentFavorite(strategyData[strategyIndex]['favorite']);
+        }
       } else {
         appState.setTitleCardsSeen(false);
       }
@@ -147,7 +195,7 @@ class StrategyCard extends StatelessWidget {
           scale: 1,
           cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
             onTapUp: (tapUpDetails) => appState.setIconsVisible(),
-            child: nextCard(index)
+            child: nextCard(index, appState.drawnCards)
           ),
           onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
           onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),

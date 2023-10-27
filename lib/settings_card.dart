@@ -58,6 +58,8 @@ class SettingsCard extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     final Cards card = Cards();
     final storage = GetStorage();
+    List<dynamic> strategyData = storage.read('strategyData') ?? [];
+    final favorites = strategyData.where((card) => card['favorite'] == true).toList();
 
     Widget cardWrapper (List<Widget> children) {
       return Padding(
@@ -129,6 +131,26 @@ class SettingsCard extends StatelessWidget {
             }
           ),
         )
+      ),
+      Visibility(visible: favorites.length > 1, child: const Spacer()),
+      Visibility(
+        visible: favorites.length > 1,
+        child: settingsItem(
+          text: 'Only draw favorites',
+          child: Transform.scale(
+            scale: 1.2,
+            child: Checkbox(
+              value: storage.read('onlyDrawFavorites') ?? false,
+              semanticLabel: 'Only draw favorites',
+              onChanged: (val) {
+                if (val is bool) {
+                  storage.write('onlyDrawFavorites', val);
+                  appState.rebuildApp();
+                }
+              }
+            ),
+          )
+        ),
       ),
       const Spacer(),
       Visibility(

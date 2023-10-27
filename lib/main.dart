@@ -135,6 +135,11 @@ class AppState extends ChangeNotifier {
   bool iconsVisible = false;
   bool titleCardsSeen = false;
   Timer? iconFadeoutTimer;
+
+  // Keeping track of all drawn cards in this session
+  // When favorites-only setting is applied there's more potential for
+  // Cards to be redrawn in the same session, impacting ability to undo swipes
+  Map<int, int> drawnCards = {};
   
   final FlipCardController flipController = FlipCardController();
   final CardSwiperController swipeController = CardSwiperController();
