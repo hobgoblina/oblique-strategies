@@ -22,7 +22,7 @@ class InstructionsCard extends StatelessWidget {
         end: const EdgeInsets.symmetric(horizontal: 75, vertical: 15)
       ).lerp(paddingInterp),
       child: FocusTraversalGroup(
-        descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'about',
+        descendantsAreFocusable: appState.cardFace == 'about',
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

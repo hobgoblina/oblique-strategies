@@ -51,7 +51,7 @@ class FavoriteIcon extends StatelessWidget {
     }
 
     return Visibility(
-      visible: !appState.settingsOpen && appState.titleCardsSeen,
+      visible: appState.cardFace == 'strategies' && appState.titleCardsSeen,
       child: AnimatedOpacity(
         opacity: appState.iconsVisible ? 1.0 : 0.0,
         duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),

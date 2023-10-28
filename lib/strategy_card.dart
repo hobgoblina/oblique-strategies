@@ -165,7 +165,7 @@ class StrategyCard extends StatelessWidget {
 
     return Focus(
       autofocus: true,
-      canRequestFocus: !appState.settingsOpen,
+      canRequestFocus: appState.cardFace == 'strategies',
       skipTraversal: false,
       onKey: handleKeyPress,
       child: Semantics(

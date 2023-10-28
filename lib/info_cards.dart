@@ -50,7 +50,7 @@ class InfoCards extends StatelessWidget {
 
     return Focus(
       autofocus: true,
-      canRequestFocus: appState.currentCardFront == 'about',
+      canRequestFocus: appState.cardFace == 'about',
       skipTraversal: false,
       onKey: handleKeyPress,
       child: Semantics(

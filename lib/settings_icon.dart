@@ -13,20 +13,25 @@ class SettingsIcon extends StatelessWidget {
     final storage = GetStorage();
 
     void onPressed() {
-      appState.flipController.toggleCard();
+      if (appState.cardFace == 'settings') {
+        appState.setCardFrontAndFlip('strategies');
+      } else {
+        appState.flipController.toggleCard();
+      }
+      
       appState.setIconsVisible();
     }
 
-    IoniconsData icon = appState.settingsOpen ? Ionicons.close_outline : Ionicons.options_outline;
-    String iconLabel = '${appState.settingsOpen ? 'Close' : 'Open'} settings';
+    IoniconsData icon = appState.cardFace == 'settings' ? Ionicons.close_outline : Ionicons.options_outline;
+    String iconLabel = '${appState.cardFace == 'settings' ? 'Close' : 'Open'} settings';
 
-    if (appState.settingsOpen && appState.currentCardFront != 'strategies') {
+    if (appState.cardFace != 'settings' && appState.cardFace != 'strategies') {
       icon = Ionicons.arrow_back_outline;
       iconLabel = 'Go back to settings';
     }
 
     return AnimatedOpacity(
-      opacity: appState.iconsVisible || appState.settingsOpen ? 1.0 : 0.0,
+      opacity: appState.iconsVisible || appState.cardFace != 'strategies' ? 1.0 : 0.0,
       duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),
       child: Container(
         padding: const EdgeInsets.all(11),

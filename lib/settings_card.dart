@@ -72,7 +72,7 @@ class SettingsCard extends StatelessWidget {
             end: const EdgeInsets.symmetric(horizontal: 75)
           ).lerp(paddingInterp),
           child: FocusTraversalGroup(
-            descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'strategies',
+            descendantsAreFocusable: appState.cardFace == 'settings',
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: children
@@ -102,7 +102,6 @@ class SettingsCard extends StatelessWidget {
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
-            autofocus: false,
             value: storage.read('reduceAnimations') ?? false,
             semanticLabel: 'Reduce animations',
             onChanged: (val) {

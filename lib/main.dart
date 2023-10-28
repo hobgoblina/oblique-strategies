@@ -130,8 +130,7 @@ class StrategiesApp extends StatelessWidget {
 
 class AppState extends ChangeNotifier {
   bool? currentIsFavorite;
-  bool settingsOpen = false;
-  String currentCardFront = 'strategies';
+  String cardFace = 'strategies';
   bool iconsVisible = false;
   bool titleCardsSeen = false;
   Timer? iconFadeoutTimer;
@@ -155,14 +154,9 @@ class AppState extends ChangeNotifier {
   }
 
   void setCardFrontAndFlip(String cardType) {
-    currentCardFront = cardType;
+    cardFace = cardType;
     notifyListeners();
     flipController.toggleCard();
-  }
-
-  void setSettingsOpen(bool isOpen) {
-    settingsOpen = isOpen;
-    notifyListeners();
   }
 
   void setIconsVisible() {
@@ -190,35 +184,39 @@ class MainPage extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     Widget frontCard = const StrategyCard();
 
-    if (appState.currentCardFront == 'about') {
+    if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
-    } else if (appState.currentCardFront == 'notifications') {
+    } else if (appState.cardFace == 'notifications') {
       frontCard = const NotificationsCard();
+    } else if (appState.cardFace == 'settings') {
+      frontCard = Container();
     }
 
     bool onWillPop() {
       if (kIsWeb) {
         return true;
-      } else if (!appState.settingsOpen) {
+      } else if (appState.cardFace == 'strategies') {
         appState.swipeController.undo();
       } else {
-        appState.flipController.toggleCard();
+        if (appState.cardFace == 'settings') {
+          appState.setCardFrontAndFlip('strategies');
+        } else {
+          appState.flipController.toggleCard();
+        }
       }
 
       return false;
     }
 
     void onFlipDone(isFlipped) {
-      if (appState.currentCardFront == 'strategies') {
-        appState.setSettingsOpen(isFlipped);
-      } else if (isFlipped) {
-        appState.currentCardFront = 'strategies';
+      if (isFlipped) {
+        appState.cardFace = 'settings';
         appState.rebuildApp();
       }
     }
 
     KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
-      if (appState.settingsOpen && appState.currentCardFront != 'about') {
+      if (appState.cardFace != 'strategies' && appState.cardFace != 'about') {
         return KeyEventResult.ignored;
       }
 
@@ -238,7 +236,7 @@ class MainPage extends StatelessWidget {
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
           appState.swipeController.undo();
           return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyF && appState.currentCardFront != 'about') {
+        } else if (event.logicalKey == LogicalKeyboardKey.keyF && appState.cardFace != 'about') {
           const FavoriteIcon().addToFavorites(appState);
           return KeyEventResult.handled;
         }

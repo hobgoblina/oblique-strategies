@@ -58,7 +58,7 @@ class NotificationsCard extends StatelessWidget {
           end: const EdgeInsets.symmetric(horizontal: 75)
         ).lerp(paddingInterp),
         child: FocusTraversalGroup(
-          descendantsAreFocusable: appState.settingsOpen && appState.currentCardFront == 'notifications',
+          descendantsAreFocusable: appState.cardFace == 'notifications',
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
