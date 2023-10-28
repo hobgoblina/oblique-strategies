@@ -140,21 +140,6 @@ class StrategyCard extends StatelessWidget {
           }
 
           return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          appState.swipeController.swipeLeft();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          appState.swipeController.swipeTop();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          appState.swipeController.swipeRight();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          appState.swipeController.swipeBottom();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-          appState.swipeController.undo();
-          return KeyEventResult.handled;
         }
       }
       return KeyEventResult.ignored;

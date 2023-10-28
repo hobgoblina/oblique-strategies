@@ -6,13 +6,9 @@ import 'main.dart';
 
 class FavoriteIcon extends StatelessWidget {
   const FavoriteIcon({ super.key });
-
-  @override
-  Widget build(BuildContext context) {
-    AppState appState = context.watch<AppState>();
-    final storage = GetStorage();
     
-    void addToFavorites() {
+    void addToFavorites(AppState appState) {
+      final storage = GetStorage();
       int? index = storage.read('currentIndex');
 
       if (index is int) {
@@ -34,6 +30,11 @@ class FavoriteIcon extends StatelessWidget {
         appState.setIconsVisible();
       }
     }
+
+  @override
+  Widget build(BuildContext context) {
+    AppState appState = context.watch<AppState>();
+    final storage = GetStorage();
 
     int? index = storage.read('currentIndex');
     final bool indexIsPastOne = index is int && index > 1;
@@ -60,7 +61,7 @@ class FavoriteIcon extends StatelessWidget {
           child: IconButton(
             hoverColor: const Color.fromRGBO(25, 25, 25, 1),
             focusColor: const Color.fromRGBO(25, 25, 25, 1),
-            onPressed: addToFavorites,
+            onPressed: () => addToFavorites(appState),
             tooltip: '${appState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
             icon: Icon(
               Ionicons.heart_outline,

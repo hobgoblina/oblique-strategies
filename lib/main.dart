@@ -217,33 +217,69 @@ class MainPage extends StatelessWidget {
       }
     }
 
-    return WillPopScope(
-      onWillPop: () async => onWillPop(),
-      child: MouseRegion(
-        onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
-        child: GestureDetector(
-          onTapUp: (tapUpDetails) => appState.setIconsVisible(),
-          child: Stack(
-            children: [
-              Scaffold(
-                body: Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints.loose(const Size(770, 550)),
-                    child: FlipCard(
-                      speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
-                      onFlipDone: onFlipDone,
-                      flipOnTouch: false,
-                      direction: FlipDirection.VERTICAL,
-                      controller: appState.flipController,
-                      front: frontCard,
-                      back: const SettingsCard()
+    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
+      if (appState.settingsOpen && appState.currentCardFront != 'about') {
+        return KeyEventResult.ignored;
+      }
+
+      if (event is RawKeyDownEvent) {
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          appState.swipeController.swipeLeft();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          appState.swipeController.swipeTop();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          appState.swipeController.swipeRight();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          appState.swipeController.swipeBottom();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+          appState.swipeController.undo();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyF && appState.currentCardFront != 'about') {
+          const FavoriteIcon().addToFavorites(appState);
+          return KeyEventResult.handled;
+        }
+      }
+
+      return KeyEventResult.ignored;
+    }
+
+    return Focus(
+      autofocus: false,
+      canRequestFocus: false,
+      skipTraversal: false,
+      onKey: handleKeyPress,
+      child: WillPopScope(
+        onWillPop: () async => onWillPop(),
+        child: MouseRegion(
+          onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
+          child: GestureDetector(
+            onTapUp: (tapUpDetails) => appState.setIconsVisible(),
+            child: Stack(
+              children: [
+                Scaffold(
+                  body: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints.loose(const Size(770, 550)),
+                      child: FlipCard(
+                        speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
+                        onFlipDone: onFlipDone,
+                        flipOnTouch: false,
+                        direction: FlipDirection.VERTICAL,
+                        controller: appState.flipController,
+                        front: frontCard,
+                        back: const SettingsCard()
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const FavoriteIcon(),
-              const SettingsIcon(),
-            ]
+                const FavoriteIcon(),
+                const SettingsIcon(),
+              ]
+            ),
           ),
         ),
       ),

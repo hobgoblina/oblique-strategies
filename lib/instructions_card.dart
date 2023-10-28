@@ -35,19 +35,24 @@ class InstructionsCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              'Swipe the current card away to reveal the next card underneath.\n\nSwiping to the next card can also be triggered by pressing the enter, space, or arrow keys.',
+              'Swipe the current card away to reveal the next card underneath',
               textAlign: TextAlign.center,
               textScaleFactor: 1.4
             ),
             Text(
-              '\nUndo swipes by pressing the ${!kIsWeb ? 'back button or the ' : ''}backspace key.',
+              '\nSwiping to the next card can also be triggered by pressing the arrow keys',
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.4
+            ),
+            Text(
+              '\nUndo swipes by pressing the ${!kIsWeb ? 'back button or the ' : ''}backspace key',
               textAlign: TextAlign.center,
               textScaleFactor: 1.4
             ),
             Visibility(
               visible: !kIsWeb,
               child: Text(
-                '\nTap anywhere to see the favorite and settings buttons.',
+                '\nTap anywhere to see the favorite and settings buttons',
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.4
               ),

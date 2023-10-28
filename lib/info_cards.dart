@@ -7,6 +7,7 @@ import 'dart:math';
 import 'main.dart';
 import 'title_card.dart';
 import 'about_card.dart';
+import 'hotkeys_card.dart';
 import 'instructions_card.dart';
 
 class InfoCards extends StatelessWidget {
@@ -20,7 +21,8 @@ class InfoCards extends StatelessWidget {
     final cards = [
       const TitleCard(),
       const AboutCard(),
-      const InstructionsCard()
+      const InstructionsCard(),
+      const HotkeysCard()
     ];
 
     KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
@@ -40,21 +42,6 @@ class InfoCards extends StatelessWidget {
               appState.swipeController.swipeBottom();
           }
 
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          appState.swipeController.swipeLeft();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          appState.swipeController.swipeTop();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          appState.swipeController.swipeRight();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          appState.swipeController.swipeBottom();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-          appState.swipeController.undo();
           return KeyEventResult.handled;
         }
       }

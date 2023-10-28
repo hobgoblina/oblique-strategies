@@ -102,7 +102,7 @@ class SettingsCard extends StatelessWidget {
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
-            autofocus: true,
+            autofocus: false,
             value: storage.read('reduceAnimations') ?? false,
             semanticLabel: 'Reduce animations',
             onChanged: (val) {
