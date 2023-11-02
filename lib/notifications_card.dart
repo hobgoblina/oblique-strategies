@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart';
 import 'main.dart';
 import 'cards.dart';
 import 'settings_card.dart';
@@ -45,8 +44,6 @@ class NotificationsCard extends StatelessWidget {
         final timeString = '${newTime.hour}:${newTime.minute}';
         storage.write(isStartTime ? 'quietHoursStart' : 'quietHoursEnd', timeString);
         appState.rebuildApp();
-
-        // TODO: reset scheduled notifications, if needed
       }
     }
 
@@ -109,8 +106,8 @@ class NotificationsCard extends StatelessWidget {
                       onPressed: () => onQuietHoursPressed(false),
                       child: Text(
                         is24HoursFormat
-                          ? '${quietHoursStart.hour.toString().padLeft(2, '0')}:${quietHoursStart.minute.toString().padLeft(2, '0')}'
-                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
+                          ? '${quietHoursEnd.hour.toString().padLeft(2, '0')}:${quietHoursEnd.minute.toString().padLeft(2, '0')}'
+                          : '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${quietHoursEnd.period.name.toUpperCase()}',
                         style: const TextStyle(decoration: TextDecoration.underline)
                       ),
                     ),

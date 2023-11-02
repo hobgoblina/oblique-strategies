@@ -153,7 +153,7 @@ class SettingsCard extends StatelessWidget {
       ),
       const Spacer(),
       Visibility(
-        visible: !kIsWeb && storage.read('currentIndex') > 1,
+        visible: !kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
         child: Center(
           child: TextButton(
             onPressed: () => appState.setCardFrontAndFlip('notifications'),

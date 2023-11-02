@@ -35,12 +35,12 @@ class InstructionsCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              'Swipe the current card away to reveal the next card underneath',
+              'Swipe the card away to reveal the next card underneath',
               textAlign: TextAlign.center,
               textScaleFactor: 1.4
             ),
             Text(
-              '\nSwiping to the next card can also be triggered by pressing the arrow keys',
+              '\nSwiping can also be triggered by pressing the arrow keys',
               textAlign: TextAlign.center,
               textScaleFactor: 1.4
             ),

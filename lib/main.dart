@@ -21,7 +21,7 @@ void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   
-  if (GetStorage().read('notificationsEnabled')) {
+  if ((GetStorage().read('notificationsEnabled') ?? false)) {
     LocalNotificationService().init();
     Workmanager().initialize(callbackDispatcher);
     Workmanager().registerPeriodicTask('nextCard', 'nextCard');
