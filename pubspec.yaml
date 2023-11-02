@@ -16,6 +16,8 @@ dependencies:
   get_storage: ^2.1.1
   ionicons: ^0.2.2
   flip_card: ^0.7.0
+  flutter_local_notifications: ^16.1.0
+  workmanager: ^0.5.2
 
 dev_dependencies:
   flutter_test:

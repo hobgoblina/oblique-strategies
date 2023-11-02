@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 import 'main.dart';
 import 'cards.dart';
 import 'settings_card.dart';
@@ -62,6 +64,31 @@ class NotificationsCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Spacer(),
+              const SettingsCard().settingsItem(
+                text: 'Enable notifications',
+                child: Transform.scale(
+                  scale: 1.2,
+                  child: Checkbox(
+                    value: storage.read('notificationsEnabled') ?? false,
+                    semanticLabel: 'Enable notifications',
+                    onChanged: (val) async {
+                      if (val is bool) {
+                        if (val && Platform.isIOS) {
+                          final permissionsGranted = await LocalNotificationService().getIosPermissions();
+
+                          if (!permissionsGranted) {
+                            return;
+                          }
+                        }
+
+                        storage.write('notificationsEnabled', val);
+                        appState.rebuildApp();
+                      }
+                    }
+                  ),
+                )
+              ),
               const Spacer(),
               const SettingsCard().settingsItem(
                 tooltip: 'Notifications will not occur between these times.',

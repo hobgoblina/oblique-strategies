@@ -12,7 +12,7 @@ import 'instructions_card.dart';
 class StrategyCard extends StatelessWidget {
   const StrategyCard({ super.key });
 
-  Widget nextCard(int index, Map<int, int> sessionDrawnCards) {
+  Map<String, dynamic> nextCard(int index, Map<int, int> sessionDrawnCards) {
     final storage = GetStorage();
     final double minRedrawPercentage = storage.read('minRedrawPercentage') ?? 0.5;
     final double needsRedrawPercentage = storage.read('needsRedrawPercentage') ?? 1.5;
@@ -20,24 +20,24 @@ class StrategyCard extends StatelessWidget {
     int minAllowedLastDraw = (index - (strategies.length * needsRedrawPercentage)).ceil();
     List<dynamic> strategyData = storage.read('strategyData') ?? [];
     final favorites = strategyData.where((card) => card['favorite'] == true).toList();
-    Widget? next;
+    Map<String, dynamic>? next;
     bool nextIsFavorite = false;
     final bool onlyFavorites = storage.read('onlyDrawFavorites') ?? false;
 
     if (index == 0) {
-      next = const TitleCard();
+      next = { 'card': const InstructionsCard() };
     } else if (index == 1) {
-      next = const InstructionsCard();
+      next = { 'card': const TitleCard() };
     } else {
       final existingCardInSession = sessionDrawnCards.containsKey(index);
 
       if (existingCardInSession) {
-        next = strategies[sessionDrawnCards[index] ?? 0]['card'];
+        next = strategies[sessionDrawnCards[index] ?? 0];
         nextIsFavorite = strategyData.where((card) => card['strategyNumber'] == sessionDrawnCards[index]).toList().first['favorite'];
       } else {
         final existingCard = strategyData.where((card) => card['lastDrawnAtIndex'] == index).toList();
         if (existingCard.isNotEmpty) {
-          next = strategies[existingCard.first['strategyNumber']]['card'];
+          next = strategies[existingCard.first['strategyNumber']];
           nextIsFavorite = existingCard.first['favorite'];
         }
       }
@@ -58,7 +58,7 @@ class StrategyCard extends StatelessWidget {
 
       final tooOld = (onlyFavorites ? favorites : strategyData).where((card) => card['lastDrawnAtIndex'] < minAllowedLastDraw);
       if (next == null && tooOld.isNotEmpty) {
-        next = strategies[tooOld.first['strategyNumber']]['card'];
+        next = strategies[tooOld.first['strategyNumber']];
 
         final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == tooOld.first['strategyNumber']);
         strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
@@ -81,7 +81,7 @@ class StrategyCard extends StatelessWidget {
           final int dataToUpdate = strategyData.indexWhere((card) => card['strategyNumber'] == favorites[favoriteNumber]['strategyNumber']);
           strategyData[dataToUpdate]['lastDrawnAtIndex'] = index;
 
-          next = strategies[favorites[favoriteNumber]['strategyNumber']]['card'];
+          next = strategies[favorites[favoriteNumber]['strategyNumber']];
           sessionDrawnCards[index] = favorites[favoriteNumber]['strategyNumber'];
         } else {
           final int strategyNumber = Random().nextInt(strategies.length);
@@ -106,7 +106,7 @@ class StrategyCard extends StatelessWidget {
             });
           }
 
-          next = strategies[strategyNumber]['card'];
+          next = strategies[strategyNumber];
           sessionDrawnCards[index] = strategyNumber;
         }
       }
@@ -180,7 +180,7 @@ class StrategyCard extends StatelessWidget {
           scale: 1,
           cardBuilder: (context, index, percentThresholdX, percentThresholdY) => GestureDetector(
             onTapUp: (tapUpDetails) => appState.setIconsVisible(),
-            child: nextCard(index, appState.drawnCards)
+            child: nextCard(index, appState.drawnCards)['card']
           ),
           onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
           onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
