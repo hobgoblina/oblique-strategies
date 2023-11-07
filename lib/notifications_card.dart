@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'main.dart';
 import 'cards.dart';
 import 'settings_card.dart';
+import 'notifications.dart';
 
 class NotificationsCard extends StatelessWidget {
   const NotificationsCard({
