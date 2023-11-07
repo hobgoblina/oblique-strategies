@@ -21,6 +21,8 @@ class NotificationsCard extends StatelessWidget {
 
     final minController = TextEditingController(text: (storage.read('minNotificationPeriod') ?? 90).toString());
     final maxController = TextEditingController(text: (storage.read('maxNotificationPeriod') ?? 180).toString());
+    final minFocusNode = FocusNode();
+    final maxFocusNode = FocusNode();
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     final String quietStart = storage.read('quietHoursStart') ?? '23:00';
@@ -133,7 +135,11 @@ class NotificationsCard extends StatelessWidget {
                         child: IntrinsicWidth(
                           child: TextFormField(
                             controller: minController,
-                            onTapOutside: (onTapOutside) => minFrequencyChanged(),
+                            focusNode: minFocusNode,
+                            onTapOutside: (onTapOutside) {
+                              minFrequencyChanged();
+                              minFocusNode.unfocus();
+                            },
                             onEditingComplete: minFrequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
@@ -169,7 +175,11 @@ class NotificationsCard extends StatelessWidget {
                         child: IntrinsicWidth(
                           child: TextFormField(
                             controller: maxController,
-                            onTapOutside: (onTapOutside) => maxFrequencyChanged(),
+                            focusNode: maxFocusNode,
+                            onTapOutside: (onTapOutside) {
+                              maxFrequencyChanged();
+                              maxFocusNode.unfocus();
+                            },
                             onEditingComplete: maxFrequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
