@@ -9,9 +9,11 @@ import 'settings_card.dart';
 import 'notifications.dart';
 
 class NotificationsCard extends StatelessWidget {
-  const NotificationsCard({
+  NotificationsCard({
     super.key,
   });
+
+  final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,8 @@ class NotificationsCard extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
 
-    final minController = TextEditingController(text: (storage.read('minNotificationPeriod') ?? 90).toString());
-    final maxController = TextEditingController(text: (storage.read('maxNotificationPeriod') ?? 180).toString());
-    final minFocusNode = FocusNode();
-    final maxFocusNode = FocusNode();
+    appState.minController ??= TextEditingController(text: (storage.read('minNotificationPeriod') ?? 90).toString());
+    appState.maxController ??= TextEditingController(text: (storage.read('maxNotificationPeriod') ?? 180).toString());
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     final String quietStart = storage.read('quietHoursStart') ?? '23:00';
@@ -55,7 +55,7 @@ class NotificationsCard extends StatelessWidget {
     }
 
     void minFrequencyChanged() {
-      final val = int.parse(minController.text);
+      final val = int.parse(appState.minController?.text ?? '');
       final currentMax = storage.read('maxNotificationPeriod') ?? 180;
       
       if (val < currentMax) {
@@ -69,7 +69,7 @@ class NotificationsCard extends StatelessWidget {
     }
 
     void maxFrequencyChanged() {
-      final val = int.parse(maxController.text);
+      final val = int.parse(appState.maxController?.text ?? '');
       final currentMin = storage.read('minNotificationPeriod') ?? 90;
       
       if (val > currentMin) {
@@ -134,20 +134,18 @@ class NotificationsCard extends StatelessWidget {
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
                           child: TextFormField(
-                            controller: minController,
-                            focusNode: minFocusNode,
+                            controller: appState.minController,
+                            focusNode: appState.minFocusNode,
                             onTapOutside: (onTapOutside) {
                               minFrequencyChanged();
-                              minFocusNode.unfocus();
+                              appState.minFocusNode.unfocus();
                             },
                             onEditingComplete: minFrequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                            ],
+                            inputFormatters: inputFormatter,
                             decoration: const InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black, width: 1.1),
@@ -163,7 +161,8 @@ class NotificationsCard extends StatelessWidget {
                               ),
                               contentPadding: EdgeInsets.all(-1),
                               isDense: true
-                            ),                         ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -174,20 +173,18 @@ class NotificationsCard extends StatelessWidget {
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
                           child: TextFormField(
-                            controller: maxController,
-                            focusNode: maxFocusNode,
+                            controller: appState.maxController,
+                            focusNode: appState.maxFocusNode,
                             onTapOutside: (onTapOutside) {
                               maxFrequencyChanged();
-                              maxFocusNode.unfocus();
+                              appState.maxFocusNode.unfocus();
                             },
                             onEditingComplete: maxFrequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                            ],
+                            inputFormatters: inputFormatter,
                             decoration: const InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black, width: 1.1),

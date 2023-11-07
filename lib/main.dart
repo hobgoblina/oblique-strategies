@@ -145,6 +145,11 @@ class AppState extends ChangeNotifier {
   bool titleCardsSeen = false;
   Timer? iconFadeoutTimer;
 
+  TextEditingController? minController;
+  TextEditingController? maxController;
+  FocusNode minFocusNode = FocusNode();
+  FocusNode maxFocusNode = FocusNode();
+
   // Keeping track of all drawn cards in this session
   // When favorites-only setting is applied there's more potential for
   // Cards to be redrawn in the same session, impacting ability to undo swipes
@@ -197,7 +202,7 @@ class MainPage extends StatelessWidget {
     if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
     } else if (appState.cardFace == 'notifications') {
-      frontCard = const NotificationsCard();
+      frontCard = NotificationsCard();
     } else if (appState.cardFace == 'settings') {
       frontCard = Container();
     }
