@@ -90,7 +90,6 @@ class SettingsCard extends StatelessWidget {
           child: const Text(
             'About',
             semanticsLabel: 'Show information about this app',
-            textScaleFactor: 1.1,
             style: TextStyle(decoration: TextDecoration.underline)
           ),
         ),
@@ -153,14 +152,13 @@ class SettingsCard extends StatelessWidget {
       ),
       const Spacer(),
       Visibility(
-        visible: !kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
+        visible: kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
         child: Center(
           child: TextButton(
             onPressed: () => appState.setCardFrontAndFlip('notifications'),
             child: const Text(
               'Notifications',
               semanticsLabel: 'Open notifications settings',
-              textScaleFactor: 1.1,
               style: TextStyle(decoration: TextDecoration.underline)
             ),
           ),

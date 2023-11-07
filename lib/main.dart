@@ -119,7 +119,7 @@ class StrategiesApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 19, fontFamily: 'Univers')),
+              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
               foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
               backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
               overlayColor: MaterialStateProperty.resolveWith((states) {

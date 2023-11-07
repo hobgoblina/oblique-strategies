@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:io' show Platform;
@@ -17,6 +18,9 @@ class NotificationsCard extends StatelessWidget {
     final Cards card = Cards();
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
+
+    final minController = TextEditingController(text: (storage.read('minNotificationPeriod') ?? 90).toString());
+    final maxController = TextEditingController(text: (storage.read('maxNotificationPeriod') ?? 180).toString());
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     final String quietStart = storage.read('quietHoursStart') ?? '23:00';
@@ -48,6 +52,34 @@ class NotificationsCard extends StatelessWidget {
       }
     }
 
+    void minFrequencyChanged() {
+      final val = int.parse(minController.text);
+      final currentMax = storage.read('maxNotificationPeriod') ?? 180;
+      
+      if (val < currentMax) {
+        storage.write('minNotificationPeriod', val);
+      } else {
+        storage.write('maxNotificationPeriod', val);
+        storage.write('minNotificationPeriod', currentMax);
+      }
+
+      appState.rebuildApp();
+    }
+
+    void maxFrequencyChanged() {
+      final val = int.parse(maxController.text);
+      final currentMin = storage.read('minNotificationPeriod') ?? 90;
+      
+      if (val > currentMin) {
+        storage.write('maxNotificationPeriod', val);
+      } else {
+        storage.write('minNotificationPeriod', val);
+        storage.write('maxNotificationPeriod', currentMin);
+      }
+
+      appState.rebuildApp();
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
       child: card.cardWrapper((paddingInterp) => Container(
@@ -62,6 +94,7 @@ class NotificationsCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Spacer(),
               const Spacer(),
               const SettingsCard().settingsItem(
                 text: 'Enable notifications',
@@ -85,6 +118,88 @@ class NotificationsCard extends StatelessWidget {
                       }
                     }
                   ),
+                )
+              ),
+              const Spacer(),
+              const SettingsCard().settingsItem(
+                tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval, starting when your quiet hours end.',
+                text: 'Notify every',
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 40),
+                        child: IntrinsicWidth(
+                          child: TextFormField(
+                            controller: minController,
+                            onTapOutside: (onTapOutside) => minFrequencyChanged(),
+                            onEditingComplete: minFrequencyChanged,
+                            cursorHeight: 18,
+                            style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                            ],
+                            decoration: const InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.1),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.1),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red, width: 1.1),
+                              ),
+                              focusedErrorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red, width: 1.1),
+                              ),
+                              contentPadding: EdgeInsets.all(-1),
+                              isDense: true
+                            ),                         ),
+                        ),
+                      ),
+                    ),
+                    const Text('–', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 40),
+                        child: IntrinsicWidth(
+                          child: TextFormField(
+                            controller: maxController,
+                            onTapOutside: (onTapOutside) => maxFrequencyChanged(),
+                            onEditingComplete: maxFrequencyChanged,
+                            cursorHeight: 18,
+                            style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                            ],
+                            decoration: const InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.1),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black, width: 1.1),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red, width: 1.1),
+                              ),
+                              focusedErrorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red, width: 1.1),
+                              ),
+                              contentPadding: EdgeInsets.all(-1),
+                              isDense: true
+                            )
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Text(' Minutes', textScaleFactor: 1.5),
+                  ],
                 )
               ),
               const Spacer(),
@@ -115,6 +230,7 @@ class NotificationsCard extends StatelessWidget {
                   ],
                 )
               ),
+              const Spacer(),
               const Spacer()
             ]
           )
