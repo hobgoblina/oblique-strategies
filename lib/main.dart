@@ -20,22 +20,28 @@ import 'notifications_card.dart';
 void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
-  
-  if ((GetStorage().read('notificationsEnabled') ?? false)) {
-    LocalNotificationService().init();
-    Workmanager().initialize(callbackDispatcher);
-    Workmanager().registerPeriodicTask('nextCard', 'nextCard');
-  }
+  Workmanager().initialize(callbackDispatcher);
+  Workmanager().registerPeriodicTask('nextCard', 'nextCard');
 
   runApp(const StrategiesApp());
 }
 
+@pragma('vm:entry-point')
 void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) {
-    final int nextIndex = GetStorage().read('currentIndex') + 1;
-    final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
-    LocalNotificationService().showNotification(nextCard);
-    GetStorage().write('currentIndex', nextIndex);
+  Workmanager().executeTask((task, inputData) async {
+    await GetStorage.init();
+
+    if ((GetStorage().read('notificationsEnabled') ?? false)) {
+      final int nextIndex = GetStorage().read('currentIndex') + 1;
+      final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
+
+      final notificationsService = LocalNotificationService();
+      await notificationsService.init();
+      notificationsService.showNotification(nextCard);
+
+      GetStorage().write('currentIndex', nextIndex);
+    }
+
     return Future.value(true);
   });
 }
