@@ -19,15 +19,18 @@ import 'notifications_card.dart';
 
 void main() async {
   await GetStorage.init();
-  WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher);
-  Workmanager().registerPeriodicTask('nextCard', 'nextCard');
+
+  if (!kIsWeb) {
+    WidgetsFlutterBinding.ensureInitialized();
+    Workmanager().initialize(notificationDispatcher);
+    Workmanager().registerPeriodicTask('nextCard', 'nextCard');
+  }
 
   runApp(const StrategiesApp());
 }
 
 @pragma('vm:entry-point')
-void callbackDispatcher() {
+void notificationDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     await GetStorage.init();
 

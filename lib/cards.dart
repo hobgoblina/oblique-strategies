@@ -82,7 +82,7 @@ class Cards {
   Map<String, dynamic> multiple(String cardText, List<String> options, double optionPadding) {
     String text = cardText;
     for (int i = 0; i < options.length; ++i) {
-      text += ' •$options[i]';
+      text += ' •${options[i]}';
     }
     
     return {
@@ -122,7 +122,7 @@ class Cards {
   Map<String, dynamic> options(String cardText, List<String> options, double optionPadding) {
     String text = cardText;
     for (int i = 0; i < options.length; ++i) {
-      text += ' •$options[i]';
+      text += ' •${options[i]}';
     }
 
     return {
