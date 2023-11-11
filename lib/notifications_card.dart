@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,22 +8,46 @@ import 'main.dart';
 import 'cards.dart';
 import 'settings_card.dart';
 import 'notifications.dart';
+import 'dart:math';
 
-class NotificationsCard extends StatelessWidget {
-  NotificationsCard({
-    super.key,
-  });
+class NotificationsCard extends StatefulWidget {
+  const NotificationsCard({
+    Key? key,
+  }) : super(key: key);
 
-  final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
+  @override
+  State<NotificationsCard> createState() => NotificationsCardState();
+}
+
+class NotificationsCardState extends State<NotificationsCard> {
+  final TextEditingController minController = TextEditingController();
+  final TextEditingController maxController = TextEditingController();
+  final FocusNode minFocusNode = FocusNode(canRequestFocus: false);
+  final FocusNode maxFocusNode = FocusNode(canRequestFocus: false);
+
+  @override
+  void dispose() {
+    minController.dispose();
+    maxController.dispose();
+    minFocusNode.dispose();
+    maxFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final Cards card = Cards();
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
+    final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
 
-    appState.minController ??= TextEditingController(text: (storage.read('minNotificationPeriod') ?? 90).toString());
-    appState.maxController ??= TextEditingController(text: (storage.read('maxNotificationPeriod') ?? 180).toString());
+    if (minController.text.isEmpty && !minFocusNode.hasFocus) {
+      minController.text = (storage.read('minNotificationPeriod') ?? 90).toString();
+    }
+
+    if (maxController.text.isEmpty && !maxFocusNode.hasFocus) {
+      maxController.text = (storage.read('maxNotificationPeriod') ?? 180).toString();
+    }
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     final String quietStart = storage.read('quietHoursStart') ?? '23:00';
@@ -54,33 +79,33 @@ class NotificationsCard extends StatelessWidget {
       }
     }
 
-    void minFrequencyChanged() {
-      final val = int.parse(appState.minController?.text ?? '');
-      final currentMax = storage.read('maxNotificationPeriod') ?? 180;
+    void frequencyChanged({ bool shouldUnfocus = false }) {
+      if (minController.text.isEmpty || maxController.text.isEmpty) {
+        return;
+      }
+
+      final vals = <int>[ int.parse(minController.text), int.parse(maxController.text) ];
+      final minVal = vals.reduce(min);
+      final maxVal = vals.reduce(max);
       
-      if (val < currentMax) {
-        storage.write('minNotificationPeriod', val);
-      } else {
-        storage.write('maxNotificationPeriod', val);
-        storage.write('minNotificationPeriod', currentMax);
+      storage.write('minNotificationPeriod', minVal);
+      storage.write('maxNotificationPeriod', maxVal);
+
+      if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
+        minController.text = '$minVal';
+        maxController.text = '$maxVal';
+      }
+
+      if (shouldUnfocus) {
+        minFocusNode.unfocus();
+        maxFocusNode.unfocus();
       }
 
       appState.rebuildApp();
     }
 
-    void maxFrequencyChanged() {
-      final val = int.parse(appState.maxController?.text ?? '');
-      final currentMin = storage.read('minNotificationPeriod') ?? 90;
-      
-      if (val > currentMin) {
-        storage.write('maxNotificationPeriod', val);
-      } else {
-        storage.write('minNotificationPeriod', val);
-        storage.write('maxNotificationPeriod', currentMin);
-      }
-
-      appState.rebuildApp();
-    }
+    minFocusNode.addListener(frequencyChanged);
+    maxFocusNode.addListener(frequencyChanged);
 
     return Padding(
       padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
@@ -107,7 +132,7 @@ class NotificationsCard extends StatelessWidget {
                     semanticLabel: 'Enable notifications',
                     onChanged: (val) async {
                       if (val is bool) {
-                        if (val && Platform.isIOS) {
+                        if (val && !kIsWeb && Platform.isIOS) {
                           final permissionsGranted = await LocalNotificationService().getIosPermissions();
 
                           if (!permissionsGranted) {
@@ -134,13 +159,9 @@ class NotificationsCard extends StatelessWidget {
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
                           child: TextFormField(
-                            controller: appState.minController,
-                            focusNode: appState.minFocusNode,
-                            onTapOutside: (onTapOutside) {
-                              minFrequencyChanged();
-                              appState.minFocusNode.unfocus();
-                            },
-                            onEditingComplete: minFrequencyChanged,
+                            focusNode: minFocusNode,
+                            controller: minController,
+                            onEditingComplete: frequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
@@ -173,13 +194,9 @@ class NotificationsCard extends StatelessWidget {
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
                           child: TextFormField(
-                            controller: appState.maxController,
-                            focusNode: appState.maxFocusNode,
-                            onTapOutside: (onTapOutside) {
-                              maxFrequencyChanged();
-                              appState.maxFocusNode.unfocus();
-                            },
-                            onEditingComplete: maxFrequencyChanged,
+                            focusNode: maxFocusNode,
+                            controller: maxController,
+                            onEditingComplete: frequencyChanged,
                             cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,

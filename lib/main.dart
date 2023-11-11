@@ -103,6 +103,7 @@ class StrategiesApp extends StatelessWidget {
           ),
           textSelectionTheme: const TextSelectionThemeData(
             selectionHandleColor: Colors.transparent,
+            selectionColor: Colors.black12,
             cursorColor: Colors.black
           ),
           checkboxTheme: CheckboxThemeData(
@@ -144,11 +145,6 @@ class AppState extends ChangeNotifier {
   bool iconsVisible = false;
   bool titleCardsSeen = false;
   Timer? iconFadeoutTimer;
-
-  TextEditingController? minController;
-  TextEditingController? maxController;
-  FocusNode minFocusNode = FocusNode();
-  FocusNode maxFocusNode = FocusNode();
 
   // Keeping track of all drawn cards in this session
   // When favorites-only setting is applied there's more potential for
