@@ -17,9 +17,9 @@ void notificationDispatcher() {
       final next = storage.read('nextNotificationTime') ? DateTime.parse(storage.read('nextNotificationTime')) : null;
       int? secondsToWait;
 
-      final int minFreq = storage.read('minNotificationPeriod') ?? 90;
-      final int maxFreq = storage.read('maxNotificationPeriod') ?? 180;
-      final int freqDiff = maxFreq - minFreq;
+      final double minFreq = storage.read('minNotificationPeriod') ?? 90;
+      final double maxFreq = storage.read('maxNotificationPeriod') ?? 180;
+      final double freqDiff = maxFreq - minFreq;
 
       final String quietStart = storage.read('quietHoursStart') ?? '23:00';
       final String quietEnd = storage.read('quietHoursEnd') ?? '11:00';
@@ -60,15 +60,25 @@ void notificationDispatcher() {
         );
       }
 
+      // Set first timer after quiet hours
       if (
+        next != null &&
+        next.isBefore(now) &&
         isDuringQuietHours(nowTime) &&
         !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 15))
       ) {
-        final quietEndDate = DateTime(now.year, now.month, now.day, quietHoursEnd.hour, quietHoursEnd.minute);
-        secondsToWait = quietEndDate.difference(now).inSeconds + (Random().nextInt(freqDiff * 60).toInt() ~/ 2);
+        final quietEndDate = DateTime(
+          now.year,
+          now.month,
+          now.hour > quietHoursEnd.hour ? now.day + 1 : now.day,
+          quietHoursEnd.hour,
+          quietHoursEnd.minute
+        );
+        secondsToWait = quietEndDate.difference(now).inSeconds + (Random().nextDouble() * freqDiff * 60 ~/ 2);
         storage.write('nextNotificationTime', now.add(Duration(seconds: secondsToWait)).toString());
       }
 
+      // Set timer if next notification should occur before next dispatcher call
       if (
         !isDuringQuietHours(nowTime) &&
         next != null &&
@@ -79,7 +89,9 @@ void notificationDispatcher() {
         secondsToWait = next.difference(now).inSeconds;
       }
 
+      // Set time for first notification or recently missed notification
       if (
+        secondsToWait == null &&
         (next == null || now.isAfter(next)) &&
         !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 1))
       ) {
@@ -87,18 +99,33 @@ void notificationDispatcher() {
         storage.write('nextNotificationTime', now.add(Duration(seconds: secondsToWait)).toString());
       }
 
+      // Recursive func for creating upcoming notifications
+      Future<void> createNotification() async {
+        final int nextIndex = storage.read('currentIndex') + 1;
+        final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
+
+        // Init notifications service & find next card
+        final notificationsService = LocalNotificationService();
+        await notificationsService.init();
+        notificationsService.showNotification(nextCard);
+
+        // Calculate next notification time
+        final nextNotificationTime = now.add(Duration(seconds: ((minFreq + freqDiff * Random().nextDouble()) * 60).toInt()));
+        storage.write('currentIndex', nextIndex);
+        storage.write('nextNotificationTime', nextNotificationTime.toString());
+
+        // If next notification should occur before the next dispatcher call,
+        // create timer to create the next notification
+        if (now.add(const Duration(minutes: 15)).isAfter(nextNotificationTime)) {
+          Timer(
+            Duration(seconds: nextNotificationTime.difference(DateTime.now()).inSeconds),
+            createNotification
+          );
+        }
+      }
+
       if (secondsToWait != null) {
-        Timer(Duration(seconds: secondsToWait), () async {
-          final int nextIndex = storage.read('currentIndex') + 1;
-          final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
-
-          final notificationsService = LocalNotificationService();
-          await notificationsService.init();
-          notificationsService.showNotification(nextCard);
-
-          storage.write('currentIndex', nextIndex);
-          storage.write('nextNotificationTime', now.add(Duration(seconds: Random().nextInt(freqDiff * 60))).toString());
-        });
+        Timer(Duration(seconds: secondsToWait), createNotification);
       }
     }
 

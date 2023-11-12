@@ -38,7 +38,7 @@ class NotificationsCardState extends State<NotificationsCard> {
     final Cards card = Cards();
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
-    final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
+    final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("^([0-9]+)?\\.?([0-9]+)?"))];
 
     if (minController.text.isEmpty && !minFocusNode.hasFocus) {
       minController.text = (storage.read('minNotificationPeriod') ?? 90).toString();
@@ -83,7 +83,7 @@ class NotificationsCardState extends State<NotificationsCard> {
         return;
       }
 
-      final vals = <int>[ int.parse(minController.text), int.parse(maxController.text) ];
+      final vals = <double>[ double.parse(minController.text), double.parse(maxController.text) ];
       final minVal = vals.reduce(min);
       final maxVal = vals.reduce(max);
       
