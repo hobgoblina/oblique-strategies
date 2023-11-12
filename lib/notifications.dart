@@ -13,12 +13,18 @@ void notificationDispatcher() {
     final storage = GetStorage();
 
     if ((storage.read('notificationsEnabled') ?? false)) {
-      final DateTime now = DateTime.now();
+      final DateTime startTime = DateTime.now();
       final next = storage.read('nextNotificationTime') ? DateTime.parse(storage.read('nextNotificationTime')) : null;
-      int? secondsToWait;
 
-      final double minFreq = storage.read('minNotificationPeriod') ?? 90;
-      final double maxFreq = storage.read('maxNotificationPeriod') ?? 180;
+      if (next != null && startTime.add(const Duration(minutes: 15)).isBefore(next)) {
+        return Future.value(true);
+      }
+
+      int? secondsToWait;
+      final String freqUnit = storage.read('notificationFreqUnit') ?? 'Hours';
+      final int secondsPerUnit = freqUnit == 'Hours' ? 3600 : 60;
+      final double minFreq = storage.read('minNotificationPeriod') ?? 1.5;
+      final double maxFreq = storage.read('maxNotificationPeriod') ?? 3;
       final double freqDiff = maxFreq - minFreq;
 
       final String quietStart = storage.read('quietHoursStart') ?? '23:00';
@@ -31,7 +37,7 @@ void notificationDispatcher() {
         hour: int.parse(quietEnd.split(':')[0]),
         minute: int.parse(quietEnd.split(':')[1]),
       );
-      final TimeOfDay nowTime = TimeOfDay(hour: now.hour, minute: now.minute);
+      final TimeOfDay nowTime = TimeOfDay(hour: startTime.hour, minute: startTime.minute);
       
       isDuringQuietHours(TimeOfDay time) {
         if (
@@ -63,40 +69,44 @@ void notificationDispatcher() {
       // Set first timer after quiet hours
       if (
         next != null &&
-        next.isBefore(now) &&
+        next.isBefore(startTime) &&
         isDuringQuietHours(nowTime) &&
         !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 15))
       ) {
         final quietEndDate = DateTime(
-          now.year,
-          now.month,
-          now.hour > quietHoursEnd.hour ? now.day + 1 : now.day,
+          startTime.year,
+          startTime.month,
+          startTime.hour > quietHoursEnd.hour ? startTime.day + 1 : startTime.day,
           quietHoursEnd.hour,
           quietHoursEnd.minute
         );
-        secondsToWait = quietEndDate.difference(now).inSeconds + (Random().nextDouble() * freqDiff * 60 ~/ 2);
-        storage.write('nextNotificationTime', now.add(Duration(seconds: secondsToWait)).toString());
+        final int secTilNextAlarm = quietEndDate.difference(startTime).inSeconds + (Random().nextDouble() * freqDiff * secondsPerUnit ~/ 2);
+        storage.write('nextNotificationTime', startTime.add(Duration(seconds: secTilNextAlarm)).toString());
+
+        if (startTime.add(Duration(seconds: secTilNextAlarm)).isBefore(startTime.add(const Duration(minutes: 15)))) {
+          secondsToWait = secTilNextAlarm;
+        }
       }
 
       // Set timer if next notification should occur before next dispatcher call
       if (
         !isDuringQuietHours(nowTime) &&
         next != null &&
-        next.isAfter(now) &&
-        next.subtract(const Duration(minutes: 15)).isBefore(now) &&
+        next.isAfter(startTime) &&
+        next.subtract(const Duration(minutes: 15)).isBefore(startTime) &&
         !isDuringQuietHours(TimeOfDay(hour: next.hour, minute: next.minute))
       ) {
-        secondsToWait = next.difference(now).inSeconds;
+        secondsToWait = next.difference(startTime).inSeconds;
       }
 
       // Set time for first notification or recently missed notification
       if (
         secondsToWait == null &&
-        (next == null || now.isAfter(next)) &&
+        (next == null || startTime.isAfter(next)) &&
         !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 1))
       ) {
         secondsToWait = 60;
-        storage.write('nextNotificationTime', now.add(Duration(seconds: secondsToWait)).toString());
+        storage.write('nextNotificationTime', startTime.add(Duration(seconds: secondsToWait)).toString());
       }
 
       // Recursive func for creating upcoming notifications
@@ -110,13 +120,13 @@ void notificationDispatcher() {
         notificationsService.showNotification(nextCard);
 
         // Calculate next notification time
-        final nextNotificationTime = now.add(Duration(seconds: ((minFreq + freqDiff * Random().nextDouble()) * 60).toInt()));
+        final nextNotificationTime = startTime.add(Duration(seconds: ((minFreq + freqDiff * Random().nextDouble()) * secondsPerUnit).toInt()));
         storage.write('currentIndex', nextIndex);
         storage.write('nextNotificationTime', nextNotificationTime.toString());
 
         // If next notification should occur before the next dispatcher call,
         // create timer to create the next notification
-        if (now.add(const Duration(minutes: 15)).isAfter(nextNotificationTime)) {
+        if (startTime.add(const Duration(minutes: 15)).isAfter(nextNotificationTime)) {
           Timer(
             Duration(seconds: nextNotificationTime.difference(DateTime.now()).inSeconds),
             createNotification

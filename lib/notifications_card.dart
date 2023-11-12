@@ -41,11 +41,11 @@ class NotificationsCardState extends State<NotificationsCard> {
     final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("^([0-9]+)?\\.?([0-9]+)?"))];
 
     if (minController.text.isEmpty && !minFocusNode.hasFocus) {
-      minController.text = (storage.read('minNotificationPeriod') ?? 90).toString();
+      minController.text = (storage.read('minNotificationPeriod') ?? 1.5).toString();
     }
 
     if (maxController.text.isEmpty && !maxFocusNode.hasFocus) {
-      maxController.text = (storage.read('maxNotificationPeriod') ?? 180).toString();
+      maxController.text = (storage.read('maxNotificationPeriod') ?? 3).toString();
     }
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
@@ -148,7 +148,7 @@ class NotificationsCardState extends State<NotificationsCard> {
               ),
               const Spacer(),
               const SettingsCard().settingsItem(
-                tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval, starting when your quiet hours end.',
+                tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval.',
                 text: 'Notify every',
                 child: Row(
                   children: [
@@ -221,7 +221,28 @@ class NotificationsCardState extends State<NotificationsCard> {
                         ),
                       ),
                     ),
-                    const Text(' Minutes', textScaleFactor: 1.5),
+                    DropdownButton<String>(
+                      value: storage.read('notificationFreqUnit') ?? 'Hours',
+                      elevation: 15,
+                      iconSize: 0,
+                      isDense: true,
+                      style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                      dropdownColor: Colors.white,
+                      underline: Container(
+                        height: 1.1,
+                        color: Colors.black,
+                      ),
+                      onChanged: (String? value) {
+                        storage.write('notificationFreqUnit', value);
+                        appState.rebuildApp();
+                      },
+                      items: ['Minutes', 'Hours'].map<DropdownMenuItem<String>>(
+                        (String value) => DropdownMenuItem<String>(
+                          value: value, 
+                          child: Text(value)
+                        )
+                      ).toList(),
+                    )
                   ],
                 )
               ),
