@@ -25,6 +25,12 @@ class InfoCards extends StatelessWidget {
       const HotkeysCard()
     ];
 
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    if (screenWidth < 700 || screenHeight < 500) {
+      cards.insert(2, const AboutCard2());
+    }
+
     KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
       if (event is RawKeyDownEvent) {
         if (

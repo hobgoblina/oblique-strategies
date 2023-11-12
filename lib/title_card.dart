@@ -41,10 +41,27 @@ class TitleCard extends StatelessWidget {
               textScaleFactor: 1.5
             ),
             Spacer(),
-            Text(
-              'BRIAN ENO and PETER SCHMIDT',
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.5
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.horizontal,
+              spacing: 5,
+              children: [
+                Text(
+                  'BRIAN ENO',
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.5
+                ),
+                Text(
+                  'and',
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.5
+                ),
+                Text(
+                  'PETER SCHMIDT',
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.5
+                ),
+              ],
             ),
             Spacer(),
             Text(

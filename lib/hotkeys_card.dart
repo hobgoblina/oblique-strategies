@@ -57,24 +57,6 @@ class HotkeysCard extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(right: 75),
                     child: Text(
-                      'Next card (when card has focus)',
-                      textScaleFactor: 1.5
-                    ),
-                  ),
-                ),
-                Text(
-                  'Enter, Space',
-                  textScaleFactor: 1.5
-                ),
-              ],
-            ),
-            Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 75),
-                    child: Text(
                       'Previous card',
                       textScaleFactor: 1.5
                     ),
@@ -93,7 +75,7 @@ class HotkeysCard extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(right: 75),
                     child: Text(
-                      'Add to favorites',
+                      'Toggle favorite',
                       textScaleFactor: 1.5
                     ),
                   ),

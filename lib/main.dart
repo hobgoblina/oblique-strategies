@@ -177,7 +177,7 @@ class AppState extends ChangeNotifier {
     }
 
     iconFadeoutTimer?.cancel();
-    iconFadeoutTimer = Timer(const Duration(seconds: 3), () {
+    iconFadeoutTimer = Timer(const Duration(milliseconds: 3500), () {
       iconsVisible = false;
       notifyListeners();
     });
@@ -198,7 +198,7 @@ class MainPage extends StatelessWidget {
     if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
     } else if (appState.cardFace == 'notifications') {
-      frontCard = NotificationsCard();
+      frontCard = const NotificationsCard();
     } else if (appState.cardFace == 'settings') {
       frontCard = Container();
     }
@@ -256,6 +256,10 @@ class MainPage extends StatelessWidget {
       return KeyEventResult.ignored;
     }
 
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool needsIconSpace = screenWidth < 850 && screenHeight < 640;
+
     return Focus(
       autofocus: false,
       canRequestFocus: false,
@@ -270,6 +274,14 @@ class MainPage extends StatelessWidget {
             child: Stack(
               children: [
                 Scaffold(
+                  appBar: needsIconSpace ? PreferredSize(
+                    preferredSize: Size.lerp(
+                      Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
+                      Size(screenWidth, 0),
+                      screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
+                    ) ?? Size.zero,
+                    child: Container(),
+                  ) : null,
                   body: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints.loose(const Size(770, 550)),
