@@ -101,13 +101,6 @@ class AboutCard2 extends StatelessWidget {
               textScaleFactor: 1.35
             ),
             Spacer(),
-            Text(
-              'First published 1975',
-              textWidthBasis: TextWidthBasis.longestLine,
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.2
-            ),
-            Spacer(),
           ]
         )
       )
