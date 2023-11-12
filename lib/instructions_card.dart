@@ -39,20 +39,23 @@ class InstructionsCard extends StatelessWidget {
               textAlign: TextAlign.center,
               textScaleFactor: 1.5
             ),
+            Spacer(),
             Text(
-              '\nYou can also swipe with the arrow keys',
+              'You can also swipe with the arrow keys',
               textAlign: TextAlign.center,
               textScaleFactor: 1.5
             ),
+            Spacer(),
             Text(
-              '\nUndo swipes with the ${!kIsWeb ? 'back button or ' : ''}backspace key',
+              'Undo swipes with the ${!kIsWeb ? 'back button or ' : ''}backspace key',
               textAlign: TextAlign.center,
               textScaleFactor: 1.5
             ),
+            Visibility(visible: !kIsWeb, child: Spacer()),
             Visibility(
               visible: !kIsWeb,
               child: Text(
-                '\nTap anywhere to see the favorite and settings buttons',
+                'Tap anywhere to see the favorite and settings buttons',
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.5
               ),
