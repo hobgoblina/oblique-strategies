@@ -35,26 +35,26 @@ class InstructionsCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              'Swipe the card away to reveal a new card',
+              'Swipe this card to reveal a new card',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.4
+              textScaleFactor: 1.5
             ),
             Text(
               '\nYou can also swipe with the arrow keys',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.4
+              textScaleFactor: 1.5
             ),
             Text(
               '\nUndo swipes with the ${!kIsWeb ? 'back button or ' : ''}backspace key',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.4
+              textScaleFactor: 1.5
             ),
             Visibility(
               visible: !kIsWeb,
               child: Text(
                 '\nTap anywhere to see the favorite and settings buttons',
                 textAlign: TextAlign.center,
-                textScaleFactor: 1.4
+                textScaleFactor: 1.5
               ),
             ),
             Spacer(),
