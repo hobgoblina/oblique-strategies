@@ -29,60 +29,83 @@ class HotkeysCard extends StatelessWidget {
             Text(
               'Hotkeys',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: TextStyle(fontWeight: FontWeight.bold)
+              style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)
             ),
             Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 75),
-                    child: Text(
-                      'Next card',
-                      textScaleFactor: 1.5
-                    ),
+                  child: Text(
+                    'Next card',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 21)
                   ),
                 ),
-                Text(
-                  'Arrow keys',
-                  textScaleFactor: 1.5
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    '•',
+                    style: TextStyle(fontSize: 21)
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    'Arrow keys',
+                    style: TextStyle(fontSize: 21)
+                  ),
                 ),
               ],
             ),
             Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 75),
-                    child: Text(
-                      'Previous card',
-                      textScaleFactor: 1.5
-                    ),
+                  child: Text(
+                    'Previous card',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 21)
                   ),
                 ),
-                Text(
-                  'Backspace',
-                  textScaleFactor: 1.5
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    '•',
+                    style: TextStyle(fontSize: 21)
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    'Backspace',
+                    style: TextStyle(fontSize: 21)
+                  ),
                 ),
               ],
             ),
             Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 75),
-                    child: Text(
-                      'Toggle favorite',
-                      textScaleFactor: 1.5
-                    ),
+                  child: Text(
+                    'Favorite',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 21)
                   ),
                 ),
-                Text(
-                  'F',
-                  textScaleFactor: 1.5
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    '•',
+                    style: TextStyle(fontSize: 21)
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    'F',
+                    style: TextStyle(fontSize: 21)
+                  ),
                 ),
               ],
             ),

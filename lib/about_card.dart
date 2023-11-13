@@ -33,21 +33,20 @@ class AboutCard extends StatelessWidget {
             const Text(
               'OBLIQUE STRATEGIES',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: TextStyle(fontWeight: FontWeight.bold)
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
             ),
             const Spacer(),
             Text(
               'These cards evolved from our separate observations of the principles underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.',
               textAlign: TextAlign.justify,
-              textScaleFactor: tinyScreen ? 1.35 : 1.2
+              style: TextStyle(fontSize: tinyScreen ? 18 : 17)
             ),
             Visibility(
               visible: !tinyScreen,
               child: const Text(
                 'They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.',
                 textAlign: TextAlign.justify,
-                textScaleFactor: 1.2
+              style: TextStyle(fontSize: 17)
               ),
             ),
             const Spacer(),
@@ -55,7 +54,7 @@ class AboutCard extends StatelessWidget {
               'First published 1975',
               textWidthBasis: TextWidthBasis.longestLine,
               textAlign: TextAlign.center,
-              textScaleFactor: 1.2
+              style: TextStyle(fontSize: 17)
             ),
             const Spacer(),
           ]
@@ -91,15 +90,15 @@ class AboutCard2 extends StatelessWidget {
             Text(
               'OBLIQUE STRATEGIES',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: TextStyle(fontWeight: FontWeight.bold)
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
             ),
             Spacer(),
             Text(
               'They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.',
               textAlign: TextAlign.justify,
-              textScaleFactor: 1.35
+              style: TextStyle(fontSize: 17)
             ),
+            Spacer(),
             Spacer(),
           ]
         )

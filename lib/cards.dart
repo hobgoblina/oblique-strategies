@@ -41,7 +41,7 @@ class Cards {
         child: Text(
           cardText,
           textWidthBasis: TextWidthBasis.longestLine,
-          textScaleFactor: 1.6
+          style: const TextStyle(fontSize: 23)
         ),
       )),
     };
@@ -63,7 +63,7 @@ class Cards {
               child: Text(
                 cardText,
                 textWidthBasis: TextWidthBasis.longestLine,
-                textScaleFactor: 1.6
+                style: const TextStyle(fontSize: 23)
               ),
             ),
             Container(
@@ -99,7 +99,7 @@ class Cards {
           children: [
             Text(
               cardText,
-              textScaleFactor: 1.6,
+              style: const TextStyle(fontSize: 23),
               textWidthBasis: TextWidthBasis.longestLine,
             ),
             Padding(
@@ -108,7 +108,7 @@ class Cards {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: options.map((option) => Text(
                   option,
-                  textScaleFactor: 1.6,
+                  style: const TextStyle(fontSize: 23),
                   textWidthBasis: TextWidthBasis.longestLine,
                 )).toList(),
               ),
@@ -140,7 +140,7 @@ class Cards {
           children: [
             Text(
               cardText,
-              textScaleFactor: 1.6,
+              style: const TextStyle(fontSize: 23),
               textWidthBasis: TextWidthBasis.longestLine,
             ),
             Padding(
@@ -158,13 +158,13 @@ class Cards {
                       padding: EdgeInsets.only(right: 8),
                       child: Text(
                         '•',
-                        textScaleFactor: 1.6,
+                        style: TextStyle(fontSize: 23),
                       ),
                     ),
                     Flexible(
                       child: Text(
                         option,
-                        textScaleFactor: 1.6,
+                        style: const TextStyle(fontSize: 23),
                         textWidthBasis: TextWidthBasis.longestLine,
                       ),
                     ),

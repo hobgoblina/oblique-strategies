@@ -150,7 +150,9 @@ class NotificationsCardState extends State<NotificationsCard> {
               const SettingsCard().settingsItem(
                 tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval.',
                 text: 'Notify every',
+                wrapControls: true,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -223,10 +225,10 @@ class NotificationsCardState extends State<NotificationsCard> {
                     ),
                     DropdownButton<String>(
                       value: storage.read('notificationFreqUnit') ?? 'Hours',
-                      elevation: 15,
+                      elevation: 20,
                       iconSize: 0,
                       isDense: true,
-                      style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                      style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
                       dropdownColor: Colors.white,
                       underline: Container(
                         height: 1.1,
@@ -250,7 +252,9 @@ class NotificationsCardState extends State<NotificationsCard> {
               const SettingsCard().settingsItem(
                 tooltip: 'Notifications will not occur between these times.',
                 text: 'Quiet hours',
+                wrapControls: true,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
                       onPressed: () => onQuietHoursPressed(true),

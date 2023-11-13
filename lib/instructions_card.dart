@@ -30,35 +30,29 @@ class InstructionsCard extends StatelessWidget {
             Text(
               'Using This App',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: TextStyle(fontWeight: FontWeight.bold)
+              style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)
             ),
             Spacer(),
             Text(
               'Swipe this card to reveal a new card',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5
+              style: TextStyle(fontSize: 21)
             ),
             Spacer(),
-            Text(
+            kIsWeb ? Text(
               'You can also swipe with the arrow keys',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5
+              style: TextStyle(fontSize: 21)
+            ) : Text(
+              'Tap anywhere to see control buttons',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 21)
             ),
             Spacer(),
             Text(
-              'Undo swipes with the ${!kIsWeb ? 'back button or ' : ''}backspace key',
+              'Undo swipes with the ${kIsWeb ? 'backspace key' : 'back button'}',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5
-            ),
-            Visibility(visible: !kIsWeb, child: Spacer()),
-            Visibility(
-              visible: !kIsWeb,
-              child: Text(
-                'Tap anywhere to see the favorite and settings buttons',
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.5
-              ),
+              style: TextStyle(fontSize: 21)
             ),
             Spacer(),
             Spacer(),

@@ -11,43 +11,55 @@ class SettingsCard extends StatelessWidget {
 
   Widget settingsItem({
     String? tooltip,
+    bool wrapControls = false,
     required String text,
-    required Widget child
+    required Widget child,
   }) {
-    return Row(
-      children: [
-        tooltip is String ? Expanded(
-          child: Tooltip(
-            triggerMode: TooltipTriggerMode.tap,
-            showDuration: kIsWeb ? null : const Duration(milliseconds: 5000),
-            message: tooltip,
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 8, bottom: 3),
-                  child: Icon(
-                    Ionicons.information_circle_outline,
-                    color: Colors.black,
-                    size: 25
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    text,
-                    textWidthBasis: TextWidthBasis.longestLine,
-                    textScaleFactor: 1.5
-                  ),
-                ),
-              ],
+    final settingItemContent = tooltip is String ? Tooltip(
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: kIsWeb ? null : const Duration(milliseconds: 5000),
+      message: tooltip,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 8, bottom: 3),
+            child: Icon(
+              Ionicons.information_circle_outline,
+              color: Colors.black,
+              size: 25
             ),
           ),
-        ) : Expanded(
-          child: Text(
-            text,
-            textWidthBasis: TextWidthBasis.longestLine,
-            textScaleFactor: 1.5
+          Flexible(
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 21)
+            ),
+          ),
+        ],
+      ),
+    ) : Text(
+      text,
+      textWidthBasis: TextWidthBasis.longestLine,
+      style: const TextStyle(fontSize: 21)
+    );
+
+    return wrapControls ? Row(
+      children: [
+        Expanded(
+          child: Wrap (
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              settingItemContent,
+              child
+            ],
           ),
         ),
+      ],
+    ) : Row(
+      children: [
+        Expanded(child: settingItemContent),
         child
       ],
     );
