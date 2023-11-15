@@ -14,7 +14,9 @@ void notificationDispatcher() {
 
     if ((storage.read('notificationsEnabled') ?? false)) {
       final DateTime startTime = DateTime.now();
-      final next = storage.read('nextNotificationTime') ? DateTime.parse(storage.read('nextNotificationTime')) : null;
+      final next = storage.read('nextNotificationTime') ?? false
+        ? DateTime.parse(storage.read('nextNotificationTime'))
+        : null;
 
       if (next != null && startTime.add(const Duration(minutes: 15)).isBefore(next)) {
         return Future.value(true);
