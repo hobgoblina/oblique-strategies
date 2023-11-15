@@ -81,7 +81,7 @@ class NotificationsCardState extends State<NotificationsCard> {
       }
     }
 
-    void frequencyChanged({ bool shouldUnfocus = false }) {
+    void frequencyChanged({ bool shouldMoveFocus = false, bool isMin = false }) {
       if (minController.text.isEmpty || maxController.text.isEmpty) {
         return;
       }
@@ -99,9 +99,12 @@ class NotificationsCardState extends State<NotificationsCard> {
         maxController.text = '$maxVal'.replaceAll(zerosRegex, '');
       }
 
-      if (shouldUnfocus) {
-        minFocusNode.unfocus();
-        maxFocusNode.unfocus();
+      if (shouldMoveFocus) {
+        if (isMin) {
+          minFocusNode.nextFocus();
+        } else {
+          maxFocusNode.nextFocus();
+        }
       }
 
       appState.rebuildApp();
@@ -166,7 +169,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                           child: TextFormField(
                             focusNode: minFocusNode,
                             controller: minController,
-                            onEditingComplete: frequencyChanged,
+                            onEditingComplete: () => frequencyChanged(shouldMoveFocus: true, isMin: true),
                             onTapOutside: (onTapOutside) => minFocusNode.unfocus(),
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
@@ -202,7 +205,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                           child: TextFormField(
                             focusNode: maxFocusNode,
                             controller: maxController,
-                            onEditingComplete: frequencyChanged,
+                            onEditingComplete: () => frequencyChanged(shouldMoveFocus: true),
                             onTapOutside: (onTapOutside) => maxFocusNode.unfocus(),
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
