@@ -105,8 +105,7 @@ void notificationDispatcher() {
         (next == null || startTime.isAfter(next)) &&
         !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 1))
       ) {
-        secondsToWait = 60;
-        storage.write('nextNotificationTime', startTime.add(Duration(seconds: secondsToWait)).toString());
+        storage.write('nextNotificationTime', startTime.add(const Duration(minutes: 1)).toString());
       }
 
       // Recursive func for creating upcoming notifications

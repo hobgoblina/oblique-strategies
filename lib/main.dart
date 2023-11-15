@@ -247,9 +247,6 @@ class MainPage extends StatelessWidget {
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
           appState.swipeController.undo();
           return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyF && appState.cardFace != 'about') {
-          const FavoriteIcon().addToFavorites(appState);
-          return KeyEventResult.handled;
         }
       }
 

@@ -89,6 +89,7 @@ class NotificationsCardState extends State<NotificationsCard> {
       
       storage.write('minNotificationPeriod', minVal);
       storage.write('maxNotificationPeriod', maxVal);
+      storage.write('nextNotificationTime', null);
 
       if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
         minController.text = '$minVal';
@@ -163,7 +164,6 @@ class NotificationsCardState extends State<NotificationsCard> {
                             focusNode: minFocusNode,
                             controller: minController,
                             onEditingComplete: frequencyChanged,
-                            cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
@@ -181,7 +181,8 @@ class NotificationsCardState extends State<NotificationsCard> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red, width: 1.1),
                               ),
-                              contentPadding: EdgeInsets.all(-1),
+                              contentPadding: EdgeInsets.symmetric(vertical: -1),
+                              isCollapsed: true,
                               isDense: true
                             ),
                           ),
@@ -198,7 +199,6 @@ class NotificationsCardState extends State<NotificationsCard> {
                             focusNode: maxFocusNode,
                             controller: maxController,
                             onEditingComplete: frequencyChanged,
-                            cursorHeight: 18,
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
@@ -216,34 +216,44 @@ class NotificationsCardState extends State<NotificationsCard> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red, width: 1.1),
                               ),
-                              contentPadding: EdgeInsets.all(-1),
+                              contentPadding: EdgeInsets.symmetric(vertical: -1),
+                              isCollapsed: true,
                               isDense: true
                             )
                           ),
                         ),
                       ),
                     ),
-                    DropdownButton<String>(
-                      value: storage.read('notificationFreqUnit') ?? 'Hours',
-                      elevation: 20,
-                      iconSize: 0,
-                      isDense: true,
-                      style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
-                      dropdownColor: Colors.white,
-                      underline: Container(
-                        height: 1.1,
-                        color: Colors.black,
+                    IntrinsicWidth(
+                      child: DropdownButtonFormField<String>(
+                        value: storage.read('notificationFreqUnit') ?? 'Hours',
+                        elevation: 20,
+                        iconSize: 0,
+                        style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
+                        dropdownColor: Colors.white,
+                        decoration: const InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 1.1),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 1.1),
+                          ),
+                          focusColor: Colors.black12,
+                          contentPadding: EdgeInsets.symmetric(vertical: 3),
+                          isCollapsed: true
+                        ),
+                        onChanged: (String? value) {
+                          storage.write('notificationFreqUnit', value);
+                          storage.write('nextNotificationTime', null);
+                          appState.rebuildApp();
+                        },
+                        items: ['Minutes', 'Hours'].map<DropdownMenuItem<String>>(
+                          (String value) => DropdownMenuItem<String>(
+                            value: value, 
+                            child: Text(value)
+                          )
+                        ).toList(),
                       ),
-                      onChanged: (String? value) {
-                        storage.write('notificationFreqUnit', value);
-                        appState.rebuildApp();
-                      },
-                      items: ['Minutes', 'Hours'].map<DropdownMenuItem<String>>(
-                        (String value) => DropdownMenuItem<String>(
-                          value: value, 
-                          child: Text(value)
-                        )
-                      ).toList(),
                     )
                   ],
                 )

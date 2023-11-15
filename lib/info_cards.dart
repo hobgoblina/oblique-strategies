@@ -7,7 +7,6 @@ import 'dart:math';
 import 'main.dart';
 import 'title_card.dart';
 import 'about_card.dart';
-import 'hotkeys_card.dart';
 import 'instructions_card.dart';
 
 class InfoCards extends StatelessWidget {
@@ -21,8 +20,7 @@ class InfoCards extends StatelessWidget {
     final cards = [
       const TitleCard(),
       const AboutCard(),
-      const InstructionsCard(),
-      const HotkeysCard()
+      const InstructionsCard()
     ];
 
     final double screenWidth = MediaQuery.of(context).size.width;
