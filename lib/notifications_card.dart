@@ -38,14 +38,17 @@ class NotificationsCardState extends State<NotificationsCard> {
     final Cards card = Cards();
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
-    final inputFormatter = <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp("^([0-9]+)?\\.?([0-9]+)?"))];
+    final inputFormatter = <TextInputFormatter>[
+      FilteringTextInputFormatter.allow(RegExp("^([0-9]+)?\\.?([0-9]+)?"))
+    ];
+    RegExp zerosRegex = RegExp(r'([.]*0)(?!.*\d)');
 
     if (minController.text.isEmpty && !minFocusNode.hasFocus) {
-      minController.text = (storage.read('minNotificationPeriod') ?? 1.5).toString();
+      minController.text = (storage.read('minNotificationPeriod') ?? 1.5).toString().replaceAll(zerosRegex, '');
     }
 
     if (maxController.text.isEmpty && !maxFocusNode.hasFocus) {
-      maxController.text = (storage.read('maxNotificationPeriod') ?? 3).toString();
+      maxController.text = (storage.read('maxNotificationPeriod') ?? 3).toString().replaceAll(zerosRegex, '');
     }
 
     final bool is24HoursFormat = MediaQuery.of(context).alwaysUse24HourFormat;
@@ -92,8 +95,8 @@ class NotificationsCardState extends State<NotificationsCard> {
       storage.write('nextNotificationTime', null);
 
       if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
-        minController.text = '$minVal';
-        maxController.text = '$maxVal';
+        minController.text = '$minVal'.replaceAll(zerosRegex, '');
+        maxController.text = '$maxVal'.replaceAll(zerosRegex, '');
       }
 
       if (shouldUnfocus) {
@@ -164,6 +167,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                             focusNode: minFocusNode,
                             controller: minController,
                             onEditingComplete: frequencyChanged,
+                            onTapOutside: (onTapOutside) => minFocusNode.unfocus(),
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
@@ -199,6 +203,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                             focusNode: maxFocusNode,
                             controller: maxController,
                             onEditingComplete: frequencyChanged,
+                            onTapOutside: (onTapOutside) => maxFocusNode.unfocus(),
                             style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
