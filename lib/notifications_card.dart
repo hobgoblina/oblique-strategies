@@ -79,6 +79,10 @@ class NotificationsCardState extends State<NotificationsCard> {
         storage.write(isStartTime ? 'quietHoursStart' : 'quietHoursEnd', timeString);
         appState.rebuildApp();
       }
+
+      LocalNotificationService().cancelAllPending();
+      storage.write('nextNotificationTime', null);
+      storage.write('lastScheduledNotification', null);
     }
 
     void frequencyChanged({ bool shouldMoveFocus = false, bool isMin = false }) {

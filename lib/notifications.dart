@@ -5,6 +5,9 @@ import 'package:workmanager/workmanager.dart';
 import 'strategy_card.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+// ignore: unused_import
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 @pragma('vm:entry-point')
 void notificationDispatcher() {
@@ -14,15 +17,24 @@ void notificationDispatcher() {
 
     if ((storage.read('notificationsEnabled') ?? false)) {
       final DateTime startTime = DateTime.now();
-      final next = storage.read('nextNotificationTime') ?? false
+      final next = storage.read('nextNotificationTime') is String
         ? DateTime.parse(storage.read('nextNotificationTime'))
         : null;
+      final lastScheduled = storage.read('lastScheduledNotification') is String
+        ? DateTime.parse(storage.read('lastScheduledNotification'))
+        : null;
 
-      if (next != null && startTime.add(const Duration(minutes: 15)).isBefore(next)) {
+      if (next != null && startTime.add(const Duration(minutes: 30)).isBefore(next)) {
+        print('stopping fast');
         return Future.value(true);
       }
 
-      int? secondsToWait;
+      final notificationsService = LocalNotificationService();
+      await notificationsService.init();
+      final existing = await notificationsService.getAllPending();
+
+      print('${existing.isEmpty ? 'No' : existing.length} notifications pending');
+
       final String freqUnit = storage.read('notificationFreqUnit') ?? 'Hours';
       final int secondsPerUnit = freqUnit == 'Hours' ? 3600 : 60;
       final double minFreq = storage.read('minNotificationPeriod') ?? 1.5;
@@ -39,9 +51,8 @@ void notificationDispatcher() {
         hour: int.parse(quietEnd.split(':')[0]),
         minute: int.parse(quietEnd.split(':')[1]),
       );
-      final TimeOfDay nowTime = TimeOfDay(hour: startTime.hour, minute: startTime.minute);
-      
-      isDuringQuietHours(TimeOfDay time) {
+
+      bool isDuringQuietHours(TimeOfDay time) {
         if (
           quietHoursStart.hour == quietHoursEnd.hour && 
           quietHoursStart.minute == quietHoursEnd.minute
@@ -68,75 +79,75 @@ void notificationDispatcher() {
         );
       }
 
-      // Set first timer after quiet hours
-      if (
-        next != null &&
-        next.isBefore(startTime) &&
-        isDuringQuietHours(nowTime) &&
-        !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 15))
-      ) {
-        final quietEndDate = DateTime(
-          startTime.year,
-          startTime.month,
-          startTime.hour > quietHoursEnd.hour ? startTime.day + 1 : startTime.day,
-          quietHoursEnd.hour,
-          quietHoursEnd.minute
-        );
-        final int secTilNextAlarm = quietEndDate.difference(startTime).inSeconds + (Random().nextDouble() * freqDiff * secondsPerUnit ~/ 2);
-        storage.write('nextNotificationTime', startTime.add(Duration(seconds: secTilNextAlarm)).toString());
-
-        if (startTime.add(Duration(seconds: secTilNextAlarm)).isBefore(startTime.add(const Duration(minutes: 15)))) {
-          secondsToWait = secTilNextAlarm;
-        }
-      }
-
-      // Set timer if next notification should occur before next dispatcher call
-      if (
-        !isDuringQuietHours(nowTime) &&
-        next != null &&
-        next.isAfter(startTime) &&
-        next.subtract(const Duration(minutes: 15)).isBefore(startTime) &&
-        !isDuringQuietHours(TimeOfDay(hour: next.hour, minute: next.minute))
-      ) {
-        secondsToWait = next.difference(startTime).inSeconds;
-      }
-
-      // Set time for first notification or recently missed notification
-      if (
-        secondsToWait == null &&
-        (next == null || startTime.isAfter(next)) &&
-        !isDuringQuietHours(nowTime.replacing(minute: nowTime.minute + 1))
-      ) {
-        storage.write('nextNotificationTime', startTime.add(const Duration(minutes: 1)).toString());
-      }
+      int nextIndex = storage.read('currentIndex') + 1;
 
       // Recursive func for creating upcoming notifications
-      Future<void> createNotification() async {
-        final int nextIndex = storage.read('currentIndex') + 1;
+      Future<void> createNotifications(DateTime notificationTime) async {
+        storage.write('lastScheduledNotification', notificationTime.toString());
+
+        // Find next card
         final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
 
-        // Init notifications service & find next card
-        final notificationsService = LocalNotificationService();
-        await notificationsService.init();
-        notificationsService.showNotification(nextCard);
+        // Schedule notification
+        notificationsService.scheduleNotification(
+          body: nextCard,
+          notificationTime: notificationTime,
+          id: nextIndex
+        );
 
         // Calculate next notification time
-        final nextNotificationTime = startTime.add(Duration(seconds: ((minFreq + freqDiff * Random().nextDouble()) * secondsPerUnit).toInt()));
-        storage.write('currentIndex', nextIndex);
-        storage.write('nextNotificationTime', nextNotificationTime.toString());
+        final secondsTillNext = ((minFreq + (freqDiff * Random().nextDouble())) * secondsPerUnit).toInt();
+        final nextNotificationTime = notificationTime.add(Duration(seconds: secondsTillNext));
 
-        // If next notification should occur before the next dispatcher call,
-        // create timer to create the next notification
-        if (startTime.add(const Duration(minutes: 15)).isAfter(nextNotificationTime)) {
-          Timer(
-            Duration(seconds: nextNotificationTime.difference(DateTime.now()).inSeconds),
-            createNotification
-          );
+        if (!isDuringQuietHours(TimeOfDay.fromDateTime(nextNotificationTime))) {
+          storage.write('nextNotificationTime', nextNotificationTime.toString());
+
+          // Schedule next notification if it should occur before the next dispatcher call
+          if (startTime.add(const Duration(minutes: 30)).isAfter(nextNotificationTime)) {
+            nextIndex = nextIndex + 1;
+            await createNotifications(nextNotificationTime);
+          }
+        } else {
+          storage.write('nextNotificationTime', null);
         }
       }
 
-      if (secondsToWait != null) {
-        Timer(Duration(seconds: secondsToWait), createNotification);
+      final nextQuietHoursEnd = startTime.copyWith(
+        hour: quietHoursEnd.hour,
+        minute: quietHoursEnd.minute,
+      );
+
+      if (
+        startTime.hour > quietHoursEnd.hour || (
+          startTime.hour == quietHoursEnd.hour &&
+          startTime.minute > quietHoursEnd.minute
+        )
+      ) {
+        nextQuietHoursEnd.add(const Duration(days: 1));
+      }
+
+      if ( // Schedule first notification after quiet hours
+        next == null &&
+        nextQuietHoursEnd.isBefore(startTime.add(const Duration(minutes: 30)))
+      ) {
+        await createNotifications(
+          nextQuietHoursEnd.add(Duration(seconds: freqDiff * secondsPerUnit * Random().nextDouble() ~/ 2))
+        );
+      } else if ( // Schedule upcoming notification
+        next != null &&
+        next.isBefore(startTime.add(const Duration(minutes: 30))) &&
+        next.isAfter(startTime)
+      ) {
+        await createNotifications(next);
+      } else if ( // Schedule new notifications
+        (next == null || next.isBefore(startTime)) &&
+        (
+          lastScheduled == null ||
+          lastScheduled.isBefore(startTime.subtract(Duration(seconds: (minFreq * secondsPerUnit).toInt())))
+        ) &&
+        !isDuringQuietHours(TimeOfDay.fromDateTime(startTime.add(const Duration(minutes: 1))))
+      ) {
+        await createNotifications(startTime.add(const Duration(minutes: 1)));
       }
     }
 
@@ -145,7 +156,7 @@ void notificationDispatcher() {
 }
 
 class LocalNotificationService {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     const AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
@@ -159,18 +170,28 @@ class LocalNotificationService {
       iOS: initSettingsIOS,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings);
+    await notificationsPlugin.initialize(
+      initSettings, 
+      onDidReceiveBackgroundNotificationResponse: (response) {
+        print(response.notificationResponseType);
+        print(response.input);
+      }
+    );
   }
 
   Future<bool> getIosPermissions() async {
-    final bool? result = await flutterLocalNotificationsPlugin
+    final bool? result = await notificationsPlugin
       .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
       ?.requestPermissions(alert: true, badge: true, sound: true);
 
     return result ?? false;
   }
 
-  void showNotification(String body) async {
+  void scheduleNotification({
+    required String body,
+    required int id,
+    required DateTime notificationTime
+  }) async {
     const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails();
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'Oblique Strategies',
@@ -186,6 +207,22 @@ class LocalNotificationService {
       iOS: iOSDetails
     );
 
-    await flutterLocalNotificationsPlugin.show(1, 'Oblique Strategies', body, notificationDetails);
+    await notificationsPlugin.zonedSchedule(
+      id,
+      'Oblique Strategies',
+      body,
+      tz.TZDateTime.from(notificationTime, tz.local),
+      notificationDetails,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
+    );
+  }
+
+  Future<List<PendingNotificationRequest>> getAllPending() async {
+    final pendingNotificationRequests = await notificationsPlugin.pendingNotificationRequests();
+    return pendingNotificationRequests;
+  }
+
+  void cancelAllPending() async {
+    await notificationsPlugin.cancelAll();
   }
 }

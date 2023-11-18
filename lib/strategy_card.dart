@@ -8,6 +8,7 @@ import 'main.dart';
 import 'strategies.dart';
 import 'title_card.dart';
 import 'instructions_card.dart';
+import 'notifications.dart';
 
 class StrategyCard extends StatelessWidget {
   const StrategyCard({ super.key });
@@ -145,8 +146,11 @@ class StrategyCard extends StatelessWidget {
       return KeyEventResult.ignored;
     }
 
-    bool refreshFavorite(int? newIndex) {
+    bool onSwipe(int? newIndex) {
       storage.write('currentIndex', newIndex);
+      LocalNotificationService().cancelAllPending();
+      storage.write('nextNotificationTime', null);
+      notificationDispatcher();
 
       if (newIndex is int && newIndex > 1) {
         appState.titleCardsSeen = true;
@@ -182,8 +186,8 @@ class StrategyCard extends StatelessWidget {
             onTapUp: (tapUpDetails) => appState.setIconsVisible(),
             child: nextCard(index, appState.drawnCards)['card']
           ),
-          onSwipe: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
-          onUndo: (previousIndex, currentIndex, direction) => refreshFavorite(currentIndex),
+          onSwipe: (previousIndex, currentIndex, direction) => onSwipe(currentIndex),
+          onUndo: (previousIndex, currentIndex, direction) => onSwipe(currentIndex),
           onEnd: () => storage.write('strategyData', []),
         ),
       ),
