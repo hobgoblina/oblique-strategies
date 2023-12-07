@@ -188,6 +188,14 @@ class LocalNotificationService {
     return result ?? false;
   }
 
+  Future<bool> getAndroidPermissions() async {
+    final bool? result = await notificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+
+    return result ?? false;
+  }
+
   void scheduleNotification({
     required String body,
     required int id,

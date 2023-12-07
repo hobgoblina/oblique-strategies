@@ -142,8 +142,14 @@ class NotificationsCardState extends State<NotificationsCard> {
                     semanticLabel: 'Enable notifications',
                     onChanged: (val) async {
                       if (val is bool) {
-                        if (val && Platform.isIOS) {
-                          final permissionsGranted = await LocalNotificationService().getIosPermissions();
+                        if (val) {
+                          bool permissionsGranted;
+
+                          if (Platform.isIOS) {
+                            permissionsGranted = await LocalNotificationService().getIosPermissions();
+                          } else {
+                            permissionsGranted = await LocalNotificationService().getAndroidPermissions();
+                          }
 
                           if (!permissionsGranted) {
                             return;
