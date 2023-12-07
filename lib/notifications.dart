@@ -80,7 +80,7 @@ Future<bool> createNotifications(task, inputData) async {
     int nextIndex = storage.read('currentIndex') + 1;
 
     // Recursive func for creating upcoming notifications
-    Future<void> createNotifications(DateTime notificationTime) async {
+    Future<void> scheduleNotifications(DateTime notificationTime) async {
       storage.write('lastScheduledNotification', notificationTime.toString());
 
       // Find next card
@@ -103,7 +103,7 @@ Future<bool> createNotifications(task, inputData) async {
         // Schedule next notification if it should occur before the next dispatcher call
         if (startTime.add(const Duration(minutes: 30)).isAfter(nextNotificationTime)) {
           nextIndex = nextIndex + 1;
-          await createNotifications(nextNotificationTime);
+          await scheduleNotifications(nextNotificationTime);
         }
       } else {
         storage.write('nextNotificationTime', null);
@@ -128,7 +128,7 @@ Future<bool> createNotifications(task, inputData) async {
       next == null &&
       nextQuietHoursEnd.isBefore(startTime.add(const Duration(minutes: 30)))
     ) {
-      await createNotifications(
+      await scheduleNotifications(
         nextQuietHoursEnd.add(Duration(seconds: freqDiff * secondsPerUnit * Random().nextDouble() ~/ 2))
       );
     } else if ( // Schedule planned upcoming notification
@@ -136,7 +136,7 @@ Future<bool> createNotifications(task, inputData) async {
       next.isBefore(startTime.add(const Duration(minutes: 30))) &&
       next.isAfter(startTime)
     ) {
-      await createNotifications(next);
+      await scheduleNotifications(next);
     } else if ( // Schedule new, not-already-planned notifications
       (next == null || next.isBefore(startTime)) &&
       (
@@ -145,7 +145,7 @@ Future<bool> createNotifications(task, inputData) async {
       ) &&
       !isDuringQuietHours(TimeOfDay.fromDateTime(startTime.add(const Duration(minutes: 1))))
     ) {
-      await createNotifications(startTime.add(const Duration(minutes: 1)));
+      await scheduleNotifications(startTime.add(const Duration(minutes: 1)));
     }
   }
 
@@ -173,7 +173,11 @@ class LocalNotificationService {
     );
 
     await notificationsPlugin.initialize(
-      initSettings
+      initSettings, 
+      onDidReceiveBackgroundNotificationResponse: (response) {
+        print(response.notificationResponseType);
+        print(response.input);
+      }
     );
   }
 
