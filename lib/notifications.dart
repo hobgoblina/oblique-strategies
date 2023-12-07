@@ -131,13 +131,13 @@ Future<bool> createNotifications(task, inputData) async {
       await createNotifications(
         nextQuietHoursEnd.add(Duration(seconds: freqDiff * secondsPerUnit * Random().nextDouble() ~/ 2))
       );
-    } else if ( // Schedule upcoming notification
+    } else if ( // Schedule planned upcoming notification
       next != null &&
       next.isBefore(startTime.add(const Duration(minutes: 30))) &&
       next.isAfter(startTime)
     ) {
       await createNotifications(next);
-    } else if ( // Schedule new notifications
+    } else if ( // Schedule new, not-already-planned notifications
       (next == null || next.isBefore(startTime)) &&
       (
         lastScheduled == null ||
@@ -161,7 +161,7 @@ class LocalNotificationService {
   final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    const AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
+    const AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings initSettingsIOS = DarwinInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
