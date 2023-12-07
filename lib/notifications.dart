@@ -83,16 +83,17 @@ Future<bool> createNotifications(task, inputData) async {
     // Recursive func for creating upcoming notifications
     Future<void> scheduleNotifications(DateTime notificationTime) async {
       storage.write('lastScheduledNotification', notificationTime.toString());
+      print(notificationTime.toString());
 
       // Find next card
       final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
 
       // Schedule notification
-      notificationsService.scheduleNotification(
-        body: nextCard,
-        notificationTime: notificationTime,
-        id: nextIndex
-      );
+      // notificationsService.scheduleNotification(
+      //   body: nextCard,
+      //   notificationTime: notificationTime,
+      //   id: nextIndex
+      // );
 
       // Calculate next notification time
       final secondsTillNext = ((minFreq + (freqDiff * Random().nextDouble())) * secondsPerUnit).toInt();
@@ -115,6 +116,7 @@ Future<bool> createNotifications(task, inputData) async {
       hour: quietHoursEnd.hour,
       minute: quietHoursEnd.minute,
     );
+    print(nextQuietHoursEnd.toString());
 
     if (
       startTime.hour > quietHoursEnd.hour || (
