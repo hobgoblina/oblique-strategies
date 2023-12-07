@@ -89,11 +89,11 @@ Future<bool> createNotifications(task, inputData) async {
       final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
 
       // Schedule notification
-      // notificationsService.scheduleNotification(
-      //   body: nextCard,
-      //   notificationTime: notificationTime,
-      //   id: nextIndex
-      // );
+      notificationsService.scheduleNotification(
+        body: nextCard,
+        notificationTime: notificationTime,
+        id: nextIndex
+      );
 
       // Calculate next notification time
       final secondsTillNext = ((minFreq + (freqDiff * Random().nextDouble())) * secondsPerUnit).toInt();
