@@ -82,7 +82,6 @@ class NotificationsCardState extends State<NotificationsCard> {
 
       LocalNotificationService().cancelAllPending();
       storage.write('nextNotificationTime', null);
-      storage.write('lastScheduledNotification', null);
     }
 
     void frequencyChanged({ bool shouldMoveFocus = false, bool isMin = false }) {
@@ -96,6 +95,7 @@ class NotificationsCardState extends State<NotificationsCard> {
       
       storage.write('minNotificationPeriod', minVal);
       storage.write('maxNotificationPeriod', maxVal);
+      LocalNotificationService().cancelAllPending();
       storage.write('nextNotificationTime', null);
 
       if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
@@ -151,6 +151,8 @@ class NotificationsCardState extends State<NotificationsCard> {
                         }
 
                         storage.write('notificationsEnabled', val);
+                        LocalNotificationService().cancelAllPending();
+                        storage.write('nextNotificationTime', null);
                         appState.rebuildApp();
                       }
                     }
@@ -256,6 +258,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                         ),
                         onChanged: (String? value) {
                           storage.write('notificationFreqUnit', value);
+                          LocalNotificationService().cancelAllPending();
                           storage.write('nextNotificationTime', null);
                           appState.rebuildApp();
                         },
