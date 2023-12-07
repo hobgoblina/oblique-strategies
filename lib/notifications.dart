@@ -89,7 +89,7 @@ Future<bool> createNotifications(task, inputData) async {
       final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
 
       // Schedule notification
-      notificationsService.scheduleNotification(
+      await notificationsService.scheduleNotification(
         body: nextCard,
         notificationTime: notificationTime,
         id: nextIndex
@@ -164,7 +164,7 @@ class LocalNotificationService {
   final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    const AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('tray_icon');
+    const AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('notification_icon');
     const DarwinInitializationSettings initSettingsIOS = DarwinInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
@@ -196,7 +196,7 @@ class LocalNotificationService {
     return result ?? false;
   }
 
-  void scheduleNotification({
+  Future<void> scheduleNotification({
     required String body,
     required int id,
     required DateTime notificationTime

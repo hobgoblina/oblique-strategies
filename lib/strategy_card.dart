@@ -150,6 +150,7 @@ class StrategyCard extends StatelessWidget {
       storage.write('currentIndex', newIndex);
       LocalNotificationService().cancelAllPending();
       storage.write('nextNotificationTime', null);
+      storage.write('lastScheduledNotification', null);
       createNotifications(null, null);
 
       if (newIndex is int && newIndex > 1) {
