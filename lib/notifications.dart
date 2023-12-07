@@ -29,6 +29,7 @@ Future<bool> createNotifications(task, inputData) async {
 
     final notificationsService = LocalNotificationService();
     await notificationsService.init();
+    tz.initializeTimeZones();
     final existing = await notificationsService.getAllPending();
 
     print('${existing.isEmpty ? 'No' : existing.length} notifications pending');
@@ -81,8 +82,6 @@ Future<bool> createNotifications(task, inputData) async {
 
     // Recursive func for creating upcoming notifications
     Future<void> scheduleNotifications(DateTime notificationTime) async {
-      final notificationsService = LocalNotificationService();
-      await notificationsService.init();
       storage.write('lastScheduledNotification', notificationTime.toString());
 
       // Find next card
