@@ -116,7 +116,6 @@ Future<bool> createNotifications(task, inputData) async {
       hour: quietHoursEnd.hour,
       minute: quietHoursEnd.minute,
     );
-    print(nextQuietHoursEnd.toString());
 
     if (
       startTime.hour > quietHoursEnd.hour || (
