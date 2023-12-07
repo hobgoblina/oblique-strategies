@@ -191,7 +191,7 @@ class LocalNotificationService {
   Future<bool> getAndroidPermissions() async {
     final bool? result = await notificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
+      ?.requestExactAlarmsPermission();
 
     return result ?? false;
   }
