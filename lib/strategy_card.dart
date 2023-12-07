@@ -150,7 +150,7 @@ class StrategyCard extends StatelessWidget {
       storage.write('currentIndex', newIndex);
       LocalNotificationService().cancelAllPending();
       storage.write('nextNotificationTime', null);
-      notificationDispatcher();
+      createNotifications(null, null);
 
       if (newIndex is int && newIndex > 1) {
         appState.titleCardsSeen = true;
