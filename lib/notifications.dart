@@ -81,6 +81,8 @@ Future<bool> createNotifications(task, inputData) async {
 
     // Recursive func for creating upcoming notifications
     Future<void> scheduleNotifications(DateTime notificationTime) async {
+      final notificationsService = LocalNotificationService();
+      await notificationsService.init();
       storage.write('lastScheduledNotification', notificationTime.toString());
 
       // Find next card
