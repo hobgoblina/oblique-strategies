@@ -173,11 +173,7 @@ class LocalNotificationService {
     );
 
     await notificationsPlugin.initialize(
-      initSettings, 
-      onDidReceiveBackgroundNotificationResponse: (response) {
-        print(response.notificationResponseType);
-        print(response.input);
-      }
+      initSettings
     );
   }
 
