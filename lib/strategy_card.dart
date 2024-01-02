@@ -148,7 +148,7 @@ class StrategyCard extends StatelessWidget {
 
     bool onSwipe(int? newIndex) {
       storage.write('currentIndex', newIndex);
-      LocalNotificationService().cancelAllPending();
+      LocalNotificationService().notificationsPlugin.cancelAll();
       storage.write('nextNotificationTime', null);
       storage.write('lastScheduledNotification', null);
       createNotifications(null, null);

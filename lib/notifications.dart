@@ -30,7 +30,7 @@ Future<bool> createNotifications(task, inputData) async {
     final notificationsService = LocalNotificationService();
     await notificationsService.init();
     tz.initializeTimeZones();
-    final existing = await notificationsService.getAllPending();
+    final existing = await notificationsService.notificationsPlugin.pendingNotificationRequests();
 
     print('${existing.isEmpty ? 'No' : existing.length} notifications pending');
 
@@ -226,14 +226,5 @@ class LocalNotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
     );
-  }
-
-  Future<List<PendingNotificationRequest>> getAllPending() async {
-    final pendingNotificationRequests = await notificationsPlugin.pendingNotificationRequests();
-    return pendingNotificationRequests;
-  }
-
-  void cancelAllPending() async {
-    await notificationsPlugin.cancelAll();
   }
 }
