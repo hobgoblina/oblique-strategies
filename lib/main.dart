@@ -24,6 +24,11 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     Workmanager().initialize(notificationDispatcher);
     Workmanager().registerPeriodicTask('nextCard', 'nextCard');
+
+    final notificationAppLaunchDetails = await LocalNotificationService().notificationsPlugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      GetStorage().write('currentIndex', notificationAppLaunchDetails?.notificationResponse?.id);
+    }
   }
 
   runApp(const StrategiesApp());

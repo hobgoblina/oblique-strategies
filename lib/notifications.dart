@@ -95,6 +95,8 @@ Future<bool> createNotifications(task, inputData) async {
         id: nextIndex
       );
 
+      storage.write('currentIndex', nextIndex);
+
       // Calculate next notification time
       final secondsTillNext = ((minFreq + (freqDiff * Random().nextDouble())) * secondsPerUnit).toInt();
       final nextNotificationTime = notificationTime.add(Duration(seconds: secondsTillNext));
@@ -112,7 +114,7 @@ Future<bool> createNotifications(task, inputData) async {
       }
     }
 
-    final nextQuietHoursEnd = startTime.copyWith(
+    DateTime nextQuietHoursEnd = startTime.copyWith(
       hour: quietHoursEnd.hour,
       minute: quietHoursEnd.minute,
     );
@@ -123,7 +125,7 @@ Future<bool> createNotifications(task, inputData) async {
         startTime.minute > quietHoursEnd.minute
       )
     ) {
-      nextQuietHoursEnd.add(const Duration(days: 1));
+      nextQuietHoursEnd = nextQuietHoursEnd.add(const Duration(days: 1));
     }
 
     if ( // Schedule first notification after quiet hours
@@ -174,9 +176,7 @@ class LocalNotificationService {
       iOS: initSettingsIOS,
     );
 
-    await notificationsPlugin.initialize(
-      initSettings
-    );
+    await notificationsPlugin.initialize(initSettings);
   }
 
   Future<bool> getIosPermissions() async {
@@ -188,11 +188,15 @@ class LocalNotificationService {
   }
 
   Future<bool> getAndroidPermissions() async {
-    final bool? result = await notificationsPlugin
+    final bool? notificationsResult = await notificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+
+    final bool? exactAlarmsResult = await notificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.requestExactAlarmsPermission();
 
-    return result ?? false;
+    return (notificationsResult ?? false) && (exactAlarmsResult ?? false);
   }
 
   Future<void> scheduleNotification({
@@ -202,12 +206,10 @@ class LocalNotificationService {
   }) async {
     const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails();
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'Oblique Strategies',
+      'oblique_strategies',
       'Oblique Strategies',
       channelDescription: 'Oblique Strategies',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'Oblique Strategies'
+      icon: 'notification_icon',
     );
 
     const NotificationDetails notificationDetails = NotificationDetails(
@@ -221,6 +223,7 @@ class LocalNotificationService {
       body,
       tz.TZDateTime.from(notificationTime, tz.local),
       notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
     );
   }
