@@ -95,8 +95,6 @@ Future<bool> createNotifications(task, inputData) async {
         id: nextIndex
       );
 
-      storage.write('currentIndex', nextIndex);
-
       // Calculate next notification time
       final secondsTillNext = ((minFreq + (freqDiff * Random().nextDouble())) * secondsPerUnit).toInt();
       final nextNotificationTime = notificationTime.add(Duration(seconds: secondsTillNext));
