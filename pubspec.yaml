@@ -16,6 +16,9 @@ dependencies:
   get_storage: ^2.1.1
   ionicons: ^0.2.2
   flip_card: ^0.7.0
+  flutter_local_notifications: ^16.1.0
+  workmanager: ^0.5.2
+  timezone: ^0.9.2
 
 dev_dependencies:
   flutter_test:
@@ -39,7 +42,7 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "assets/icon/icon.png"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icon/icon_round.png"
+  image_path: "assets/icon/icon_square.png"
   image_path_ios: "assets/icon/icon_square.png"
   min_sdk_android: 21
   web:

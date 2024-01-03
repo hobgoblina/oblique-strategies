@@ -31,36 +31,52 @@ class TitleCard extends StatelessWidget {
               child: Text(
                 'OBLIQUE STRATEGIES',
                 textAlign: TextAlign.center,
-                textScaleFactor: 1.6,
-                style: TextStyle(fontWeight: FontWeight.bold)
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
               ),
             ),
             Text(
               'Over one hundred worthwhile dilemmas',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.5
+              style: TextStyle(fontSize: 21)
             ),
             Spacer(),
-            Text(
-              'BRIAN ENO and PETER SCHMIDT',
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.5
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.horizontal,
+              spacing: 5,
+              children: [
+                Text(
+                  'BRIAN ENO',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 21)
+                ),
+                Text(
+                  'and',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 21)
+                ),
+                Text(
+                  'PETER SCHMIDT',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 21)
+                ),
+              ],
             ),
             Spacer(),
             Text(
               'Fifth, again slightly revised edition, 2001',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.1
+              style: TextStyle(fontSize: 16)
             ),
             Text(
               'Plus a selection from earlier editions',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.1
+              style: TextStyle(fontSize: 16)
             ),
             Text(
               'Digitized by Lina, 2023',
               textAlign: TextAlign.center,
-              textScaleFactor: 1.1
+              style: TextStyle(fontSize: 16)
             ),
             Spacer(),
           ]

@@ -7,15 +7,30 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:workmanager/workmanager.dart';
+
 import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
 import 'settings_card.dart';
 import 'info_cards.dart';
 import 'notifications_card.dart';
+import 'notifications.dart';
 
 void main() async {
   await GetStorage.init();
+
+  if (!kIsWeb) {
+    WidgetsFlutterBinding.ensureInitialized();
+    Workmanager().initialize(notificationDispatcher);
+    Workmanager().registerPeriodicTask('scheduleNotifications', 'scheduleNotifications');
+
+    final notificationAppLaunchDetails = await LocalNotificationService().notificationsPlugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      GetStorage().write('currentIndex', notificationAppLaunchDetails?.notificationResponse?.id);
+    }
+  }
+
   runApp(const StrategiesApp());
 }
 
@@ -93,6 +108,7 @@ class StrategiesApp extends StatelessWidget {
           ),
           textSelectionTheme: const TextSelectionThemeData(
             selectionHandleColor: Colors.transparent,
+            selectionColor: Colors.black12,
             cursorColor: Colors.black
           ),
           checkboxTheme: CheckboxThemeData(
@@ -109,7 +125,7 @@ class StrategiesApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 19, fontFamily: 'Univers')),
+              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
               foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
               backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
               overlayColor: MaterialStateProperty.resolveWith((states) {
@@ -166,7 +182,7 @@ class AppState extends ChangeNotifier {
     }
 
     iconFadeoutTimer?.cancel();
-    iconFadeoutTimer = Timer(const Duration(seconds: 3), () {
+    iconFadeoutTimer = Timer(const Duration(milliseconds: 3500), () {
       iconsVisible = false;
       notifyListeners();
     });
@@ -236,14 +252,15 @@ class MainPage extends StatelessWidget {
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
           appState.swipeController.undo();
           return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyF && appState.cardFace != 'about') {
-          const FavoriteIcon().addToFavorites(appState);
-          return KeyEventResult.handled;
         }
       }
 
       return KeyEventResult.ignored;
     }
+
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final bool needsIconSpace = screenWidth < 850 && screenHeight < 640;
 
     return Focus(
       autofocus: false,
@@ -259,6 +276,14 @@ class MainPage extends StatelessWidget {
             child: Stack(
               children: [
                 Scaffold(
+                  appBar: needsIconSpace ? PreferredSize(
+                    preferredSize: Size.lerp(
+                      Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
+                      Size(screenWidth, 0),
+                      screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
+                    ) ?? Size.zero,
+                    child: Container(),
+                  ) : null,
                   body: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints.loose(const Size(770, 550)),
