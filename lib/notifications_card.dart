@@ -82,6 +82,11 @@ class NotificationsCardState extends State<NotificationsCard> {
 
       LocalNotificationService().notificationsPlugin.cancelAll();
       storage.write('nextNotificationTime', null);
+      
+      final lastTime = storage.read('lastScheduledNotification');
+      if (lastTime != null && DateTime.parse(lastTime).isAfter(DateTime.now())) {
+        storage.write('lastScheduledNotification', null);
+      }
     }
 
     void frequencyChanged({ bool shouldMoveFocus = false, bool isMin = false }) {
@@ -97,6 +102,11 @@ class NotificationsCardState extends State<NotificationsCard> {
       storage.write('maxNotificationPeriod', maxVal);
       LocalNotificationService().notificationsPlugin.cancelAll();
       storage.write('nextNotificationTime', null);
+
+      final lastTime = storage.read('lastScheduledNotification');
+      if (lastTime != null && DateTime.parse(lastTime).isAfter(DateTime.now())) {
+        storage.write('lastScheduledNotification', null);
+      }
 
       if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
         minController.text = '$minVal'.replaceAll(zerosRegex, '');
@@ -154,11 +164,11 @@ class NotificationsCardState extends State<NotificationsCard> {
                           if (!permissionsGranted) {
                             return;
                           }
+                        } else {
+                          LocalNotificationService().notificationsPlugin.cancelAll();
                         }
 
                         storage.write('notificationsEnabled', val);
-                        LocalNotificationService().notificationsPlugin.cancelAll();
-                        storage.write('nextNotificationTime', null);
                         appState.rebuildApp();
                       }
                     }
@@ -266,6 +276,13 @@ class NotificationsCardState extends State<NotificationsCard> {
                           storage.write('notificationFreqUnit', value);
                           LocalNotificationService().notificationsPlugin.cancelAll();
                           storage.write('nextNotificationTime', null);
+                          final lastTime = storage.read('lastScheduledNotification');
+                          if (
+                            lastTime != null &&
+                            DateTime.parse(lastTime).isAfter(DateTime.now())
+                          ) {
+                            storage.write('lastScheduledNotification', null);
+                          }
                           appState.rebuildApp();
                         },
                         items: ['Minutes', 'Hours'].map<DropdownMenuItem<String>>(
