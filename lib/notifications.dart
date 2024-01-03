@@ -23,16 +23,12 @@ Future<bool> createNotifications(task, inputData) async {
       : null;
 
     if (next != null && startTime.add(const Duration(minutes: 30)).isBefore(next)) {
-      print('stopping fast');
       return Future.value(true);
     }
 
     final notificationsService = LocalNotificationService();
     await notificationsService.init();
     tz.initializeTimeZones();
-    final existing = await notificationsService.notificationsPlugin.pendingNotificationRequests();
-
-    print('${existing.isEmpty ? 'No' : existing.length} notifications pending');
 
     final String freqUnit = storage.read('notificationFreqUnit') ?? 'Hours';
     final int secondsPerUnit = freqUnit == 'Hours' ? 3600 : 60;
@@ -83,7 +79,6 @@ Future<bool> createNotifications(task, inputData) async {
     // Recursive func for creating upcoming notifications
     Future<void> scheduleNotifications(DateTime notificationTime) async {
       storage.write('lastScheduledNotification', notificationTime.toString());
-      print(notificationTime.toString());
 
       // Find next card
       final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];

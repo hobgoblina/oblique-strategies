@@ -23,7 +23,7 @@ void main() async {
   if (!kIsWeb) {
     WidgetsFlutterBinding.ensureInitialized();
     Workmanager().initialize(notificationDispatcher);
-    Workmanager().registerPeriodicTask('nextCard', 'nextCard');
+    Workmanager().registerPeriodicTask('scheduleNotifications', 'scheduleNotifications');
 
     final notificationAppLaunchDetails = await LocalNotificationService().notificationsPlugin.getNotificationAppLaunchDetails();
     if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
