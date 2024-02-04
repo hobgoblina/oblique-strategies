@@ -86,6 +86,7 @@ class NotificationsCardState extends State<NotificationsCard> {
       final lastTime = storage.read('lastScheduledNotification');
       if (lastTime != null && DateTime.parse(lastTime).isAfter(DateTime.now())) {
         storage.write('lastScheduledNotification', null);
+        storage.write('lastScheduledIndex', null);
       }
     }
 
@@ -106,6 +107,7 @@ class NotificationsCardState extends State<NotificationsCard> {
       final lastTime = storage.read('lastScheduledNotification');
       if (lastTime != null && DateTime.parse(lastTime).isAfter(DateTime.now())) {
         storage.write('lastScheduledNotification', null);
+        storage.write('lastScheduledIndex', null);
       }
 
       if (!minFocusNode.hasFocus && !maxFocusNode.hasFocus) {
@@ -282,6 +284,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                             DateTime.parse(lastTime).isAfter(DateTime.now())
                           ) {
                             storage.write('lastScheduledNotification', null);
+                            storage.write('lastScheduledIndex', null);
                           }
                           appState.rebuildApp();
                         },

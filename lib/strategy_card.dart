@@ -154,14 +154,17 @@ class StrategyCard extends StatelessWidget {
       if (last != null) {
         final lastTime = DateTime.parse(last);
 
+        // Reset notification data if 
         if (lastTime.isAfter(DateTime.now())) {
           storage.write('nextNotificationTime', last);
           storage.write('lastScheduledNotification', null);
+          storage.write('lastScheduledIndex', null);
         }
       }
 
       createNotifications(null, null);
 
+      // Set `titleCardsSeen` and favorite icon statuses for upcoming card
       if (newIndex is int && newIndex > 1) {
         appState.titleCardsSeen = true;
         List<dynamic> strategyData = storage.read('strategyData');

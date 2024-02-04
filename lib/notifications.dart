@@ -74,11 +74,30 @@ Future<bool> createNotifications(task, inputData) async {
       );
     }
 
-    int nextIndex = storage.read('currentIndex') + 1;
+    int currentIndex = storage.read('currentIndex');
+    final lastScheduledIndex = storage.read('lastScheduledIndex');
+    int nextIndex = currentIndex + 1;
+
+    if (lastScheduledIndex is int) {
+      final nextScheduledIndex = await notificationsService.getNextScheduledIndex();
+
+      if (nextScheduledIndex is int) {
+        if (nextScheduledIndex - 1 > currentIndex) {
+          storage.write('currentIndex', nextScheduledIndex - 1);
+          currentIndex = nextScheduledIndex - 1;
+        }
+      } else if (lastScheduledIndex != currentIndex) {
+        storage.write('currentIndex', lastScheduledIndex);
+        currentIndex = lastScheduledIndex;
+      }
+
+      nextIndex = lastScheduledIndex + 1;
+    }
 
     // Recursive func for creating upcoming notifications
     Future<void> scheduleNotifications(DateTime notificationTime) async {
       storage.write('lastScheduledNotification', notificationTime.toString());
+      storage.write('lastScheduledIndex', nextIndex);
 
       // Find next card
       final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
@@ -190,6 +209,19 @@ class LocalNotificationService {
       ?.requestExactAlarmsPermission();
 
     return (notificationsResult ?? false) && (exactAlarmsResult ?? false);
+  }
+
+  Future<int?> getNextScheduledIndex() async {
+    List<ActiveNotification> scheduled = await notificationsPlugin.getActiveNotifications();
+
+    if (scheduled.isEmpty) {
+      return null;
+    }
+
+    List<int> ids = scheduled.map((e) => e.id ?? -1).toList();
+    ids.sort();
+
+    return ids.firstWhere((e) => e != -1);
   }
 
   Future<void> scheduleNotification({
