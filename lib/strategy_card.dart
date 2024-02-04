@@ -156,7 +156,7 @@ class StrategyCard extends StatelessWidget {
 
         // Reset notification data if 
         if (lastTime.isAfter(DateTime.now())) {
-          storage.write('nextNotificationTime', last);
+          storage.write('nextNotificationTime', last.toString());
           storage.write('lastScheduledNotification', null);
           storage.write('lastScheduledIndex', null);
         }
