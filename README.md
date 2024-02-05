@@ -22,6 +22,6 @@ A couple things I'd be interested in doing with this are:
   - the 1996 Oblique Strategies edition illustrated by Pae White (lmk if you have access to a deck or high-res scans!!!)
   - maybe decks intended for other practices (strategies for programming, etc)
  
-I haven't implemented a framework for either of those yet, but I'll get one going either when I get around to it or when I get prompted by *you* to do so. 
+I haven't implemented a framework for either of those yet, but I'll get them going either when I get around to it or when I get prompted by *you* to do so. 
 
 Plz open an issue if you'd like to contribute translations, requests for (or access to) other decks, bug reports, or something else entirely.
