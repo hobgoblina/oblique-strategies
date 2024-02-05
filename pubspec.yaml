@@ -2,7 +2,7 @@ name: oblique_strategies
 description: Over one hundred worthwhile dilemmas
 publish_to: 'none'
 
-version: 0.1.0
+version: 0.1.0+0
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
