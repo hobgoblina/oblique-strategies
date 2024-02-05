@@ -6,6 +6,8 @@ An explanation of the project that's included with some editions states:
 >
 > They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.
 
+### [Try it out!](https://strategies.lina.garden)
+
 ---
 ## Developing / Building
 Made with flutter, no flavors, nothing special.
