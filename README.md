@@ -7,7 +7,9 @@ An explanation of the project that's included with some editions states:
 > They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.
 
 Available both for web and mobile (Android only, currently)
+
 ### [Try it out!](https://strategies.lina.garden)
+
 <a href="https://github.com/hobgoblina/oblique-strategies/releases" target="_blank" rel="noopener noreferrer">
 <img alt="Download .apk directly from GitHub" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/ab6afab9-edd1-4ead-9176-10178a4f5f80" style="height: 45px; border-radius: 8px;"></a>
 
