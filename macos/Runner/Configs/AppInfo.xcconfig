@@ -8,7 +8,7 @@
 PRODUCT_NAME = oblique_strategies
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.linalina.obliqueStrategies
+PRODUCT_BUNDLE_IDENTIFIER = garden.lina.obliqueStrategies
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.linalina. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 lina.garden All rights reserved.

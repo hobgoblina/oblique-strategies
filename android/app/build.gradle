@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'com.linalina.oblique_strategies'
+    namespace 'garden.lina.oblique_strategies'
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.linalina.oblique_strategies'
+        applicationId 'garden.lina.oblique_strategies'
         multiDexEnabled true
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 33
