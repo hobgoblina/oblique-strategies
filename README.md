@@ -12,6 +12,9 @@ Available for web and mobile (Android only, atm)
 
 <a href="https://github.com/hobgoblina/oblique-strategies/releases" target="_blank" rel="noopener noreferrer">
 <img alt="Download .apk directly from GitHub" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/ab6afab9-edd1-4ead-9176-10178a4f5f80" style="height: 45px; border-radius: 8px;"></a>
+<a href="https://f-droid.org/en/packages/garden.lina.oblique_strategies" target="_blank" rel="noopener noreferrer">
+<img alt="Get it on F-Droid" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/fb332d1c-0699-446a-b5f3-fd895feb8332" style="height: 45px; border-radius: 8px;"></a>
+
 
 ---
 ## Developing / Building
