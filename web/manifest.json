@@ -1,11 +1,11 @@
 {
-    "name": "oblique_strategies",
-    "short_name": "oblique_strategies",
+    "name": "Oblique Strategies",
+    "short_name": "Oblique Strategies",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#000000",
-    "description": "A new Flutter project.",
+    "description": "Over one hundred worthwhile dilemmas",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
