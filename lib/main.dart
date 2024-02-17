@@ -40,7 +40,6 @@ class StrategiesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color backgroundColor = Color.fromRGBO(15, 15, 15, 1);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: backgroundColor,
       systemNavigationBarColor: backgroundColor
@@ -200,6 +199,10 @@ class MainPage extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     Widget frontCard = const StrategyCard();
 
+    if (storage.read('immersiveMode') ?? false) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+
     if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
     } else if (appState.cardFace == 'notifications') {
@@ -208,7 +211,7 @@ class MainPage extends StatelessWidget {
       frontCard = Container();
     }
 
-    bool onWillPop() {
+    bool canPop() {
       if (kIsWeb) {
         return true;
       } else if (appState.cardFace == 'strategies') {
@@ -231,12 +234,12 @@ class MainPage extends StatelessWidget {
       }
     }
 
-    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
+    KeyEventResult handleKeyPress(FocusNode node, KeyEvent event) {
       if (appState.cardFace != 'strategies' && appState.cardFace != 'about') {
         return KeyEventResult.ignored;
       }
 
-      if (event is RawKeyDownEvent) {
+      if (event is KeyDownEvent) {
         if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
           appState.swipeController.swipeLeft();
           return KeyEventResult.handled;
@@ -266,9 +269,9 @@ class MainPage extends StatelessWidget {
       autofocus: false,
       canRequestFocus: false,
       skipTraversal: false,
-      onKey: handleKeyPress,
-      child: WillPopScope(
-        onWillPop: () async => onWillPop(),
+      onKeyEvent: handleKeyPress,
+      child: PopScope(
+        canPop: canPop(),
         child: MouseRegion(
           onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
           child: GestureDetector(

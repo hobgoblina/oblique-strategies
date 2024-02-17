@@ -123,8 +123,8 @@ class StrategyCard extends StatelessWidget {
     AppState appState = context.watch<AppState>();
     final storage = GetStorage();
 
-    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
-      if (event is RawKeyDownEvent) {
+    KeyEventResult handleKeyPress(FocusNode node, KeyEvent event) {
+      if (event is KeyDownEvent) {
         if (
           event.logicalKey == LogicalKeyboardKey.space || 
           event.logicalKey == LogicalKeyboardKey.enter
@@ -184,7 +184,7 @@ class StrategyCard extends StatelessWidget {
       autofocus: true,
       canRequestFocus: appState.cardFace == 'strategies',
       skipTraversal: false,
-      onKey: handleKeyPress,
+      onKeyEvent: handleKeyPress,
       child: Semantics(
         label: 'The current strategy card. Press enter, space, or the arrow keys to go to the next strategy. Press backspace to return to the previous strategy.',
         child: CardSwiper(
