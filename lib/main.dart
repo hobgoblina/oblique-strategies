@@ -201,6 +201,11 @@ class MainPage extends StatelessWidget {
 
     if (storage.read('immersiveMode') ?? false) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    } else {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom
+      ]);
     }
 
     if (appState.cardFace == 'about') {
@@ -270,8 +275,8 @@ class MainPage extends StatelessWidget {
       canRequestFocus: false,
       skipTraversal: false,
       onKeyEvent: handleKeyPress,
-      child: PopScope(
-        canPop: canPop(),
+      child: WillPopScope(
+        onWillPop: () async => canPop(),
         child: MouseRegion(
           onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
           child: GestureDetector(
