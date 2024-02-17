@@ -1,13 +1,12 @@
 A deck of cards.
 Over one hundred worthwhile dilemmas.
 Insights into creative processes.
-Enigmatic challenges, constraints, and questions for you to interpret.
+Gnomic challenges, constraints, and questions for you to interpret.
 
-First published by Brian Eno and Peter Schmidt in 1975,
-Oblique Strategies is a tool for working past creative blocks
-and reorienting (or disorienting) thought processes.
+First published by Brian Eno and Peter Schmidt in 1975, Oblique Strategies is a tool for working past creative blocks and reorienting (or disorienting) thought processes.
 
-This app presents you with a single strategy card at a time. Swipe to
-reveal the next card, use the back button to bring previous cards back,
-create recurring notifications that regularly present strategies to you,
-mark strategies as favorites to change how frequently they occur, and more!
+This app presents you with a single strategy card at a time.
+- Swipe to reveal the next card.
+- Use the back button to bring previous cards back.
+- Create recurring notifications.
+- Favorites cards to change how frequently they occur.
