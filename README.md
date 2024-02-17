@@ -18,7 +18,6 @@ Available for web and mobile (Android only, atm)
 #### Mobile screenshots:
 
 <img alt="Title card: Oblique Strategies; Over one hundred worthwhile dilemmas; Brian Eno and Peter Schmidt; Fifth, again slightly revised edition, 2001; Plus a selection from earlier editions; Digitized by Lina, 2023" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/ff869979-d7c0-4bd3-bdb8-4b4f4a35ca65" style="height: 450px;">
-<img alt="A card: Fill every beat with something" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/4469b558-d686-4e90-89c2-fefd34f9083a" style="height: 450px;">
 <img alt="A card being swiped away, revealing another card underneath: Always give yourself credit for having more than personality (given by Arto Lindsay)" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/adc632c4-45e7-4cf4-a14a-64d83ef4c4d6" style="height: 450px;">
 <img alt="A card with visible settings and favorite icons. The favorite icon is a heart and is colored red, indicating the card has been favorited. The card's text reads: Make a blank valuable by putting it in an exquisite frame" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/80a03c52-faec-419e-9447-db891c13ac19" style="height: 450px;">
 
