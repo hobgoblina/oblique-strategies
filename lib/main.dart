@@ -202,10 +202,7 @@ class MainPage extends StatelessWidget {
     if (storage.read('immersiveMode') ?? false) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-        SystemUiOverlay.top,
-        SystemUiOverlay.bottom
-      ]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
 
     if (appState.cardFace == 'about') {
@@ -307,8 +304,8 @@ class MainPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const FavoriteIcon(),
-                const SettingsIcon(),
+                const SafeArea(child: FavoriteIcon()),
+                const SafeArea(child: SettingsIcon()),
               ]
             ),
           ),
