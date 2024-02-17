@@ -125,6 +125,27 @@ class SettingsCard extends StatelessWidget {
         )
       ),
       const Spacer(),
+      Visibility(
+        visible: !kIsWeb,
+        child: settingsItem(
+          tooltip: 'Hides the navigation and status bars',
+          text: 'Immersive mode',
+          child: Transform.scale(
+            scale: 1.2,
+            child: Checkbox(
+              value: storage.read('immersiveMode') ?? false,
+              semanticLabel: 'Immersive mode',
+              onChanged: (val) {
+                if (val is bool) {
+                  storage.write('immersiveMode', val);
+                  appState.rebuildApp();
+                }
+              }
+            ),
+          )
+        ),
+      ),
+      const Visibility(visible: !kIsWeb, child: Spacer()),
       settingsItem(
         tooltip: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
         text: 'Keep favorites in the deck',

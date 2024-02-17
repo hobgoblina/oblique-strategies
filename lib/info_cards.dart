@@ -29,8 +29,8 @@ class InfoCards extends StatelessWidget {
       cards.insert(2, const AboutCard2());
     }
 
-    KeyEventResult handleKeyPress(FocusNode node, RawKeyEvent event) {
-      if (event is RawKeyDownEvent) {
+    KeyEventResult handleKeyPress(FocusNode node, KeyEvent event) {
+      if (event is KeyDownEvent) {
         if (
           event.logicalKey == LogicalKeyboardKey.space || 
           event.logicalKey == LogicalKeyboardKey.enter
@@ -56,7 +56,7 @@ class InfoCards extends StatelessWidget {
       autofocus: true,
       canRequestFocus: appState.cardFace == 'about',
       skipTraversal: false,
-      onKey: handleKeyPress,
+      onKeyEvent: handleKeyPress,
       child: Semantics(
         label: 'Title and about cards. To go to the next card, you can press enter, space, or the arrow keys while the card has focus. Press backspace to return to the previous card.',
         child: CardSwiper(
