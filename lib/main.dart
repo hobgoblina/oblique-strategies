@@ -12,9 +12,10 @@ import 'package:workmanager/workmanager.dart';
 import 'strategy_card.dart';
 import 'favorite_icon.dart';
 import 'settings_icon.dart';
-import 'settings_card.dart';
+import 'settings/settings_card.dart';
 import 'info_cards.dart';
-import 'notifications_card.dart';
+import 'settings/notifications_settings_card.dart';
+import 'settings/cards_settings_card.dart';
 import 'notifications.dart';
 
 void main() async {
@@ -207,8 +208,10 @@ class MainPage extends StatelessWidget {
 
     if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
-    } else if (appState.cardFace == 'notifications') {
-      frontCard = const NotificationsCard();
+    } else if (appState.cardFace == 'notifications-settings') {
+      frontCard = const NotificationsSettingsCard();
+    } else if (appState.cardFace == 'cards-settings') {
+      frontCard = const CardsSettingsCard();
     } else if (appState.cardFace == 'settings') {
       frontCard = Container();
     }
@@ -243,16 +246,16 @@ class MainPage extends StatelessWidget {
 
       if (event is KeyDownEvent) {
         if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          appState.swipeController.swipeLeft();
+          appState.swipeController.swipe(CardSwiperDirection.left);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          appState.swipeController.swipeTop();
+          appState.swipeController.swipe(CardSwiperDirection.top);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          appState.swipeController.swipeRight();
+          appState.swipeController.swipe(CardSwiperDirection.right);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          appState.swipeController.swipeBottom();
+          appState.swipeController.swipe(CardSwiperDirection.bottom);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
           appState.swipeController.undo();

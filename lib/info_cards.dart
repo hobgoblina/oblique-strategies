@@ -37,13 +37,13 @@ class InfoCards extends StatelessWidget {
         ) {
           switch (Random().nextInt(4)) {
             case 0:
-              appState.swipeController.swipeLeft();
+              appState.swipeController.swipe(CardSwiperDirection.left);
             case 1:
-              appState.swipeController.swipeTop();
+              appState.swipeController.swipe(CardSwiperDirection.top);
             case 2:
-              appState.swipeController.swipeRight();
+              appState.swipeController.swipe(CardSwiperDirection.right);
             case 3:
-              appState.swipeController.swipeBottom();
+              appState.swipeController.swipe(CardSwiperDirection.bottom);
           }
 
           return KeyEventResult.handled;

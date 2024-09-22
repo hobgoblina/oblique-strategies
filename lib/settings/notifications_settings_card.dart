@@ -3,22 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:io' show Platform;
-import 'main.dart';
-import 'cards.dart';
-import 'settings_card.dart';
-import 'notifications.dart';
+import '../main.dart';
+import '../cards.dart';
+import 'settings_item.dart';
+import '../notifications.dart';
 import 'dart:math';
 
-class NotificationsCard extends StatefulWidget {
-  const NotificationsCard({
+class NotificationsSettingsCard extends StatefulWidget {
+  const NotificationsSettingsCard({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NotificationsCard> createState() => NotificationsCardState();
+  State<NotificationsSettingsCard> createState() => NotificationsSettingsCardState();
 }
 
-class NotificationsCardState extends State<NotificationsCard> {
+class NotificationsSettingsCardState extends State<NotificationsSettingsCard> {
   final TextEditingController minController = TextEditingController();
   final TextEditingController maxController = TextEditingController();
   final FocusNode minFocusNode = FocusNode(canRequestFocus: false);
@@ -145,7 +145,7 @@ class NotificationsCardState extends State<NotificationsCard> {
             children: [
               const Spacer(),
               const Spacer(),
-              const SettingsCard().settingsItem(
+              settingsItem(
                 text: 'Enable notifications',
                 child: Transform.scale(
                   scale: 1.2,
@@ -178,7 +178,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                 )
               ),
               const Spacer(),
-              const SettingsCard().settingsItem(
+              settingsItem(
                 tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval.',
                 text: 'Notify every',
                 wrapControls: true,
@@ -300,7 +300,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                 )
               ),
               const Spacer(),
-              const SettingsCard().settingsItem(
+              settingsItem(
                 tooltip: 'Notifications will not occur between these times.',
                 text: 'Quiet hours',
                 wrapControls: true,

@@ -39,16 +39,15 @@ class InstructionsCard extends StatelessWidget {
               style: TextStyle(fontSize: 21)
             ),
             Spacer(),
-            kIsWeb ? Text(
-              'You can also swipe with the arrow keys',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
-            ) : Text(
-              'Tap anywhere to see control buttons',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
+            Visibility(
+              visible: kIsWeb,
+              child: Text(
+                'You can also swipe with the arrow keys',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 21)
+              ),
             ),
-            Spacer(),
+            Visibility(visible: kIsWeb, child: Spacer()),
             Text(
               'Undo swipes with the ${kIsWeb ? 'backspace key' : 'back button'}',
               textAlign: TextAlign.center,
