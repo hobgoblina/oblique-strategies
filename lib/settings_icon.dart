@@ -31,7 +31,9 @@ class SettingsIcon extends StatelessWidget {
     }
 
     return AnimatedOpacity(
-      opacity: appState.iconsVisible || appState.cardFace != 'strategies' ? 1.0 : 0.0,
+      opacity: appState.iconsVisible
+        || (storage.read('alwaysShowControls') ?? true)
+        || appState.cardFace != 'strategies' ? 1.0 : 0.0,
       duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),
       child: Container(
         padding: const EdgeInsets.all(11),

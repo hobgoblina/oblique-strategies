@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import '../main.dart';
 import '../cards.dart';
 import 'settings_item.dart';
 
-class CardsSettingsCard extends StatelessWidget {
-  const CardsSettingsCard({ super.key });
+class LookAndFeelSettingsCard extends StatelessWidget {
+  const LookAndFeelSettingsCard({ super.key });
 
   @override
   Widget build(BuildContext context) {
     AppState appState = context.watch<AppState>();
     final Cards card = Cards();
     final storage = GetStorage();
-    List<dynamic> strategyData = storage.read('strategyData') ?? [];
-    final favorites = strategyData.where((card) => card['favorite'] == true).toList();
 
     Widget cardWrapper (List<Widget> children) {
       return Padding(
@@ -39,43 +38,64 @@ class CardsSettingsCard extends StatelessWidget {
 
     return cardWrapper([
       const Spacer(),
-      const Spacer(),
+      const Spacer(), 
       settingsItem(
-        tooltip: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-        text: 'Keep favorites in the deck',
+        tooltip: 'A reload may be required for certain animation changes to take effect.',
+        text: 'Reduce animations',
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
-            value: storage.read('canAlwaysRedrawFavorites') ?? true,
-            semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+            value: storage.read('reduceAnimations') ?? false,
+            semanticLabel: 'Reduce animations',
             onChanged: (val) {
               if (val is bool) {
-                storage.write('canAlwaysRedrawFavorites', val);
+                storage.write('reduceAnimations', val);
                 appState.rebuildApp();
               }
             }
           ),
         )
       ),
-      Visibility(visible: favorites.length > 1, child: const Spacer()),
+      const Visibility(visible: !kIsWeb, child: Spacer()),
       Visibility(
-        visible: favorites.length > 1,
+        visible: !kIsWeb,
         child: settingsItem(
-          text: 'Only draw favorites',
+          tooltip: 'Hides the navigation and status bars',
+          text: 'Immersive mode',
           child: Transform.scale(
             scale: 1.2,
             child: Checkbox(
-              value: storage.read('onlyDrawFavorites') ?? false,
-              semanticLabel: 'Only draw favorites',
+              value: storage.read('immersiveMode') ?? false,
+              semanticLabel: 'Immersive mode',
               onChanged: (val) {
                 if (val is bool) {
-                  storage.write('onlyDrawFavorites', val);
+                  storage.write('immersiveMode', val);
                   appState.rebuildApp();
                 }
               }
             ),
           )
         ),
+      ),
+      const Spacer(), 
+      settingsItem(
+        tooltip: kIsWeb
+          ? 'If disabled, controls will disappear after a few seconds of mouse inactivity.'
+          : 'If disabled, controls will disappear after a few seconds. Tap anywhere to reveal them again.',
+        text: 'Always show controls',
+        child: Transform.scale(
+          scale: 1.2,
+          child: Checkbox(
+            value: storage.read('alwaysShowControls') ?? true,
+            semanticLabel: 'Always show controls',
+            onChanged: (val) {
+              if (val is bool) {
+                storage.write('alwaysShowControls', val);
+                appState.rebuildApp();
+              }
+            }
+          ),
+        )
       ),
       const Spacer(),
       const Spacer(),

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import '../main.dart';
 import '../cards.dart';
-import 'settings_item.dart';
 
 class SettingsCard extends StatelessWidget {
   const SettingsCard({ super.key });
@@ -38,6 +37,7 @@ class SettingsCard extends StatelessWidget {
 
     return cardWrapper([
       const Spacer(),
+      const Spacer(),
       Center(
         child: TextButton(
           onPressed: () => appState.setCardFrontAndFlip('about'),
@@ -46,45 +46,6 @@ class SettingsCard extends StatelessWidget {
             semanticsLabel: 'Show information about this app',
             style: TextStyle(decoration: TextDecoration.underline)
           ),
-        ),
-      ),
-      const Spacer(),
-      settingsItem(
-        tooltip: 'A reload may be required for certain animation changes to take effect.',
-        text: 'Reduce animations',
-        child: Transform.scale(
-          scale: 1.2,
-          child: Checkbox(
-            value: storage.read('reduceAnimations') ?? false,
-            semanticLabel: 'Reduce animations',
-            onChanged: (val) {
-              if (val is bool) {
-                storage.write('reduceAnimations', val);
-                appState.rebuildApp();
-              }
-            }
-          ),
-        )
-      ),
-      const Spacer(),
-      Visibility(
-        visible: !kIsWeb,
-        child: settingsItem(
-          tooltip: 'Hides the navigation and status bars',
-          text: 'Immersive mode',
-          child: Transform.scale(
-            scale: 1.2,
-            child: Checkbox(
-              value: storage.read('immersiveMode') ?? false,
-              semanticLabel: 'Immersive mode',
-              onChanged: (val) {
-                if (val is bool) {
-                  storage.write('immersiveMode', val);
-                  appState.rebuildApp();
-                }
-              }
-            ),
-          )
         ),
       ),
       const Spacer(),
@@ -98,24 +59,35 @@ class SettingsCard extends StatelessWidget {
           ),
         ),
       ),
-      Column(
-        children: [
-          const Spacer(),
-          Visibility(
-            visible: !kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
-            child: Center(
-              child: TextButton(
-                onPressed: () => appState.setCardFrontAndFlip('notifications-settings'),
-                child: const Text(
-                  'Notifications',
-                  semanticsLabel: 'Open notifications settings',
-                  style: TextStyle(decoration: TextDecoration.underline)
-                ),
-              ),
+      const Spacer(),
+      Center(
+        child: TextButton(
+          onPressed: () => appState.setCardFrontAndFlip('look-and-feel-settings'),
+          child: const Text(
+            'Look and feel',
+            semanticsLabel: 'Open look and feel settings',
+            style: TextStyle(decoration: TextDecoration.underline)
+          ),
+        ),
+      ),
+      Visibility(
+        visible: !kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
+        child: const Spacer()
+      ),
+      Visibility(
+        visible: !kIsWeb && (storage.read('currentIndex') ?? 0) > 1,
+        child: Center(
+          child: TextButton(
+            onPressed: () => appState.setCardFrontAndFlip('notifications-settings'),
+            child: const Text(
+              'Notifications',
+              semanticsLabel: 'Open notifications settings',
+              style: TextStyle(decoration: TextDecoration.underline)
             ),
           ),
-        ],
+        ),
       ),
+      const Spacer(),
       const Spacer(),
     ]);
   }

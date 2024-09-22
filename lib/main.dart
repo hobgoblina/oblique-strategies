@@ -16,6 +16,7 @@ import 'settings/settings_card.dart';
 import 'info_cards.dart';
 import 'settings/notifications_settings_card.dart';
 import 'settings/cards_settings_card.dart';
+import 'settings/look_and_feel_settings_card.dart';
 import 'notifications.dart';
 
 void main() async {
@@ -61,9 +62,7 @@ class StrategiesApp extends StatelessWidget {
             onSecondary: Colors.black,
             error: Color.fromRGBO(200, 32, 20, 1),
             onError: Colors.white,
-            background: backgroundColor,
-            onBackground: Colors.white,
-            surface: Colors.white,
+            surface: backgroundColor,
             onSurface: Colors.black,
             outline: Colors.black
           ),
@@ -212,6 +211,8 @@ class MainPage extends StatelessWidget {
       frontCard = const NotificationsSettingsCard();
     } else if (appState.cardFace == 'cards-settings') {
       frontCard = const CardsSettingsCard();
+    } else if (appState.cardFace == 'look-and-feel-settings') {
+      frontCard = const LookAndFeelSettingsCard();
     } else if (appState.cardFace == 'settings') {
       frontCard = Container();
     }
@@ -275,8 +276,8 @@ class MainPage extends StatelessWidget {
       canRequestFocus: false,
       skipTraversal: false,
       onKeyEvent: handleKeyPress,
-      child: WillPopScope(
-        onWillPop: () async => canPop(),
+      child: PopScope(
+        canPop: canPop(),
         child: MouseRegion(
           onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
           child: GestureDetector(
