@@ -2,10 +2,10 @@ import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
+import '../main.dart';
 
-class FavoriteIcon extends StatelessWidget {
-  const FavoriteIcon({ super.key });
+class FavoriteButton extends StatelessWidget {
+  const FavoriteButton({ super.key });
     
     void addToFavorites(AppState appState) {
       final storage = GetStorage();

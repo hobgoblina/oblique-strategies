@@ -6,8 +6,8 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:math';
 import 'main.dart';
 import 'strategies.dart';
-import 'title_card.dart';
-import 'instructions_card.dart';
+import 'info-cards/title_card.dart';
+import 'info-cards/instructions_card.dart';
 import 'notifications.dart';
 
 class StrategyCard extends StatelessWidget {

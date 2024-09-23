@@ -11,8 +11,8 @@ import 'dart:math';
 
 class NotificationsSettingsCard extends StatefulWidget {
   const NotificationsSettingsCard({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<NotificationsSettingsCard> createState() => NotificationsSettingsCardState();
@@ -139,7 +139,7 @@ class NotificationsSettingsCardState extends State<NotificationsSettingsCard> {
           end: const EdgeInsets.symmetric(horizontal: 75)
         ).lerp(paddingInterp),
         child: FocusTraversalGroup(
-          descendantsAreFocusable: appState.cardFace == 'notifications',
+          descendantsAreFocusable: appState.cardFace == 'notifications-settings',
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

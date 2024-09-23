@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:math';
-import 'main.dart';
+import '../main.dart';
 import 'title_card.dart';
 import 'about_card.dart';
 import 'instructions_card.dart';

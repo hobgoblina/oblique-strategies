@@ -7,6 +7,7 @@ Widget settingsItem({
   bool wrapControls = false,
   required String text,
   required Widget child,
+  bool disabled = false,
 }) {
   final settingItemContent = tooltip is String ? Tooltip(
     triggerMode: TooltipTriggerMode.tap,
@@ -15,18 +16,21 @@ Widget settingsItem({
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 8, bottom: 3),
+        Padding(
+          padding: const EdgeInsets.only(right: 8, bottom: 3),
           child: Icon(
             Ionicons.information_circle_outline,
-            color: Colors.black,
+            color: disabled ? Colors.blueGrey : Colors.black,
             size: 25
           ),
         ),
         Flexible(
           child: Text(
             text,
-            style: const TextStyle(fontSize: 21)
+            style: TextStyle(
+              fontSize: 21,
+              color: disabled ? Colors.blueGrey : Colors.black
+            )
           ),
         ),
       ],
@@ -34,7 +38,10 @@ Widget settingsItem({
   ) : Text(
     text,
     textWidthBasis: TextWidthBasis.longestLine,
-    style: const TextStyle(fontSize: 21)
+    style: TextStyle(
+      fontSize: 21,
+      color: disabled ? Colors.blueGrey : Colors.black
+    )
   );
 
   return wrapControls ? Row(

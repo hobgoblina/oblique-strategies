@@ -44,7 +44,7 @@ class SettingsCard extends StatelessWidget {
           child: const Text(
             'About',
             semanticsLabel: 'Show information about this app',
-            style: TextStyle(decoration: TextDecoration.underline)
+            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -55,7 +55,7 @@ class SettingsCard extends StatelessWidget {
           child: const Text(
             'Cards',
             semanticsLabel: 'Open card settings',
-            style: TextStyle(decoration: TextDecoration.underline)
+            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -66,7 +66,7 @@ class SettingsCard extends StatelessWidget {
           child: const Text(
             'Look and feel',
             semanticsLabel: 'Open look and feel settings',
-            style: TextStyle(decoration: TextDecoration.underline)
+            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -82,7 +82,7 @@ class SettingsCard extends StatelessWidget {
             child: const Text(
               'Notifications',
               semanticsLabel: 'Open notifications settings',
-              style: TextStyle(decoration: TextDecoration.underline)
+              style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
             ),
           ),
         ),

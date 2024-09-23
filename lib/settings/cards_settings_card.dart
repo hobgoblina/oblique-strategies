@@ -27,7 +27,7 @@ class CardsSettingsCard extends StatelessWidget {
             end: const EdgeInsets.symmetric(horizontal: 75)
           ).lerp(paddingInterp),
           child: FocusTraversalGroup(
-            descendantsAreFocusable: appState.cardFace == 'deck',
+            descendantsAreFocusable: appState.cardFace == 'cards-settings',
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: children
@@ -57,25 +57,29 @@ class CardsSettingsCard extends StatelessWidget {
           ),
         )
       ),
-      Visibility(visible: favorites.length > 1, child: const Spacer()),
-      Visibility(
-        visible: favorites.length > 1,
-        child: settingsItem(
-          text: 'Only draw favorites',
-          child: Transform.scale(
-            scale: 1.2,
-            child: Checkbox(
-              value: storage.read('onlyDrawFavorites') ?? false,
-              semanticLabel: 'Only draw favorites',
-              onChanged: (val) {
-                if (val is bool) {
-                  storage.write('onlyDrawFavorites', val);
-                  appState.rebuildApp();
-                }
-              }
+      const Spacer(),
+      settingsItem(
+        disabled: favorites.length <= 1,
+        text: 'Only draw favorites',
+        tooltip: 'Only draw cards that have been favorited. Must have at least 2 favorites to enable.',
+        child: Transform.scale(
+          scale: 1.2,
+          child: Checkbox(
+            value: storage.read('onlyDrawFavorites') ?? false,
+            semanticLabel: 'Only draw favorites',
+            side: BorderSide(
+              strokeAlign: -.1,
+              width: 1.75,
+              color: favorites.length <= 1 ? Colors.blueGrey : Colors.black
             ),
-          )
-        ),
+            onChanged: favorites.length <= 1 ? null : (val) {
+              if (val is bool) {
+                storage.write('onlyDrawFavorites', val);
+                appState.rebuildApp();
+              }
+            }
+          ),
+        )
       ),
       const Spacer(),
       const Spacer(),

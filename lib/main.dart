@@ -8,16 +8,19 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 
 import 'strategy_card.dart';
-import 'favorite_icon.dart';
-import 'settings_icon.dart';
+import 'controls/favorite_button.dart';
+import 'controls/settings_button.dart';
 import 'settings/settings_card.dart';
-import 'info_cards.dart';
+import 'info-cards/info_cards.dart';
 import 'settings/notifications_settings_card.dart';
 import 'settings/cards_settings_card.dart';
 import 'settings/look_and_feel_settings_card.dart';
 import 'notifications.dart';
+
+final FlutterLocalization localization = FlutterLocalization.instance;
 
 void main() async {
   await GetStorage.init();
@@ -51,6 +54,8 @@ class StrategiesApp extends StatelessWidget {
       create: (context) => AppState(),
       child: MaterialApp(
         title: 'Oblique Strategies',
+        supportedLocales: localization.supportedLocales,
+        localizationsDelegates: localization.localizationsDelegates,
         theme: ThemeData(
           fontFamily: 'Univers',
           useMaterial3: true,
@@ -70,13 +75,13 @@ class StrategiesApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             dialBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
             dialHandColor: Colors.black,
-            dialTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            dialTextColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.white : Colors.black),
             entryModeIconColor: Colors.black,
-            hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
+            hourMinuteColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
             hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: Colors.black, width: 1.5)),
             dayPeriodBorderSide: const BorderSide(color: Colors.black, width: 1.5),
-            dayPeriodColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.black : Colors.white),
-            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            dayPeriodColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.black : Colors.white),
+            dayPeriodTextColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.white : Colors.black),
             inputDecorationTheme: const InputDecorationTheme(
               filled: true,
               errorStyle: TextStyle(height: 0),
@@ -113,22 +118,38 @@ class StrategiesApp extends StatelessWidget {
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
             shape: const RoundedRectangleBorder(),
-            checkColor: MaterialStateProperty.all(Colors.black),
-            overlayColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.focused) ? Colors.black12 : Colors.transparent),
-            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
-            fillColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.disabled) ? Colors.grey : Colors.white),
+            checkColor: WidgetStateProperty.all(Colors.black),
+            overlayColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.focused) ? Colors.black12 : Colors.transparent),
+            side: WidgetStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
+            fillColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.disabled) ? Colors.blueGrey : Colors.white),
+          ),
+          sliderTheme: const SliderThemeData(
+            trackShape: RectangularSliderTrackShape(),
+            activeTrackColor: Colors.black,
+            inactiveTrackColor: Colors.black,
+            inactiveTickMarkColor: Colors.black,
+            activeTickMarkColor: Colors.black,
+            thumbColor: Colors.black,
+            tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 4),
+            trackHeight: 1.8,
           ),
           tooltipTheme: const TooltipThemeData(
             textStyle: TextStyle(color: Colors.white),
-            decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.all(Radius.circular(10))),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
-              foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
-              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
-              overlayColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+              textStyle: WidgetStateProperty.resolveWith((states) => const TextStyle(
+                fontSize: 20,
+                fontFamily: 'Univers')
+              ),
+              foregroundColor: WidgetStateProperty.resolveWith((states) => Colors.black),
+              backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
+              overlayColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
                   return Colors.black12;
                 }
 
@@ -308,8 +329,8 @@ class MainPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SafeArea(child: FavoriteIcon()),
-                const SafeArea(child: SettingsIcon()),
+                const SafeArea(child: FavoriteButton()),
+                const SafeArea(child: SettingsButton()),
               ]
             ),
           ),

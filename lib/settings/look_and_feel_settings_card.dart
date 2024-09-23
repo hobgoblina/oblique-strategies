@@ -6,14 +6,24 @@ import '../main.dart';
 import '../cards.dart';
 import 'settings_item.dart';
 
-class LookAndFeelSettingsCard extends StatelessWidget {
-  const LookAndFeelSettingsCard({ super.key });
+class LookAndFeelSettingsCard extends StatefulWidget {
+  const LookAndFeelSettingsCard({
+    super.key,
+  });
+
+  @override
+  State<LookAndFeelSettingsCard> createState() => LookAndFeelSettingsCardState();
+}
+
+class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
+  // double fontSize = 0;
 
   @override
   Widget build(BuildContext context) {
     AppState appState = context.watch<AppState>();
     final Cards card = Cards();
     final storage = GetStorage();
+    // fontSize = storage.read('fontSize') ?? 0;
 
     Widget cardWrapper (List<Widget> children) {
       return Padding(
@@ -26,7 +36,7 @@ class LookAndFeelSettingsCard extends StatelessWidget {
             end: const EdgeInsets.symmetric(horizontal: 75)
           ).lerp(paddingInterp),
           child: FocusTraversalGroup(
-            descendantsAreFocusable: appState.cardFace == 'deck',
+            descendantsAreFocusable: appState.cardFace == 'look-and-feel-settings',
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: children
@@ -39,6 +49,43 @@ class LookAndFeelSettingsCard extends StatelessWidget {
     return cardWrapper([
       const Spacer(),
       const Spacer(), 
+      // settingsItem(
+      //   text: 'Font size',
+      //   child: Expanded(
+      //     child: Transform.scale(
+      //       scale: 1.2,
+      //       child: Slider(
+      //         min: -2,
+      //         max: 2,
+      //         divisions: 4,
+      //         value: fontSize,
+      //         label: (() {
+      //           switch (fontSize) {
+      //             case -2:
+      //               return 'Smaller';
+      //             case -1:
+      //               return 'Small';
+      //             case 0:
+      //               return null;
+      //             case 1:
+      //               return 'Large';
+      //             case 2:
+      //               return 'Larger';
+      //           }
+            
+      //           return null;
+      //         })(),
+      //         onChanged: (val) {
+      //           setState(() {
+      //             fontSize = val;
+      //           });
+      //           storage.write('fontSize', val);
+      //         }
+      //       )
+      //     ),
+      //   )
+      // ),
+      // const Spacer(), 
       settingsItem(
         tooltip: 'A reload may be required for certain animation changes to take effect.',
         text: 'Reduce animations',

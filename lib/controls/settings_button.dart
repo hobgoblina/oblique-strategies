@@ -2,10 +2,10 @@ import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
+import '../main.dart';
 
-class SettingsIcon extends StatelessWidget {
-  const SettingsIcon({ super.key });
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({ super.key });
 
   @override
   Widget build(BuildContext context) {

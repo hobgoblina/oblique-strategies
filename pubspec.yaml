@@ -20,6 +20,7 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   workmanager: ^0.5.2
   timezone: ^0.9.2
+  flutter_localization: ^0.2.2
 
 dev_dependencies:
   flutter_test:
