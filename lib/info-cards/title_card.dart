@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
 import '../cards.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TitleCard extends StatelessWidget {
   const TitleCard({
@@ -22,25 +23,25 @@ class TitleCard extends StatelessWidget {
       ).lerp(paddingInterp),
       child: FocusTraversalGroup(
         descendantsAreFocusable: appState.cardFace == 'about',
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Padding(
-              padding: EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                'OBLIQUE STRATEGIES',
+                AppLocalizations.of(context)!.title.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
+                style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
               ),
             ),
             Text(
-              'Over one hundred worthwhile dilemmas',
+              AppLocalizations.of(context)!.subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
+              style: const TextStyle(fontSize: 21)
             ),
-            Spacer(),
-            Wrap(
+            const Spacer(),
+            const Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               direction: Axis.horizontal,
               spacing: 5,
@@ -62,23 +63,23 @@ class TitleCard extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
-            Text(
+            const Spacer(),
+            const Text(
               'Fifth, again slightly revised edition, 2001',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16)
             ),
-            Text(
+            const Text(
               'Plus a selection from earlier editions',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16)
             ),
-            Text(
+            const Text(
               'Digitized by Lina, 2023',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16)
             ),
-            Spacer(),
+            const Spacer(),
           ]
         )
       )

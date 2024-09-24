@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+
+  "languageName": "English",
+  "@language": {
+    "description": "The name of the language being translated, not a translation of \"English\".",
+    "context": "Settings -> Language selection"
+  },
+
+  "title": "Oblique Strategies",
+  "subtitle": "Over one hundred worthwhile dilemmas",
+
+  "language": "Language"
+}

@@ -8,7 +8,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:flutter_localization/flutter_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'strategy_card.dart';
 import 'controls/favorite_button.dart';
@@ -19,8 +19,6 @@ import 'settings/notifications_settings_card.dart';
 import 'settings/cards_settings_card.dart';
 import 'settings/look_and_feel_settings_card.dart';
 import 'notifications.dart';
-
-final FlutterLocalization localization = FlutterLocalization.instance;
 
 void main() async {
   await GetStorage.init();
@@ -54,8 +52,8 @@ class StrategiesApp extends StatelessWidget {
       create: (context) => AppState(),
       child: MaterialApp(
         title: 'Oblique Strategies',
-        supportedLocales: localization.supportedLocales,
-        localizationsDelegates: localization.localizationsDelegates,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           fontFamily: 'Univers',
           useMaterial3: true,
@@ -135,24 +133,18 @@ class StrategiesApp extends StatelessWidget {
           ),
           tooltipTheme: const TooltipThemeData(
             textStyle: TextStyle(color: Colors.white),
-            decoration: BoxDecoration(
-              color: Colors.black87,
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
+            decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: WidgetStateProperty.resolveWith((states) => const TextStyle(
-                fontSize: 20,
-                fontFamily: 'Univers')
-              ),
+              textStyle: WidgetStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
               foregroundColor: WidgetStateProperty.resolveWith((states) => Colors.black),
               backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
               overlayColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
                   return Colors.black12;
                 }
-
+          
                 return Colors.transparent;
               })
             )
@@ -292,46 +284,50 @@ class MainPage extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final bool needsIconSpace = screenWidth < 850 && screenHeight < 640;
 
-    return Focus(
-      autofocus: false,
-      canRequestFocus: false,
-      skipTraversal: false,
-      onKeyEvent: handleKeyPress,
-      child: PopScope(
-        canPop: canPop(),
-        child: MouseRegion(
-          onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
-          child: GestureDetector(
-            onTapUp: (tapUpDetails) => appState.setIconsVisible(),
-            child: Stack(
-              children: [
-                Scaffold(
-                  appBar: needsIconSpace ? PreferredSize(
-                    preferredSize: Size.lerp(
-                      Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
-                      Size(screenWidth, 0),
-                      screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
-                    ) ?? Size.zero,
-                    child: Container(),
-                  ) : null,
-                  body: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints.loose(const Size(770, 550)),
-                      child: FlipCard(
-                        speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
-                        onFlipDone: onFlipDone,
-                        flipOnTouch: false,
-                        direction: FlipDirection.VERTICAL,
-                        controller: appState.flipController,
-                        front: frontCard,
-                        back: const SettingsCard()
+    return Localizations.override(
+      context: context,
+      locale: storage.read('language') is String ? Locale(storage.read('language')) : null,
+      child: Focus(
+        autofocus: false,
+        canRequestFocus: false,
+        skipTraversal: false,
+        onKeyEvent: handleKeyPress,
+        child: PopScope(
+          canPop: canPop(),
+          child: MouseRegion(
+            onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
+            child: GestureDetector(
+              onTapUp: (tapUpDetails) => appState.setIconsVisible(),
+              child: Stack(
+                children: [
+                  Scaffold(
+                    appBar: needsIconSpace ? PreferredSize(
+                      preferredSize: Size.lerp(
+                        Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
+                        Size(screenWidth, 0),
+                        screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
+                      ) ?? Size.zero,
+                      child: Container(),
+                    ) : null,
+                    body: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints.loose(const Size(770, 550)),
+                        child: FlipCard(
+                          speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
+                          onFlipDone: onFlipDone,
+                          flipOnTouch: false,
+                          direction: FlipDirection.VERTICAL,
+                          controller: appState.flipController,
+                          front: frontCard,
+                          back: const SettingsCard()
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SafeArea(child: FavoriteButton()),
-                const SafeArea(child: SettingsButton()),
-              ]
+                  const SafeArea(child: FavoriteButton()),
+                  const SafeArea(child: SettingsButton()),
+                ]
+              ),
             ),
           ),
         ),

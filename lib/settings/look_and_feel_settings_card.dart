@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import '../main.dart';
 import '../cards.dart';
 import 'settings_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LookAndFeelSettingsCard extends StatefulWidget {
   const LookAndFeelSettingsCard({
@@ -48,7 +49,50 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
 
     return cardWrapper([
       const Spacer(),
-      const Spacer(), 
+      const Spacer(),
+      settingsItem(
+        text: AppLocalizations.of(context)!.language,
+        child: Transform.scale(
+          scale: 1.2,
+          child: IntrinsicWidth(
+            child: DropdownButtonFormField<String>(
+              value: storage.read('language') ?? Localizations.localeOf(context).languageCode,
+              elevation: 20,
+              iconSize: 0,
+              style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
+              dropdownColor: Colors.white,
+              decoration: const InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                ),
+                focusColor: Colors.black12,
+                contentPadding: EdgeInsets.symmetric(vertical: 3),
+                isCollapsed: true
+              ),
+              onChanged: (String? value) {
+                storage.write('language', value);
+                appState.rebuildApp();
+              },
+              items: AppLocalizations.supportedLocales.map<DropdownMenuItem<String>>(
+                (Locale locale) => DropdownMenuItem<String>(
+                  value: locale.languageCode,
+                  child: Localizations.override(
+                    context: context,
+                    locale: Locale(locale.languageCode),
+                    child: Builder(
+                      builder: (context) => Text(AppLocalizations.of(context)!.languageName)
+                    )
+                  )
+                )
+              ).toList(),
+            ),
+          ),
+        )
+      ),
+      const Spacer(),
       // settingsItem(
       //   text: 'Font size',
       //   child: Expanded(
