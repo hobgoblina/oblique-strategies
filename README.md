@@ -1,7 +1,7 @@
 # Oblique Strategies
-A digital rendering of Oblique Strategies by Brian Eno and Peter Schmidt - ***Over one hundred worthwhile dilemmas*** - a set of insights, produced as a deck of cards, which can be used to overcome creative blocks and reorient your perspective.
+A digital rendering of Oblique Strategies by Brian Eno and Peter Schmidt - ***Over one hundred worthwhile dilemmas*** - a set of insights and challenges, produced as a deck of cards, which can be used to overcome creative blocks and reorient your perspective.
 
-An explanation of the project that's included with some editions states:
+As described by the creators:
 > These cards evolved from our separate observations of the principles underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.
 >
 > They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.
@@ -14,8 +14,6 @@ Available for web and mobile (Android only, currently)
 <img alt="Download .apk directly from GitHub" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/ab6afab9-edd1-4ead-9176-10178a4f5f80" style="height: 45px; border-radius: 8px;"></a>
 <a href="https://f-droid.org/en/packages/garden.lina.oblique_strategies" target="_blank" rel="noopener noreferrer">
 <img alt="Get it on F-Droid" src="https://github.com/hobgoblina/oblique-strategies/assets/20880695/fb332d1c-0699-446a-b5f3-fd895feb8332" style="height: 45px; border-radius: 8px;"></a>
-
----
 
 ## Translations
 #### Crowdin
