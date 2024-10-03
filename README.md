@@ -18,9 +18,15 @@ Available for web and mobile (Android only, currently)
 ---
 
 ## Translations
-The easiest way to contribute translations is [on Crowdin](https://crowdin.com/project/oblique-strategies). I'll try to keep on top of publishing new app versions as translations get completed in Crowdin, but it'd be helpful if you create a Github issue to let me know.
+#### Crowdin
+The easiest way to contribute translations is [on Crowdin](https://crowdin.com/project/oblique-strategies).
 
-Alternatively, you can manually write a new `.yaml` translation file in the `assets/l10n` directory and open a pull request.
+If you'd like to provide translations for a language that isn't in the list of target languages, please create a Github issue to let me know. My Crowdin account is limited by the free plan, so I can only add so many languages to the list, but I'll happily make room for your language.
+
+I'll try to keep on top of publishing new app versions as translations get completed in Crowdin, but it'd be helpful if you create a Github issue to let me know.
+
+#### Manual
+Alternatively, you can manually write a new `.yaml` translation file in the `assets/l10n` directory, translate the strings in the `en.yaml` file, and open a pull request.
 
 ## Developing / Building
 Made with flutter, no flavors, nothing special.

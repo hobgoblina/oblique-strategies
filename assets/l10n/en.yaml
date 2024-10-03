@@ -30,13 +30,23 @@ returnToSettings: Go back to the main settings page
 # Settings
 language: Language
 useSystemLanguage: System language
+fontSize: Font size
+smaller: Smaller
+small: Small
+large: Large
+larger: Larger
 reduceAnimations: Reduce animations
 reduceAnimationsTooltip: A reload may be required for certain animation changes to take effect.
 immersiveMode: Immersive mode
 immersiveModeTooltip: Hides the navigation and status bars
+showSwipeControls: Show swipe controls
+showSwipeControlsTooltip: Shows buttons for swiping to the next card or returning to the previous one.
 showControls: Always show controls
 showControlsTooltip: If disabled, controls will disappear after a few seconds. Tap anywhere to reveal them again.
 showControlsTooltipWeb: If disabled, controls will disappear after a few seconds of mouse inactivity.
+deck: Deck
+fifthEditionDeck: 5th ed. (plus extras)
+fourthEditionDeck: 4th ed. (illustrated)
 keepFavoritesInDeck: Keep favorites in the deck
 keepFavoritesInDeckTooltip: Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.
 onlyDrawFavorites: Only draw favorites

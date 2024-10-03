@@ -111,7 +111,7 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       ),
       const Spacer(),
       // settingsItem(
-      //   text: 'Font size',
+      //   text: context.tr('fontSize'),
       //   child: Expanded(
       //     child: Transform.scale(
       //       scale: 1.2,
@@ -123,15 +123,15 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       //         label: (() {
       //           switch (fontSize) {
       //             case -2:
-      //               return 'Smaller';
+      //               return context.tr('smaller');
       //             case -1:
-      //               return 'Small';
+      //               return context.tr('small');
       //             case 0:
       //               return null;
       //             case 1:
-      //               return 'Large';
+      //               return context.tr('large');
       //             case 2:
-      //               return 'Larger';
+      //               return context.tr('larger');
       //           }
             
       //           return null;
