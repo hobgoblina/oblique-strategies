@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({ super.key });
@@ -62,10 +63,14 @@ class FavoriteButton extends StatelessWidget {
             hoverColor: const Color.fromRGBO(25, 25, 25, 1),
             focusColor: const Color.fromRGBO(25, 25, 25, 1),
             onPressed: () => addToFavorites(appState),
-            tooltip: '${appState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
+            tooltip: appState.currentIsFavorite ?? false
+              ? context.tr('removeFromFavorites')
+              : context.tr('addToFavorites'),
             icon: Icon(
               Ionicons.heart_outline,
-              semanticLabel: '${appState.currentIsFavorite ?? false ? 'Remove from' : 'Add to'} favorites',
+              semanticLabel: appState.currentIsFavorite ?? false
+                ? context.tr('removeFromFavorites')
+                : context.tr('addToFavorites'),
               color: (appState.currentIsFavorite ?? false) ? Colors.red : Colors.white,
               size: 40
             ),

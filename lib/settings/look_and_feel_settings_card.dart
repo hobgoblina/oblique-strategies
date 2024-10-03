@@ -5,7 +5,14 @@ import 'package:get_storage/get_storage.dart';
 import '../main.dart';
 import '../cards.dart';
 import 'settings_item.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:locale_names/locale_names.dart';
+
+extension StringExtension on String {
+    String capitalize() {
+      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    }
+}
 
 class LookAndFeelSettingsCard extends StatefulWidget {
   const LookAndFeelSettingsCard({
@@ -51,44 +58,49 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       const Spacer(),
       const Spacer(),
       settingsItem(
-        text: AppLocalizations.of(context)!.language,
-        child: Transform.scale(
-          scale: 1.2,
-          child: IntrinsicWidth(
-            child: DropdownButtonFormField<String>(
-              value: storage.read('language') ?? Localizations.localeOf(context).languageCode,
-              elevation: 20,
-              iconSize: 0,
-              style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
-              dropdownColor: Colors.white,
-              decoration: const InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.1),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.1),
-                ),
-                focusColor: Colors.black12,
-                contentPadding: EdgeInsets.symmetric(vertical: 3),
-                isCollapsed: true
+        text: context.tr('language'),
+        child: IntrinsicWidth(
+          child: DropdownButtonFormField<String>(
+            value: storage.read('language') ?? context.locale.toString(),
+            elevation: 20,
+            iconSize: 0,
+            style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
+            dropdownColor: Colors.white,
+            decoration: const InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black, width: 1.1),
               ),
-              onChanged: (String? value) {
-                storage.write('language', value);
-                appState.rebuildApp();
-              },
-              items: AppLocalizations.supportedLocales.map<DropdownMenuItem<String>>(
-                (Locale locale) => DropdownMenuItem<String>(
-                  value: locale.languageCode,
-                  child: Localizations.override(
-                    context: context,
-                    locale: Locale(locale.languageCode),
-                    child: Builder(
-                      builder: (context) => Text(AppLocalizations.of(context)!.languageName)
-                    )
-                  )
-                )
-              ).toList(),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black, width: 1.1),
+              ),
+              focusColor: Colors.black12,
+              contentPadding: EdgeInsets.symmetric(vertical: 3),
+              isCollapsed: true
             ),
+            onChanged: (String? value) {
+              if (value == 'system') {
+                storage.write('language', null);
+                context.resetLocale();
+                appState.rebuildApp();
+                return;
+              }
+
+              storage.write('language', value);
+              context.setLocale(Locale(value ?? context.locale.toString()));
+              appState.rebuildApp();
+            },
+            items: [
+              DropdownMenuItem<String>(
+                  value: 'system',
+                  child: Text(context.tr('useSystemLanguage'))
+                ),
+              ...context.supportedLocales.map<DropdownMenuItem<String>>(
+                (Locale locale) => DropdownMenuItem<String>(
+                  value: locale.toString(),
+                  child: Text(locale.nativeDisplayLanguage.capitalize())
+                )
+              )
+            ],
           ),
         )
       ),
@@ -129,15 +141,15 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       //     ),
       //   )
       // ),
-      // const Spacer(), 
+      // const Spacer(),
       settingsItem(
-        tooltip: 'A reload may be required for certain animation changes to take effect.',
-        text: 'Reduce animations',
+        tooltip: context.tr('reduceAnimationsTooltip'),
+        text: context.tr('reduceAnimations'),
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
             value: storage.read('reduceAnimations') ?? false,
-            semanticLabel: 'Reduce animations',
+            semanticLabel: context.tr('reduceAnimations'),
             onChanged: (val) {
               if (val is bool) {
                 storage.write('reduceAnimations', val);
@@ -151,13 +163,13 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       Visibility(
         visible: !kIsWeb,
         child: settingsItem(
-          tooltip: 'Hides the navigation and status bars',
-          text: 'Immersive mode',
+          tooltip: context.tr('immersiveModeTooltip'),
+          text: context.tr('immersiveMode'),
           child: Transform.scale(
             scale: 1.2,
             child: Checkbox(
               value: storage.read('immersiveMode') ?? false,
-              semanticLabel: 'Immersive mode',
+              semanticLabel: context.tr('immersiveMode'),
               onChanged: (val) {
                 if (val is bool) {
                   storage.write('immersiveMode', val);
@@ -171,14 +183,14 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
       const Spacer(), 
       settingsItem(
         tooltip: kIsWeb
-          ? 'If disabled, controls will disappear after a few seconds of mouse inactivity.'
-          : 'If disabled, controls will disappear after a few seconds. Tap anywhere to reveal them again.',
+          ? context.tr('showControlsTooltipWeb')
+          : context.tr('showControlsTooltip'),
         text: 'Always show controls',
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
             value: storage.read('alwaysShowControls') ?? true,
-            semanticLabel: 'Always show controls',
+            semanticLabel: context.tr('showControls'),
             onChanged: (val) {
               if (val is bool) {
                 storage.write('alwaysShowControls', val);

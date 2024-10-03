@@ -5,9 +5,9 @@ import 'package:workmanager/workmanager.dart';
 import 'strategy_card.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-// ignore: unused_import
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:easy_localization/easy_localization.dart';
 
 Future<bool> createNotifications(task, inputData) async {
   await GetStorage.init();
@@ -100,7 +100,7 @@ Future<bool> createNotifications(task, inputData) async {
       storage.write('lastScheduledIndex', nextIndex);
 
       // Find next card
-      final String nextCard = const StrategyCard().nextCard(nextIndex, {})['text'];
+      final String nextCard = const StrategyCard().nextCard(nextIndex, {}, null)['text'];
 
       // Schedule notification
       await notificationsService.scheduleNotification(
@@ -230,21 +230,21 @@ class LocalNotificationService {
     required DateTime notificationTime
   }) async {
     const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails();
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'oblique_strategies',
-      'Oblique Strategies',
-      channelDescription: 'Oblique Strategies',
+      'title'.tr(),
+      channelDescription: 'title'.tr(),
       icon: 'notification_icon',
     );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    NotificationDetails notificationDetails = NotificationDetails(
       android: androidDetails,
       iOS: iOSDetails
     );
 
     await notificationsPlugin.zonedSchedule(
       id,
-      'Oblique Strategies',
+      'title'.tr(),
       body,
       tz.TZDateTime.from(notificationTime, tz.local),
       notificationDetails,

@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import '../main.dart';
 import '../cards.dart';
 
@@ -41,10 +43,10 @@ class SettingsCard extends StatelessWidget {
       Center(
         child: TextButton(
           onPressed: () => appState.setCardFrontAndFlip('about'),
-          child: const Text(
-            'About',
-            semanticsLabel: 'Show information about this app',
-            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
+          child: Text(
+            context.tr('about'),
+            semanticsLabel: context.tr('aboutLabel'),
+            style: const TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -52,10 +54,10 @@ class SettingsCard extends StatelessWidget {
       Center(
         child: TextButton(
           onPressed: () => appState.setCardFrontAndFlip('cards-settings'),
-          child: const Text(
-            'Cards',
-            semanticsLabel: 'Open card settings',
-            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
+          child: Text(
+            context.tr('cards'),
+            semanticsLabel: context.tr('cardsLabel'),
+            style: const TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -63,10 +65,10 @@ class SettingsCard extends StatelessWidget {
       Center(
         child: TextButton(
           onPressed: () => appState.setCardFrontAndFlip('look-and-feel-settings'),
-          child: const Text(
-            'Look and feel',
-            semanticsLabel: 'Open look and feel settings',
-            style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
+          child: Text(
+            context.tr('lookAndFeel'),
+            semanticsLabel: context.tr('lookAndFeelLabel'),
+            style: const TextStyle(fontSize: 23, decoration: TextDecoration.underline)
           ),
         ),
       ),
@@ -79,10 +81,10 @@ class SettingsCard extends StatelessWidget {
         child: Center(
           child: TextButton(
             onPressed: () => appState.setCardFrontAndFlip('notifications-settings'),
-            child: const Text(
-              'Notifications',
-              semanticsLabel: 'Open notifications settings',
-              style: TextStyle(fontSize: 23, decoration: TextDecoration.underline)
+            child: Text(
+              context.tr('notifications'),
+              semanticsLabel: context.tr('notificationsLabel'),
+              style: const TextStyle(fontSize: 23, decoration: TextDecoration.underline)
             ),
           ),
         ),

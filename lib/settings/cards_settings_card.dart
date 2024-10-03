@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../main.dart';
 import '../cards.dart';
 import 'settings_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CardsSettingsCard extends StatelessWidget {
   const CardsSettingsCard({ super.key });
@@ -41,13 +42,13 @@ class CardsSettingsCard extends StatelessWidget {
       const Spacer(),
       const Spacer(),
       settingsItem(
-        tooltip: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
-        text: 'Keep favorites in the deck',
+        tooltip: context.tr('keepFavoritesInDeckTooltip'),
+        text: context.tr('keepFavoritesInDeck'),
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
             value: storage.read('canAlwaysRedrawFavorites') ?? true,
-            semanticLabel: 'Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.',
+            semanticLabel: context.tr('keepFavoritesInDeck'),
             onChanged: (val) {
               if (val is bool) {
                 storage.write('canAlwaysRedrawFavorites', val);
@@ -60,13 +61,13 @@ class CardsSettingsCard extends StatelessWidget {
       const Spacer(),
       settingsItem(
         disabled: favorites.length <= 1,
-        text: 'Only draw favorites',
-        tooltip: 'Only draw cards that have been favorited. Must have at least 2 favorites to enable.',
+        text: context.tr('onlyDrawFavorites'),
+        tooltip: context.tr('onlyDrawFavoritesTooltip'),
         child: Transform.scale(
           scale: 1.2,
           child: Checkbox(
             value: storage.read('onlyDrawFavorites') ?? false,
-            semanticLabel: 'Only draw favorites',
+            semanticLabel: context.tr('onlyDrawFavorites'),
             side: BorderSide(
               strokeAlign: -.1,
               width: 1.75,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
 import '../cards.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TitleCard extends StatelessWidget {
   const TitleCard({
@@ -14,6 +14,20 @@ class TitleCard extends StatelessWidget {
     final Cards card = Cards();
     AppState appState = context.watch<AppState>();
 
+    final authors = context.tr('authors');
+    final eno = context.tr('brianEno');
+    final schmidt = context.tr('peterSchmidt');
+  
+    List<String> authorsArr = authors.split(eno);
+    authorsArr.insert(1, eno.toUpperCase());
+    
+    final schmidtIndex = authorsArr.indexWhere((str) => str.contains(schmidt));
+    final authorsArr2 = authorsArr[schmidtIndex].split(schmidt);
+    authorsArr2.insert(1, schmidt.toUpperCase());
+    authorsArr.replaceRange(schmidtIndex, schmidtIndex + 1, authorsArr2);
+
+    authorsArr = authorsArr.map((str) => str.trim()).where((str) => str != "").toList();
+    
     return card.cardWrapper((paddingInterp) => Container(
       alignment: Alignment.center,
       color: Colors.white,
@@ -30,54 +44,42 @@ class TitleCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                AppLocalizations.of(context)!.title.toUpperCase(),
+                context.tr('title.toUpperCase()'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
               ),
             ),
             Text(
-              AppLocalizations.of(context)!.subtitle,
+              context.tr('subtitle'),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 21)
             ),
             const Spacer(),
-            const Wrap(
+            Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               direction: Axis.horizontal,
               spacing: 5,
-              children: [
-                Text(
-                  'BRIAN ENO',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 21)
-                ),
-                Text(
-                  'and',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 21)
-                ),
-                Text(
-                  'PETER SCHMIDT',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 21)
-                ),
-              ],
+              children: authorsArr.map((str) => Text(
+                str,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 21)
+              )).toList()
             ),
             const Spacer(),
-            const Text(
-              'Fifth, again slightly revised edition, 2001',
+            Text(
+              context.tr('fifthEdition'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16)
+              style: const TextStyle(fontSize: 16)
             ),
-            const Text(
-              'Plus a selection from earlier editions',
+            Text(
+              context.tr('fifthEdition2'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16)
+              style: const TextStyle(fontSize: 16)
             ),
-            const Text(
-              'Digitized by Lina, 2023',
+            Text(
+              context.tr('digitizedBy'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16)
+              style: const TextStyle(fontSize: 16)
             ),
             const Spacer(),
           ]

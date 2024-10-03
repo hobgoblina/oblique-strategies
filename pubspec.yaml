@@ -20,9 +20,9 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   workmanager: ^0.5.2
   timezone: ^0.9.2
-  flutter_localizations:
-    sdk: flutter
-  intl: any
+  easy_localization_loader: ^2.0.2
+  easy_localization: ^3.0.7
+  locale_names: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -32,7 +32,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.0
 
 flutter:
-  generate: true
   uses-material-design: true
   fonts:
     - family: Univers
@@ -58,3 +57,4 @@ flutter_launcher_icons:
 
 assets:
   - assets/fonts/
+  - assets/l10n/

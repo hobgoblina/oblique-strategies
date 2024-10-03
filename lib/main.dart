@@ -8,7 +8,8 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 
 import 'strategy_card.dart';
 import 'controls/favorite_button.dart';
@@ -22,9 +23,10 @@ import 'notifications.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   if (!kIsWeb) {
-    WidgetsFlutterBinding.ensureInitialized();
     Workmanager().initialize(notificationDispatcher);
     Workmanager().registerPeriodicTask('scheduleNotifications', 'scheduleNotifications');
 
@@ -34,7 +36,15 @@ void main() async {
     }
   }
 
-  runApp(const StrategiesApp());
+  runApp(EasyLocalization(
+    supportedLocales: const [ Locale('en'), Locale('es') ],
+    path: 'l10n',
+    assetLoader: const YamlAssetLoader(),
+    fallbackLocale: const Locale('en'),
+    useFallbackTranslations: true,
+    useFallbackTranslationsForEmptyResources: true,
+    child: const StrategiesApp(),
+  ));
 }
 
 class StrategiesApp extends StatelessWidget {
@@ -47,13 +57,15 @@ class StrategiesApp extends StatelessWidget {
       statusBarColor: backgroundColor,
       systemNavigationBarColor: backgroundColor
     ));
+    final storage = GetStorage();
 
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
-        title: 'Oblique Strategies',
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        onGenerateTitle: (context) => context.tr('title'),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: storage.read('language') is String ? Locale(storage.read('language')) : context.locale,
         theme: ThemeData(
           fontFamily: 'Univers',
           useMaterial3: true,
@@ -284,50 +296,46 @@ class MainPage extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final bool needsIconSpace = screenWidth < 850 && screenHeight < 640;
 
-    return Localizations.override(
-      context: context,
-      locale: storage.read('language') is String ? Locale(storage.read('language')) : null,
-      child: Focus(
-        autofocus: false,
-        canRequestFocus: false,
-        skipTraversal: false,
-        onKeyEvent: handleKeyPress,
-        child: PopScope(
-          canPop: canPop(),
-          child: MouseRegion(
-            onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
-            child: GestureDetector(
-              onTapUp: (tapUpDetails) => appState.setIconsVisible(),
-              child: Stack(
-                children: [
-                  Scaffold(
-                    appBar: needsIconSpace ? PreferredSize(
-                      preferredSize: Size.lerp(
-                        Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
-                        Size(screenWidth, 0),
-                        screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
-                      ) ?? Size.zero,
-                      child: Container(),
-                    ) : null,
-                    body: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints.loose(const Size(770, 550)),
-                        child: FlipCard(
-                          speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
-                          onFlipDone: onFlipDone,
-                          flipOnTouch: false,
-                          direction: FlipDirection.VERTICAL,
-                          controller: appState.flipController,
-                          front: frontCard,
-                          back: const SettingsCard()
-                        ),
+    return Focus(
+      autofocus: false,
+      canRequestFocus: false,
+      skipTraversal: false,
+      onKeyEvent: handleKeyPress,
+      child: PopScope(
+        canPop: canPop(),
+        child: MouseRegion(
+          onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
+          child: GestureDetector(
+            onTapUp: (tapUpDetails) => appState.setIconsVisible(),
+            child: Stack(
+              children: [
+                Scaffold(
+                  appBar: needsIconSpace ? PreferredSize(
+                    preferredSize: Size.lerp(
+                      Size(screenWidth, screenHeight < 590 ? 40 : (1 - (screenHeight - 590) / 50) * 40),
+                      Size(screenWidth, 0),
+                      screenWidth < 770 ? 0 : (screenWidth - 770) / 80,
+                    ) ?? Size.zero,
+                    child: Container(),
+                  ) : null,
+                  body: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints.loose(const Size(770, 550)),
+                      child: FlipCard(
+                        speed: storage.read('reduceAnimations') ?? false ? 0 : 1000,
+                        onFlipDone: onFlipDone,
+                        flipOnTouch: false,
+                        direction: FlipDirection.VERTICAL,
+                        controller: appState.flipController,
+                        front: frontCard,
+                        back: const SettingsCard()
                       ),
                     ),
                   ),
-                  const SafeArea(child: FavoriteButton()),
-                  const SafeArea(child: SettingsButton()),
-                ]
-              ),
+                ),
+                const SafeArea(child: FavoriteButton()),
+                const SafeArea(child: SettingsButton()),
+              ]
             ),
           ),
         ),
