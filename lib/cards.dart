@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Cards {
   Container cardWrapper(Function cardBuilder) {
@@ -47,7 +48,7 @@ class Cards {
     };
   }
 
-  Map<String, dynamic> attribution(String cardText, String contributor) {
+  Map<String, dynamic> attribution(String cardText, String contributorText) {
     return {
       'text': cardText,
       'card': cardWrapper((paddingInterp) => Container(
@@ -69,9 +70,7 @@ class Cards {
             Container(
               alignment: Alignment.bottomRight,
               padding: const EdgeInsets.only(bottom: 20, right: 27),
-              child: Text(
-                '(given by $contributor)',
-              ),
+              child: Text(contributorText),
             ),
           ],
         ),

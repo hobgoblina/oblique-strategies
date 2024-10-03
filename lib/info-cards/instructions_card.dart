@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
-import 'main.dart';
-import 'cards.dart';
+import '../main.dart';
+import '../cards.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InstructionsCard extends StatelessWidget {
   const InstructionsCard({
@@ -23,39 +24,40 @@ class InstructionsCard extends StatelessWidget {
       ).lerp(paddingInterp),
       child: FocusTraversalGroup(
         descendantsAreFocusable: appState.cardFace == 'about',
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Text(
-              'Using This App',
+              context.tr('instructionsTitle'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)
+              style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)
             ),
-            Spacer(),
+            const Spacer(),
             Text(
-              'Swipe this card to reveal a new card',
+              context.tr('instructionsSwipe'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
+              style: const TextStyle(fontSize: 21)
             ),
-            Spacer(),
-            kIsWeb ? Text(
-              'You can also swipe with the arrow keys',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
-            ) : Text(
-              'Tap anywhere to see control buttons',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
+            const Spacer(),
+            Visibility(
+              visible: kIsWeb,
+              child: Text(
+                context.tr('instructionsSwipe2'),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 21)
+              ),
             ),
-            Spacer(),
+            const Visibility(visible: kIsWeb, child: Spacer()),
             Text(
-              'Undo swipes with the ${kIsWeb ? 'backspace key' : 'back button'}',
+              kIsWeb 
+                ? context.tr('instructionsUndoWeb')
+                : context.tr('instructionsUndo'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 21)
+              style: const TextStyle(fontSize: 21)
             ),
-            Spacer(),
-            Spacer(),
+            const Spacer(),
+            const Spacer(),
           ]
         )
       )

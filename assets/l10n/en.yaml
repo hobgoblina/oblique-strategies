@@ -1,0 +1,211 @@
+# Title card
+title: Oblique Strategies
+subtitle: Over one hundred worthwhile dilemmas
+brianEno: Brian Eno
+peterSchmidt: Peter Schmidt
+authors: Brian Eno and Peter Schmidt
+fifthEdition: Fifth, again slightly revised edition, 2001
+fifthEdition2: Plus a selection from earlier editions
+digitizedBy: Digitized by Lina, 2023
+
+# Instructions card
+instructionsTitle: Using this app
+instructionsSwipe: Swipe to reveal a new card
+instructionsSwipe2: You can also swipe with the arrow keys
+instructionsUndo: Undo swipes with the back button
+instructionsUndoWeb: Undo swipes with the backspace key
+
+# About card
+aboutCard1: These cards evolved from our separate observations of the principles underlying what we were doing. Sometimes they were recognized in retrospect (intellect catching up with intuition), sometimes they were identified as they were happening, sometimes they were formulated.
+aboutCard2: They can be used as a pack (a set of possibilities being continuously reviewed in the mind) or by drawing a single card from the shuffled pack when a dilemma occurs in a working situation. In this case the card is trusted even if its appropriateness is quite unclear. They are not final, as new ideas will present themselves, and others will become self-evident.
+firstPublished: First published 1975
+
+# Controls
+removeFromFavorites: Remove from favorites
+addToFavorites: Add to favorites
+closeSettings: Close settings
+openSettings: Open settings
+returnToSettings: Go back to the main settings page
+
+# Settings
+language: Language
+useSystemLanguage: System language
+fontSize: Font size
+smaller: Smaller
+small: Small
+large: Large
+larger: Larger
+reduceAnimations: Reduce animations
+reduceAnimationsTooltip: A reload may be required for certain animation changes to take effect.
+immersiveMode: Immersive mode
+immersiveModeTooltip: Hides the navigation and status bars
+showSwipeControls: Show swipe controls
+showSwipeControlsTooltip: Shows buttons for swiping to the next card or returning to the previous one.
+showControls: Always show controls
+showControlsTooltip: If disabled, controls will disappear after a few seconds. Tap anywhere to reveal them again.
+showControlsTooltipWeb: If disabled, controls will disappear after a few seconds of mouse inactivity.
+deck: Deck
+fifthEditionDeck: 5th ed. (plus extras)
+fourthEditionDeck: 4th ed. (illustrated)
+keepFavoritesInDeck: Keep favorites in the deck
+keepFavoritesInDeckTooltip: Allows favorited cards to be redrawn anytime. It usually takes a while before a card can be redrawn.
+onlyDrawFavorites: Only draw favorites
+onlyDrawFavoritesTooltip: Only draw cards that have been favorited. You must have at least 2 favorites to enable.
+confirm: Confirm
+enableNotifications: Enable notifications
+notifyEvery: Notify every
+notifyEveryTooltip: Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval.
+minNotificationPeriod: Minimum notification frequency
+maxNotificationPeriod: Maximum notification frequency
+minutes: Minutes
+hours: Hours
+quietHours: Quiet hours
+quietHoursTooltip: Notifications will not occur between these times.
+timeAM: AM
+timePM: PM
+about: About
+aboutLabel: Show information about this app
+cards: Cards
+cardsLabel: Open card settings
+lookAndFeel: Language and feel
+lookAndFeelLabel: Open look and feel settings
+notifications: Notifications
+notificationsLabel: Open notifications settings
+
+# Strategy cards
+contributedBy: (given by {})
+card0: Destroy
+card0Option0: nothing
+card0Option1: the most important thing
+card1: Bridges
+card1Option0: build
+card1Option1: burn
+card2: Intentions
+card2Option0: credibility of
+card2Option1: nobility of
+card2Option2: humility of
+card3: 'Think:'
+card3Option0: Inside the work
+card3Option1: Outside the work
+card4: Try faking it!
+card4Contributor: Stewart Brand
+card5: Faced with a choice do both
+card5Contributor: Diter Rot
+card6: Tape your mouth
+card6Contributor: Ritva Saarikko
+card7: Always give yourself credit for having more than personality
+card7Contributor: Arto Lindsay
+card8: Use filters
+card9: Which elements can be grouped?
+card10: Gardening, not architecture
+card11: Where's the edge?\nWhere does the frame start?
+card12: Just carry on
+card13: Listen to the quiet voice
+card14: Question the heroic approach
+card15: Take away the elements in order of apparent non importance
+card16: The inconsistency principle
+card17: You don't have to be ashamed of using your own ideas
+card18: What to maintain?
+card19: Decorate, decorate
+card20: When is it for?
+card21: Is it finished?
+card22: Is there something missing?
+card23: Cut a vital connection
+card24: Ask people to work against their better judgment
+card25: Only one element of each kind
+card26: Overtly resist change
+card27: Accretion
+card28: Be less critical more often
+card29: State the problem in words as clearly as possible
+card30: Take a break
+card31: Emphasize the flaws
+card32: Breathe more deeply
+card33: Distorting time
+card34: Make an exhaustive list of everything you might do and do the last thing on the list
+card35: Emphasize differences
+card36: Discover the recipes you are using and abandon them
+card37: Disconnect from desire
+card38: Be extravagant
+card39: Do nothing for as long as possible
+card40: Remove specifics and convert to ambiguities
+card41: The most important thing is the thing most easily forgotten
+card42: Tidy up
+card43: In total darkness or in a very large room, very quietly
+card44: Once the search is in progress, something will be found
+card45: Only a part, not the whole
+card46: Go outside. Shut the door
+card47: Go to an extreme, move back to a more comfortable place
+card48: Simple subtraction
+card49: Simply a matter of work
+card50: Make a blank valuable by putting it in an exquisite frame
+card51: Don't stress one thing more than another
+card52: Make a sudden, destructive unpredictable action; incorporate
+card53: Don't break the silence
+card54: Disciplined self-indulgence
+card55: Repetition is a form of change
+card56: Discard an axiom
+card57: Retrace your steps
+card58: Ask your body
+card59: Are there sections? Consider transitions
+card60: Don't be afraid of things because they're easy to do
+card61: Turn it upside down
+card62: Use an old idea
+card63: You are an engineer
+card64: Do we need holes?
+card65: Humanize something free of error
+card66: Use 'unqualified' people
+card67: Do the words need changing?
+card68: Do something boring
+card69: Towards the insignificant
+card70: Trust in the you of now
+card71: Courage!
+card72: Change nothing and continue with immaculate consistency
+card73: Work at a different speed
+card74: Would anybody want it?
+card75: Accept advice
+card76: Abandon normal instruments
+card77: Which frame would make this look right?
+card78: Look at the order in which you do things
+card79: Look closely at the most embarrassing details and amplify them
+card80: Remove ambiguities and convert to specifics
+card81: What to increase? What to reduce?
+card82: What would your closest friend do?
+card83: Who should be doing this job?\nHow would they do it?
+card84: Reverse
+card85: Slow preparation..Fast execution
+card86: Short circuit (example; a man eating peas with the idea that they will improve his virility shovels them straight into his lap)
+card87: Voice nagging suspicions
+card88: Make it more sensual
+card89: Don't be frightened to display your talents
+card90: What wouldn't you do?
+card91: Don't be frightened of cliches
+card92: What mistakes did you make last time?
+card93: Water
+card94: Make something implied more definite (reinforce, duplicate)
+card95: What are you really thinking about just now? incorporate
+card96: Define an area as 'safe' and use it as an anchor
+card97: Always first steps
+card98: Allow an easement (an easement is the abandonment of structure)
+card99: How would you have done it?
+card100: Give the game away
+card101: Not building a wall but making a brick
+card102: Be dirty
+card103: Give way to your worst impulse
+card104: Honour thy error as a hidden intention
+card105: Use an unacceptable colour
+card106: Remember  .those quiet evenings
+card107: A line has two sides
+card108: Fill every beat with something
+card109: Infinitesimal gradations
+card110: Into the impossible
+card111: Left channel, right channel, centre channel
+card112: Look at a very small object, look at its centre
+card113: Spectrum analysis
+card114: The tape is now the music
+card115: Go slowly all the way round the outside
+card116: Put in earplugs
+card117: Assemble some of the elements in a group and treat the group
+card118: Lowest common denominator
+card119: (Organic) machinery
+card120: Revaluation (a warm feeling)
+card121: You can only make one dot at a time

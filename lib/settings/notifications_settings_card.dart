@@ -3,22 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:io' show Platform;
-import 'main.dart';
-import 'cards.dart';
-import 'settings_card.dart';
-import 'notifications.dart';
+import '../main.dart';
+import '../cards.dart';
+import 'settings_item.dart';
+import '../notifications.dart';
 import 'dart:math';
+import 'package:easy_localization/easy_localization.dart';
 
-class NotificationsCard extends StatefulWidget {
-  const NotificationsCard({
-    Key? key,
-  }) : super(key: key);
+class NotificationsSettingsCard extends StatefulWidget {
+  const NotificationsSettingsCard({
+    super.key,
+  });
 
   @override
-  State<NotificationsCard> createState() => NotificationsCardState();
+  State<NotificationsSettingsCard> createState() => NotificationsSettingsCardState();
 }
 
-class NotificationsCardState extends State<NotificationsCard> {
+class NotificationsSettingsCardState extends State<NotificationsSettingsCard> {
   final TextEditingController minController = TextEditingController();
   final TextEditingController maxController = TextEditingController();
   final FocusNode minFocusNode = FocusNode(canRequestFocus: false);
@@ -66,7 +67,7 @@ class NotificationsCardState extends State<NotificationsCard> {
     void onQuietHoursPressed(bool isStartTime) async {
       TimeOfDay? newTime = await showTimePicker(
         useRootNavigator: false,
-        confirmText: 'Confirm',
+        confirmText: context.tr('confirm'),
         minuteLabelText: '',
         hourLabelText: '',
         helpText: '',
@@ -139,19 +140,19 @@ class NotificationsCardState extends State<NotificationsCard> {
           end: const EdgeInsets.symmetric(horizontal: 75)
         ).lerp(paddingInterp),
         child: FocusTraversalGroup(
-          descendantsAreFocusable: appState.cardFace == 'notifications',
+          descendantsAreFocusable: appState.cardFace == 'notifications-settings',
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
               const Spacer(),
-              const SettingsCard().settingsItem(
-                text: 'Enable notifications',
+              settingsItem(
+                text: context.tr('enableNotifications'),
                 child: Transform.scale(
                   scale: 1.2,
                   child: Checkbox(
                     value: storage.read('notificationsEnabled') ?? false,
-                    semanticLabel: 'Enable notifications',
+                    semanticLabel: context.tr('enableNotifications'),
                     onChanged: (val) async {
                       if (val is bool) {
                         if (val) {
@@ -178,9 +179,9 @@ class NotificationsCardState extends State<NotificationsCard> {
                 )
               ),
               const Spacer(),
-              const SettingsCard().settingsItem(
-                tooltip: 'Notifications will randomly repeat within the provided time span. If the numbers match, notifications will regularly repeat at that interval.',
-                text: 'Notify every',
+              settingsItem(
+                tooltip: context.tr('notifyEveryTooltip'),
+                text: context.tr('notifyEvery'),
                 wrapControls: true,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -190,31 +191,34 @@ class NotificationsCardState extends State<NotificationsCard> {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
-                          child: TextFormField(
-                            focusNode: minFocusNode,
-                            controller: minController,
-                            onEditingComplete: () => frequencyChanged(shouldMoveFocus: true, isMin: true),
-                            onTapOutside: (onTapOutside) => minFocusNode.unfocus(),
-                            style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: inputFormatter,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.1),
+                          child: Semantics(
+                            label: context.tr('minNotificationPeriod'),
+                            child: TextFormField(
+                              focusNode: minFocusNode,
+                              controller: minController,
+                              onEditingComplete: () => frequencyChanged(shouldMoveFocus: true, isMin: true),
+                              onTapOutside: (onTapOutside) => minFocusNode.unfocus(),
+                              style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: inputFormatter,
+                              decoration: const InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red, width: 1.1),
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red, width: 1.1),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(vertical: -1),
+                                isCollapsed: true,
+                                isDense: true
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.1),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red, width: 1.1),
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red, width: 1.1),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(vertical: -1),
-                              isCollapsed: true,
-                              isDense: true
                             ),
                           ),
                         ),
@@ -226,39 +230,42 @@ class NotificationsCardState extends State<NotificationsCard> {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minWidth: 40),
                         child: IntrinsicWidth(
-                          child: TextFormField(
-                            focusNode: maxFocusNode,
-                            controller: maxController,
-                            onEditingComplete: () => frequencyChanged(shouldMoveFocus: true),
-                            onTapOutside: (onTapOutside) => maxFocusNode.unfocus(),
-                            style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: inputFormatter,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.1),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black, width: 1.1),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red, width: 1.1),
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red, width: 1.1),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(vertical: -1),
-                              isCollapsed: true,
-                              isDense: true
-                            )
+                          child: Semantics(
+                            label: context.tr('maxNotificationPeriod'),
+                            child: TextFormField(
+                              focusNode: maxFocusNode,
+                              controller: maxController,
+                              onEditingComplete: () => frequencyChanged(shouldMoveFocus: true),
+                              onTapOutside: (onTapOutside) => maxFocusNode.unfocus(),
+                              style: const TextStyle(fontSize: 21, fontFamily: 'Univers'),
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: inputFormatter,
+                              decoration: const InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black, width: 1.1),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red, width: 1.1),
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red, width: 1.1),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(vertical: -1),
+                                isCollapsed: true,
+                                isDense: true
+                              )
+                            ),
                           ),
                         ),
                       ),
                     ),
                     IntrinsicWidth(
                       child: DropdownButtonFormField<String>(
-                        value: storage.read('notificationFreqUnit') ?? 'Hours',
+                        value: storage.read('notificationFreqUnit') ?? 'hours',
                         elevation: 20,
                         iconSize: 0,
                         style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
@@ -288,21 +295,25 @@ class NotificationsCardState extends State<NotificationsCard> {
                           }
                           appState.rebuildApp();
                         },
-                        items: ['Minutes', 'Hours'].map<DropdownMenuItem<String>>(
-                          (String value) => DropdownMenuItem<String>(
-                            value: value, 
-                            child: Text(value)
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: 'minutes', 
+                            child: Text(context.tr('minutes'))
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'hours', 
+                            child: Text(context.tr('hours'))
                           )
-                        ).toList(),
+                        ],
                       ),
                     )
                   ],
                 )
               ),
               const Spacer(),
-              const SettingsCard().settingsItem(
-                tooltip: 'Notifications will not occur between these times.',
-                text: 'Quiet hours',
+              settingsItem(
+                tooltip: context.tr('quietHoursTooltip'),
+                text: context.tr('quietHours'),
                 wrapControls: true,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -312,7 +323,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                       child: Text(
                         is24HoursFormat
                           ? '${quietHoursStart.hour.toString().padLeft(2, '0')}:${quietHoursStart.minute.toString().padLeft(2, '0')}'
-                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
+                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${context.tr(quietHoursStart.period.name == 'am' ? 'timeAM' : 'timePM')}',
                         style: const TextStyle(decoration: TextDecoration.underline)
                       ),
                     ),
@@ -322,7 +333,7 @@ class NotificationsCardState extends State<NotificationsCard> {
                       child: Text(
                         is24HoursFormat
                           ? '${quietHoursEnd.hour.toString().padLeft(2, '0')}:${quietHoursEnd.minute.toString().padLeft(2, '0')}'
-                          : '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${quietHoursEnd.period.name.toUpperCase()}',
+                          : '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${context.tr(quietHoursStart.period.name == 'am' ? 'timeAM' : 'timePM')}',
                         style: const TextStyle(decoration: TextDecoration.underline)
                       ),
                     ),

@@ -2,10 +2,11 @@ import 'package:ionicons/ionicons.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
+import '../main.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class SettingsIcon extends StatelessWidget {
-  const SettingsIcon({ super.key });
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({ super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +24,19 @@ class SettingsIcon extends StatelessWidget {
     }
 
     IoniconsData icon = appState.cardFace == 'settings' ? Ionicons.close_outline : Ionicons.options_outline;
-    String iconLabel = '${appState.cardFace == 'settings' ? 'Close' : 'Open'} settings';
+    String iconLabel = appState.cardFace == 'settings'
+      ? context.tr('closeSettings')
+      : context.tr('openSettings');
 
     if (appState.cardFace != 'settings' && appState.cardFace != 'strategies') {
       icon = Ionicons.arrow_back_outline;
-      iconLabel = 'Go back to settings';
+      iconLabel = context.tr('returnToSettings');
     }
 
     return AnimatedOpacity(
-      opacity: appState.iconsVisible || appState.cardFace != 'strategies' ? 1.0 : 0.0,
+      opacity: appState.iconsVisible
+        || (storage.read('alwaysShowControls') ?? true)
+        || appState.cardFace != 'strategies' ? 1.0 : 0.0,
       duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 200),
       child: Container(
         padding: const EdgeInsets.all(11),

@@ -8,20 +8,25 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 
 import 'strategy_card.dart';
-import 'favorite_icon.dart';
-import 'settings_icon.dart';
-import 'settings_card.dart';
-import 'info_cards.dart';
-import 'notifications_card.dart';
+import 'controls/favorite_button.dart';
+import 'controls/settings_button.dart';
+import 'settings/settings_card.dart';
+import 'info-cards/info_cards.dart';
+import 'settings/notifications_settings_card.dart';
+import 'settings/cards_settings_card.dart';
+import 'settings/look_and_feel_settings_card.dart';
 import 'notifications.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   if (!kIsWeb) {
-    WidgetsFlutterBinding.ensureInitialized();
     Workmanager().initialize(notificationDispatcher);
     Workmanager().registerPeriodicTask('scheduleNotifications', 'scheduleNotifications');
 
@@ -31,7 +36,15 @@ void main() async {
     }
   }
 
-  runApp(const StrategiesApp());
+  runApp(EasyLocalization(
+    supportedLocales: const [ Locale('en') ],
+    path: 'l10n',
+    assetLoader: const YamlAssetLoader(),
+    fallbackLocale: const Locale('en'),
+    useFallbackTranslations: true,
+    useFallbackTranslationsForEmptyResources: true,
+    child: const StrategiesApp(),
+  ));
 }
 
 class StrategiesApp extends StatelessWidget {
@@ -44,11 +57,15 @@ class StrategiesApp extends StatelessWidget {
       statusBarColor: backgroundColor,
       systemNavigationBarColor: backgroundColor
     ));
+    final storage = GetStorage();
 
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
-        title: 'Oblique Strategies',
+        onGenerateTitle: (context) => context.tr('title'),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: storage.read('language') is String ? Locale(storage.read('language')) : context.locale,
         theme: ThemeData(
           fontFamily: 'Univers',
           useMaterial3: true,
@@ -60,9 +77,7 @@ class StrategiesApp extends StatelessWidget {
             onSecondary: Colors.black,
             error: Color.fromRGBO(200, 32, 20, 1),
             onError: Colors.white,
-            background: backgroundColor,
-            onBackground: Colors.white,
-            surface: Colors.white,
+            surface: backgroundColor,
             onSurface: Colors.black,
             outline: Colors.black
           ),
@@ -70,13 +85,13 @@ class StrategiesApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             dialBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
             dialHandColor: Colors.black,
-            dialTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            dialTextColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.white : Colors.black),
             entryModeIconColor: Colors.black,
-            hourMinuteColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
+            hourMinuteColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? const Color.fromRGBO(235, 235, 235, 1) : Colors.white),
             hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: Colors.black, width: 1.5)),
             dayPeriodBorderSide: const BorderSide(color: Colors.black, width: 1.5),
-            dayPeriodColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.black : Colors.white),
-            dayPeriodTextColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+            dayPeriodColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.black : Colors.white),
+            dayPeriodTextColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? Colors.white : Colors.black),
             inputDecorationTheme: const InputDecorationTheme(
               filled: true,
               errorStyle: TextStyle(height: 0),
@@ -113,10 +128,20 @@ class StrategiesApp extends StatelessWidget {
           checkboxTheme: CheckboxThemeData(
             splashRadius: 17,
             shape: const RoundedRectangleBorder(),
-            checkColor: MaterialStateProperty.all(Colors.black),
-            overlayColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.focused) ? Colors.black12 : Colors.transparent),
-            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
-            fillColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.disabled) ? Colors.grey : Colors.white),
+            checkColor: WidgetStateProperty.all(Colors.black),
+            overlayColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.focused) ? Colors.black12 : Colors.transparent),
+            side: WidgetStateBorderSide.resolveWith((states) => const BorderSide(strokeAlign: -.1, width: 1.75, color: Colors.black)),
+            fillColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.disabled) ? Colors.blueGrey : Colors.white),
+          ),
+          sliderTheme: const SliderThemeData(
+            trackShape: RectangularSliderTrackShape(),
+            activeTrackColor: Colors.black,
+            inactiveTrackColor: Colors.black,
+            inactiveTickMarkColor: Colors.black,
+            activeTickMarkColor: Colors.black,
+            thumbColor: Colors.black,
+            tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 4),
+            trackHeight: 1.8,
           ),
           tooltipTheme: const TooltipThemeData(
             textStyle: TextStyle(color: Colors.white),
@@ -124,14 +149,14 @@ class StrategiesApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
-              foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black),
-              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
-              overlayColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+              textStyle: WidgetStateProperty.resolveWith((states) => const TextStyle(fontSize: 20, fontFamily: 'Univers')),
+              foregroundColor: WidgetStateProperty.resolveWith((states) => Colors.black),
+              backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
+              overlayColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
                   return Colors.black12;
                 }
-
+          
                 return Colors.transparent;
               })
             )
@@ -207,8 +232,12 @@ class MainPage extends StatelessWidget {
 
     if (appState.cardFace == 'about') {
       frontCard = const InfoCards();
-    } else if (appState.cardFace == 'notifications') {
-      frontCard = const NotificationsCard();
+    } else if (appState.cardFace == 'notifications-settings') {
+      frontCard = const NotificationsSettingsCard();
+    } else if (appState.cardFace == 'cards-settings') {
+      frontCard = const CardsSettingsCard();
+    } else if (appState.cardFace == 'look-and-feel-settings') {
+      frontCard = const LookAndFeelSettingsCard();
     } else if (appState.cardFace == 'settings') {
       frontCard = Container();
     }
@@ -243,16 +272,16 @@ class MainPage extends StatelessWidget {
 
       if (event is KeyDownEvent) {
         if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          appState.swipeController.swipeLeft();
+          appState.swipeController.swipe(CardSwiperDirection.left);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          appState.swipeController.swipeTop();
+          appState.swipeController.swipe(CardSwiperDirection.top);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          appState.swipeController.swipeRight();
+          appState.swipeController.swipe(CardSwiperDirection.right);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          appState.swipeController.swipeBottom();
+          appState.swipeController.swipe(CardSwiperDirection.bottom);
           return KeyEventResult.handled;
         } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
           appState.swipeController.undo();
@@ -272,8 +301,8 @@ class MainPage extends StatelessWidget {
       canRequestFocus: false,
       skipTraversal: false,
       onKeyEvent: handleKeyPress,
-      child: WillPopScope(
-        onWillPop: () async => canPop(),
+      child: PopScope(
+        canPop: canPop(),
         child: MouseRegion(
           onHover: (pointerHoverEventListener) => kIsWeb ? appState.setIconsVisible() : null,
           child: GestureDetector(
@@ -304,8 +333,8 @@ class MainPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SafeArea(child: FavoriteIcon()),
-                const SafeArea(child: SettingsIcon()),
+                const SafeArea(child: FavoriteButton()),
+                const SafeArea(child: SettingsButton()),
               ]
             ),
           ),

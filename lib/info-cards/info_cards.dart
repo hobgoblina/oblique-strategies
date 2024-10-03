@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:math';
-import 'main.dart';
+import '../main.dart';
 import 'title_card.dart';
 import 'about_card.dart';
 import 'instructions_card.dart';
@@ -37,13 +37,13 @@ class InfoCards extends StatelessWidget {
         ) {
           switch (Random().nextInt(4)) {
             case 0:
-              appState.swipeController.swipeLeft();
+              appState.swipeController.swipe(CardSwiperDirection.left);
             case 1:
-              appState.swipeController.swipeTop();
+              appState.swipeController.swipe(CardSwiperDirection.top);
             case 2:
-              appState.swipeController.swipeRight();
+              appState.swipeController.swipe(CardSwiperDirection.right);
             case 3:
-              appState.swipeController.swipeBottom();
+              appState.swipeController.swipe(CardSwiperDirection.bottom);
           }
 
           return KeyEventResult.handled;
@@ -57,18 +57,15 @@ class InfoCards extends StatelessWidget {
       canRequestFocus: appState.cardFace == 'about',
       skipTraversal: false,
       onKeyEvent: handleKeyPress,
-      child: Semantics(
-        label: 'Title and about cards. To go to the next card, you can press enter, space, or the arrow keys while the card has focus. Press backspace to return to the previous card.',
-        child: CardSwiper(
-          controller: appState.swipeController,
-          initialIndex: 0,
-          cardsCount: cards.length,
-          maxAngle: 13,
-          duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
-          backCardOffset: const Offset(0, 0),
-          scale: 1,
-          cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards[index],
-        ),
+      child: CardSwiper(
+        controller: appState.swipeController,
+        initialIndex: 0,
+        cardsCount: cards.length,
+        maxAngle: 13,
+        duration: storage.read('reduceAnimations') ?? false ? Duration.zero : const Duration(milliseconds: 300),
+        backCardOffset: const Offset(0, 0),
+        scale: 1,
+        cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards[index],
       ),
     );
   }
