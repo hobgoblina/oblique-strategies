@@ -23,7 +23,7 @@ If you'd like to provide translations for a language that isn't in the list of t
 
 I'll try to keep on top of publishing new app versions as translations get completed in Crowdin, but it'd be helpful if you create a Github issue to let me know.
 
-#### Manual
+#### PR
 Alternatively, you can manually write a new `.yaml` translation file in the `assets/l10n` directory, translate the strings in the `en.yaml` file, and open a pull request.
 
 ## Developing / Building
