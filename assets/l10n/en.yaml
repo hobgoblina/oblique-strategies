@@ -51,11 +51,13 @@ minutes: Minutes
 hours: Hours
 quietHours: Quiet hours
 quietHoursTooltip: Notifications will not occur between these times.
+timeAM: AM
+timePM: PM
 about: About
 aboutLabel: Show information about this app
 cards: Cards
 cardsLabel: Open card settings
-lookAndFeel: Look and feel
+lookAndFeel: Language and feel
 lookAndFeelLabel: Open look and feel settings
 notifications: Notifications
 notificationsLabel: Open notifications settings

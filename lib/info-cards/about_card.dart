@@ -32,7 +32,7 @@ class AboutCard extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              context.tr('title.toUpperCase()'),
+              context.tr('title').toUpperCase(),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
             ),
@@ -89,7 +89,7 @@ class AboutCard2 extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              context.tr('title.toUpperCase()'),
+              context.tr('title').toUpperCase(),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
             ),

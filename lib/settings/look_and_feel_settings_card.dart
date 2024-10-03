@@ -64,8 +64,10 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
             value: storage.read('language') ?? context.locale.toString(),
             elevation: 20,
             iconSize: 0,
+            alignment: AlignmentDirectional.center,
             style: const TextStyle(fontSize: 21, fontFamily: 'Univers', color: Colors.black),
             dropdownColor: Colors.white,
+            focusColor: Colors.black12,
             decoration: const InputDecoration(
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black, width: 1.1),
@@ -74,7 +76,8 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
                 borderSide: BorderSide(color: Colors.black, width: 1.1),
               ),
               focusColor: Colors.black12,
-              contentPadding: EdgeInsets.symmetric(vertical: 3),
+              hoverColor: Colors.black12,
+              contentPadding: EdgeInsets.symmetric(vertical: 6),
               isCollapsed: true
             ),
             onChanged: (String? value) {
@@ -92,13 +95,15 @@ class LookAndFeelSettingsCardState extends State<LookAndFeelSettingsCard> {
             items: [
               DropdownMenuItem<String>(
                   value: 'system',
+                  alignment: AlignmentDirectional.centerEnd,
                   child: Text(context.tr('useSystemLanguage'))
                 ),
               ...context.supportedLocales.map<DropdownMenuItem<String>>(
                 (Locale locale) => DropdownMenuItem<String>(
                   value: locale.toString(),
+                  alignment: AlignmentDirectional.centerEnd,
                   child: Text(locale.nativeDisplayLanguage.capitalize())
-                )
+                ),
               )
             ],
           ),

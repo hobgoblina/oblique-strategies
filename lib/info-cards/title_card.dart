@@ -44,7 +44,7 @@ class TitleCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                context.tr('title.toUpperCase()'),
+                context.tr('title').toUpperCase(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold)
               ),

@@ -323,7 +323,7 @@ class NotificationsSettingsCardState extends State<NotificationsSettingsCard> {
                       child: Text(
                         is24HoursFormat
                           ? '${quietHoursStart.hour.toString().padLeft(2, '0')}:${quietHoursStart.minute.toString().padLeft(2, '0')}'
-                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${quietHoursStart.period.name.toUpperCase()}',
+                          : '${quietHoursStart.hourOfPeriod}:${quietHoursStart.minute.toString().padLeft(2, '0')} ${context.tr(quietHoursStart.period.name == 'am' ? 'timeAM' : 'timePM')}',
                         style: const TextStyle(decoration: TextDecoration.underline)
                       ),
                     ),
@@ -333,7 +333,7 @@ class NotificationsSettingsCardState extends State<NotificationsSettingsCard> {
                       child: Text(
                         is24HoursFormat
                           ? '${quietHoursEnd.hour.toString().padLeft(2, '0')}:${quietHoursEnd.minute.toString().padLeft(2, '0')}'
-                          : '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${quietHoursEnd.period.name.toUpperCase()}',
+                          : '${quietHoursEnd.hourOfPeriod}:${quietHoursEnd.minute.toString().padLeft(2, '0')} ${context.tr(quietHoursStart.period.name == 'am' ? 'timeAM' : 'timePM')}',
                         style: const TextStyle(decoration: TextDecoration.underline)
                       ),
                     ),
