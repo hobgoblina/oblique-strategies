@@ -249,7 +249,6 @@ class LocalNotificationService {
       tz.TZDateTime.from(notificationTime, tz.local),
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
     );
   }
 }
