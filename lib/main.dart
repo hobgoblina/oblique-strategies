@@ -38,7 +38,7 @@ void main() async {
 
   runApp(EasyLocalization(
     supportedLocales: const [ Locale('en') ],
-    path: 'l10n',
+    path: 'assets/l10n',
     assetLoader: const YamlAssetLoader(),
     fallbackLocale: const Locale('en'),
     useFallbackTranslations: true,
